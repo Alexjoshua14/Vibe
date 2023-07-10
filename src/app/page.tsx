@@ -5,23 +5,16 @@ import { authOptions } from './api/auth/[...nextauth]/route';
 import { LoginButton, LogoutButton } from "@/components/buttons";
 
 import { getTopTracks } from "@/utilities/spotifyAPI";
+import { mapToSongs } from "@/utilities/helper";
 
 import { SongCard } from "@/components/songCard";
 import { songs } from "@/data/songs";
-
-const currentlyPlayingURL = "https://api.spotify.com/v1/me/player/currently-playing";
-const topTracksURL = "https://api.spotify.com/v1/me/top/tracks";
-
-
-
-function logTopTracks(topTracks: any[]) {
-  for (const track of topTracks) {
-    console.log(track);
-  }
-}
+import { SpotifyItem } from "@/types/spotifyTypes";
+import { logTopTracks } from "@/utilities/helper";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+  let topTracks: SpotifyItem[] = [];
 
   if (!session) {
     console.log("No session found.")
@@ -30,14 +23,13 @@ export default async function Home() {
 
   let currentlyPlaying = null;
 
-  console.log("Logging session:");
-  console.log(session);
-
   if (session.accessToken) {
     const topTracksData = await getTopTracks(session.accessToken);
-    const topTracks = await Promise.all([topTracksData]);
+    // const topTracksResponse = await Promise.all([topTracksData]);
     // console.log(topTracks);
-    // logTopTracks(topTracks);
+    topTracks = mapToSongs(topTracksData);
+    console.log("_____________________________________");
+    logTopTracks(topTracks);
   } else {
     throw new Error("No access token found.");
   }
@@ -49,7 +41,7 @@ export default async function Home() {
           {session ? <LogoutButton /> : <LoginButton />}
         </div>
         <div>
-          <SongCard song={currentlyPlaying ? songs[5] : songs[6]} />
+          <SongCard song={topTracks ? topTracks[0] : songs[6]} />
         </div>
       </div>
     </main>

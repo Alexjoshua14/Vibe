@@ -8,14 +8,14 @@ declare module 'next-auth' {
   }
 
   interface Account extends NextAuthAccount {
-    expires_at?: string,
+    expires_in: number,
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT extends NextAuthJWT {
     accessToken?: string,
-    refreshtoken?: string,
+    refreshToken?: string,
     accessTokenExpires?: number,
     error?: string,
     user?: Session['user'],

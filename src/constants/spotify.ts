@@ -10,7 +10,7 @@ export const spotifyScope = [
   "user-top-read",
 ]
 
-export const spotifyAPI = "https://api.spotify.com/v1";
+export const spotifyAPI = "https://api.spotify.com/v1/";
 
 export const topTracksURL = `${spotifyAPI}me/top/tracks`;
 export const topArtistsURL = `${spotifyAPI}me/top/artists`;

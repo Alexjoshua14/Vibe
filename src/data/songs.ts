@@ -1,4 +1,4 @@
-import { Song } from "../types";
+import { Song } from "../types/spotifyTypes";
 
 export const songs: Song[] = [
   {
