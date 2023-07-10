@@ -2,7 +2,7 @@ import NextAuth, { DefaultSession, Account as NextAuthAccount} from "next-auth";
 import axios from "axios";
 import type { NextAuthOptions } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
-import { spotifyScopes } from "@/constants/spotify";
+import { spotifyScope } from "@/constants/spotify";
 
 // async function refreshAccessToken(token: NextAuthJWT): Promise<JWT> { 
 //   try {
@@ -38,7 +38,7 @@ import { spotifyScopes } from "@/constants/spotify";
 async function refreshAccessToken(token) {
   try {
     const url =
-      process.env.NEXT_PUBLIC_SPOTIFY_REFRESH_TOKEN_URL!;
+      process.env.NEXT_PUBLIC_SPOTIFY_TOKEN_URL!;
       new URLSearchParams({
         client_id: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID!,
         client_secret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET!,
@@ -52,7 +52,9 @@ async function refreshAccessToken(token) {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       });
-
+      
+  } catch (error) {
+    console.log(error);
   }
 }
 
