@@ -24,4 +24,38 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+} 
+
+.gradient-01 {
+  position: absolute;
+  width: 300px;
+  height: 500px;
+  top: 0px;
+  right: 0px;
+  background: purple;
+  transform: rotate(-45deg);
+  filter: blur(200px);
 }
+
+.gradient-02 {
+  position: absolute;
+  width: 240px;
+  height: 440px;
+  bottom: 0px;
+  left: 100px;
+  background: teal;
+  transform: rotate(21deg);
+  filter: blur(200px);
+}
+
+.gradient-03 {
+  position: absolute;
+  width: 100px;
+  height: 900px;
+  bottom: -300px;
+  right: 100px;
+  background: slateblue;
+  transform: rotate(44deg);
+  filter: blur(200px);
+}
+
