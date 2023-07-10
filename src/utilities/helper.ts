@@ -31,7 +31,7 @@ export function songDataToSongBrief(song: SpotifyItem) {
 }
 
 
-export function logTopTracks(topTracks: Song[]) {
+export function logTopTracks(topTracks: SpotifyItem[]) {
   for (const track of topTracks) {
     console.log(track);
     console.log(track.album.images[0]);

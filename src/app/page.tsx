@@ -14,6 +14,8 @@ import { logTopTracks } from "@/utilities/helper";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+  
+  
   let topTracks: SpotifyItem[] = [];
 
   if (!session) {
@@ -24,12 +26,16 @@ export default async function Home() {
   let currentlyPlaying = null;
 
   if (session.accessToken) {
+    try {
     const topTracksData = await getTopTracks(session.accessToken);
     // const topTracksResponse = await Promise.all([topTracksData]);
     // console.log(topTracks);
     topTracks = mapToSongs(topTracksData);
     console.log("_____________________________________");
     logTopTracks(topTracks);
+  } catch (error) {
+    console.log(error);
+  }
   } else {
     throw new Error("No access token found.");
   }
@@ -40,8 +46,8 @@ export default async function Home() {
         <div className="p-4 border-2 border-yellow-500">
           {session ? <LogoutButton /> : <LoginButton />}
         </div>
-        <div>
-          <SongCard song={topTracks ? topTracks[0] : songs[6]} />
+        <div className="flex gap-4">
+          <SongCard song={topTracks[0] ? topTracks[0] : songs[4]} />
         </div>
       </div>
     </main>
