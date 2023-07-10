@@ -15,7 +15,6 @@ import { logTopTracks } from "@/utilities/helper";
 export default async function Home() {
   const session = await getServerSession(authOptions);
   
-  
   let topTracks: SpotifyItem[] = [];
 
   if (!session) {
@@ -31,8 +30,8 @@ export default async function Home() {
     // const topTracksResponse = await Promise.all([topTracksData]);
     // console.log(topTracks);
     topTracks = mapToSongs(topTracksData);
-    console.log("_____________________________________");
-    logTopTracks(topTracks);
+    // console.log("_____________________________________");
+    // logTopTracks(topTracks);
   } catch (error) {
     console.log(error);
   }

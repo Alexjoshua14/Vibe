@@ -7,36 +7,36 @@ import { JWT } from "next-auth/jwt";
 import { Account } from "next-auth";
 
 async function refreshAccessToken(token: JWT) {
+  console.log("ATTEMPTING TO REFRESH ACCESS TOKEN");
+  console.log("TOKEN: " + token.refreshToken);
   try {
-    const url =
-      process.env.NEXT_PUBLIC_SPOTIFY_TOKEN_URL!;
-      new URLSearchParams({
+    const res = await fetch(process.env.NEXT_PUBLIC_SPOTIFY_TOKEN_URL!, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded"},
+      body: 
+       new URLSearchParams({
         client_id: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID!,
         client_secret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET!,
         grant_type: "refresh_token",
         refresh_token: token.refreshToken!,
-      });
+       }),
+       method: "POST",
+    });
 
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
-      if (!res.ok) {
-        throw new Error("RefreshAccessTokenError");
-      }
+    const refreshedTokens = await res.json();
 
-      const refreshedTokens = await res.json();
+    if (!res.ok) {
+      throw refreshedTokens;
+    }
 
-      return {
-        ...token,
-        accessToken: refreshedTokens.access_token,
-        accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-        refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
-      }
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Math.floor(Date.now() / 1000 + refreshedTokens.expires_in),
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+    }
       
   } catch (error) {
+    console.log("Error refreshing access token: " + error);
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -57,22 +57,27 @@ export const authOptions: NextAuthOptions = {
     // Arguments: user, account, profile, and isNewUser are only passed on a new session
     async jwt({ token, account }: {token: JWT, account: Account | null}) {
       if (account) {
-        token.accessToken = account.access_token;
-        token.id = account.id;
-        token.accessTokenExpires = Date.now() + account.expires_in * 1000;
-        token.refreshToken = account.refresh_token;
+        return {
+          accessToken: account.access_token,
+          id: account.id,
+          accessTokenExpires: Math.floor(Date.now() / 1000 + account.expires_in),
+          refreshToken: account.refresh_token,
+        }
       }
       // Return previous token if the access token has not expired yet
-      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
+      else if (token.accessTokenExpires && Date.now() < token.accessTokenExpires * 1000) {
         return token;
       }
-      return refreshAccessToken(token);
+      const refreshedToken = await refreshAccessToken(token);
+      return refreshedToken;
     },
     // Access token needs to be explicitly declared to be made available
     // If using a database, may want to accept user argument and persist user.id
     async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.error = token.error;
+      if (token) {
+        session.accessToken = token.accessToken;
+        session.error = token.error;
+      }
       return session;
     }
   },
