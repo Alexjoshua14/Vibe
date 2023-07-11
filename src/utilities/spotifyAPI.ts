@@ -114,12 +114,7 @@ export async function addToQueue(access_token: string, uri: string) {
     }
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to add to queue..\n");
-  }
-  const data = await res.json();
-
-  return data;
+  return res.ok;
 }
 
 /*
@@ -133,9 +128,8 @@ export async function addToQueueClient(uri: string) {
   }
 
   if (session.accessToken) {
-    const addToQueueData = await addToQueue(session.accessToken, uri);
-    console.log(addToQueueData);
-    return addToQueueData;
+    const resStatus = await addToQueue(session.accessToken, uri);
+    return resStatus;
   } else {
     throw new Error("No access token found");
   }
