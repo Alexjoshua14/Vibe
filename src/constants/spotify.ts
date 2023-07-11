@@ -22,4 +22,5 @@ export const nextURL = `${spotifyAPI}me/player/next`;
 export const previousURL = `${spotifyAPI}me/player/previous`;
 export const shuffleURL = `${spotifyAPI}me/player/shuffle`;
 export const repeatURL = `${spotifyAPI}me/player/repeat`;
-export const addToQueueURL = `${spotifyAPI}me/player/queue`;
+export const addToQueueURL = `${spotifyAPI}me/player/queue?uri=`;
+export const searchURL = `${spotifyAPI}search?q=`;

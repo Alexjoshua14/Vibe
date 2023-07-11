@@ -1,6 +1,6 @@
-import { SpotifyTopTracksResponse, SpotifyItem, CurrentlyPlaying, CurrentlyPlayingResponse } from '@/types/spotifyTypes';
+import { SpotifyItemWrapper, SpotifyItem, CurrentlyPlaying, CurrentlyPlayingResponse } from '@/types/spotifyTypes';
 
-export function mapToSongs(json: SpotifyTopTracksResponse) {
+export function mapToSongs(json: SpotifyItemWrapper) {
   return json.items.map((item: SpotifyItem) => {
     return {
       id: item.id,

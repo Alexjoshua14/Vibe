@@ -40,6 +40,10 @@ export interface SpotifyItem {
   explicit: boolean;
 }
 
+export interface SpotifyItemWrapper {
+  items: SpotifyItem[];
+}
+
 export interface SpotifyItemBrief {
   id: number;
   name: string;
@@ -55,7 +59,7 @@ export interface SpotifyItemBrief {
   };
 }
 
-export interface CurrentlyPlaying {
+export interface CurrentlyPlaying extends SpotifyItemWrapper {
   timestamp: number;
   progress_ms: number;
   item: SpotifyItem;
@@ -74,6 +78,16 @@ export interface CurrentlyPlayingResponse extends CurrentlyPlaying {
   },
 }
 
+export interface SpotifyTracks extends SpotifyItemWrapper {
+  href: string;
+  items: SpotifyItem[];
+  limit: number;
+  next: string;
+  offset: number;
+  previous?: string;
+  total: number;
+}
+
 /* API Response formats */
 
 export interface SpotifyTopTracksResponse {
@@ -84,4 +98,8 @@ export interface SpotifyTopTracksResponse {
   href: string;
   next?: string;
   previous?: string;
+}
+
+export interface SpotifySearchResponse {
+  tracks: SpotifyTracks;
 }
