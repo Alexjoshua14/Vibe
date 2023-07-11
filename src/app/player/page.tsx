@@ -23,7 +23,7 @@ export default function Player() {
   const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null>(null);
   const [progress, setProgress] = useState<number>(0);
   const [filters, setFilters] = useState<string[]>([]);
-  const [searchResults, setSearchResults] = useState<SpotifyItem[]>(songs);
+  const [searchResults, setSearchResults] = useState<SpotifyItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -51,6 +51,12 @@ export default function Player() {
   const addToQueue = async (item: SpotifyItem) => {
     console.log(item);
     const result = await addToQueueClient(item.uri);
+    if (result) {
+      console.log("Added to queue");
+      setSearchResults([]);
+    } else {
+      console.log("Failed to add to queue");
+    }
   }
 
   useEffect(() => {
@@ -99,25 +105,26 @@ export default function Player() {
           </button>
         </div>
       </div>
-      <div>
-        <div className="flex flex-col gap-2">
-          {searchResults.length > 0 &&
-            searchResults.slice(offset, offset + limit).map((item, index) => (
+      {searchResults.length > 0 &&
+       (<div>
+          <div className="flex flex-col gap-2">
+            {searchResults.slice(offset, offset + limit).map((item, index) => (
               <button key={index} onClick={() => addToQueue(item)}>
                 <SearchResult item={item} />
               </button>
-            )) 
-          }
-        </div>
-        <div className="flex">
-          <button onClick={decrementOffset} disabled={offset == 0} className="disabled:text-gray-400">
-            <BsChevronLeft />
-          </button>
-          <button onClick={incrementOffset} disabled={offset + limit >= searchResults.length} className="disabled:text-gray-400">
-            <BsChevronRight />
-          </button>
-        </div>
-      </div>
+            ))
+            } 
+          </div>
+          <div className="flex">
+            <button onClick={decrementOffset} disabled={offset == 0} className="disabled:text-gray-400">
+              <BsChevronLeft />
+            </button>
+            <button onClick={incrementOffset} disabled={offset + limit >= searchResults.length} className="disabled:text-gray-400">
+              <BsChevronRight />
+            </button>
+          </div>
+        </div>)
+      }
     </main>
   )
 }
