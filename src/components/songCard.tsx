@@ -12,9 +12,9 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 
 import { SpotifyItem } from '../types/spotifyTypes';
 
-export const SongCard = ({ song }: { song: SpotifyItem } ) => {
+export const SongCard = ({ song, progress }: { song: SpotifyItem, progress?: number } ) => {
   return (
-    <Card sx={{ display: 'flex'}} className={`rounded-lg min-w-[20rem] pe-4 max-w-[38rem] bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
+    <Card sx={{ display: 'flex'}} className={`rounded-lg min-w-[400px] pe-4 max-w-[38rem] bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
       <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
         <CardMedia
           component="img"
@@ -23,15 +23,19 @@ export const SongCard = ({ song }: { song: SpotifyItem } ) => {
           alt={song.album.name}
           />
         <Box sx={{display: 'flex', flexDirection: 'col', width: '100%'}}>
-          <CardContent sx={{ flex: '1 0 auto' }}>
-            <Typography component="div" variant="h5">
-              {song.name}
-            </Typography>
-            <Typography component="div" variant="subtitle1">
-              {song.artists[0].name}
-            </Typography>
-          </CardContent>
-          <LinearProgress variant="determinate" value={.14} className="border-2 border-green-500" />
+          <CardContent sx={{ flex: '1 0 auto' }} className="flex flex-col justify-between">
+            <div className="flex-1">
+              <Typography component="div" variant="h5">
+                {song.name}
+              </Typography>
+              <Typography component="div" variant="subtitle1">
+                {song.artists[0].name}
+              </Typography>
+            </div>
+            <div className="w-full">
+              <LinearProgress variant="determinate" value={progress} />
+            </div>
+          </CardContent>  
         </Box>
       </Box>
     </Card>

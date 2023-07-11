@@ -47,8 +47,9 @@ export async function getClientCurrentlyPlaying() {
 
   if (session.accessToken) {
     const currentlyPlayingData = await getCurrentlyPlaying(session.accessToken);
-
-    return mapToCurrentlyPlaying(currentlyPlayingData);
+    if (currentlyPlayingData)
+      return mapToCurrentlyPlaying(currentlyPlayingData);
+    return currentlyPlayingData;
   }
   
 }
