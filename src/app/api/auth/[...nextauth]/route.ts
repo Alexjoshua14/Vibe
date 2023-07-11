@@ -6,6 +6,13 @@ import { spotifyScope } from "@/constants/spotify";
 import { JWT } from "next-auth/jwt";
 import { Account } from "next-auth";
 
+/*
+* Convert current time to seconds and add token expiration time to it
+*/
+const tokenExpirationFromNow = (time: number) => {
+  return Math.floor(Date.now() / 1000 + time);
+}
+
 async function refreshAccessToken(token: JWT) {
   console.log("ATTEMPTING TO REFRESH ACCESS TOKEN");
   console.log("TOKEN: " + token.refreshToken);
@@ -31,7 +38,7 @@ async function refreshAccessToken(token: JWT) {
     return {
       ...token,
       accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Math.floor(Date.now() / 1000 + refreshedTokens.expires_in),
+      accessTokenExpires: tokenExpirationFromNow(refreshedTokens.expires_in),
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
     }
       
@@ -60,12 +67,12 @@ export const authOptions: NextAuthOptions = {
         return {
           accessToken: account.access_token,
           id: account.id,
-          accessTokenExpires: Math.floor(Date.now() / 1000 + account.expires_in),
+          accessTokenExpires: tokenExpirationFromNow(account.expires_in),
           refreshToken: account.refresh_token,
         }
       }
       // Return previous token if the access token has not expired yet
-      else if (token.accessTokenExpires && Date.now() < token.accessTokenExpires * 1000) {
+      else if (token.accessTokenExpires && Date.now() / 1000 < token.accessTokenExpires) {
         return token;
       }
       const refreshedToken = await refreshAccessToken(token);
