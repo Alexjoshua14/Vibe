@@ -21,14 +21,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
+        
           <div className="flex flex-col min-h-screen p-2 bg-gradient-to-t from-zinc-950 to-zinc-800">
             <div className="flex-1 flex">
+            <AuthProvider>
               {children}
+            </AuthProvider>
             </div>
             <BottomNav />
-          </div>
-        </AuthProvider>
+          </div> 
       </body>
     </html>
   )

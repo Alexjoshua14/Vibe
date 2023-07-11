@@ -74,10 +74,10 @@ export const authOptions: NextAuthOptions = {
     // Access token needs to be explicitly declared to be made available
     // If using a database, may want to accept user argument and persist user.id
     async session({ session, token }) {
-      if (token) {
-        session.accessToken = token.accessToken;
-        session.error = token.error;
-      }
+      
+      session.accessToken = token.accessToken;
+      session.error = token.error;
+      
       return session;
     }
   },

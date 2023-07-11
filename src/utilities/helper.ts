@@ -1,4 +1,4 @@
-import { SpotifyTopTracksResponse, SpotifyItem } from '@/types/spotifyTypes';
+import { SpotifyTopTracksResponse, SpotifyItem, CurrentlyPlaying, CurrentlyPlayingResponse } from '@/types/spotifyTypes';
 
 export function mapToSongs(json: SpotifyTopTracksResponse) {
   return json.items.map((item: SpotifyItem) => {
@@ -27,6 +27,16 @@ export function songDataToSongBrief(song: SpotifyItem) {
     href: song.href,
     release_date: song.album.release_date,
     image: song.album.images[0],
+  }
+}
+
+export function mapToCurrentlyPlaying(json: CurrentlyPlayingResponse) {
+  return {
+    timestamp: json.timestamp,
+    progress_ms: json.progress_ms,
+    item: json.item,
+    currently_playing_type: json.currently_playing_type,
+    is_playing: json.is_playing,
   }
 }
 

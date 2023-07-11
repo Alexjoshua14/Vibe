@@ -55,6 +55,25 @@ export interface SpotifyItemBrief {
   };
 }
 
+export interface CurrentlyPlaying {
+  timestamp: number;
+  progress_ms: number;
+  item: SpotifyItem;
+  currently_playing_type: string;
+  is_playing: boolean;
+}
+
+export interface CurrentlyPlayingResponse extends CurrentlyPlaying {
+  context: {
+    external_urls: {
+      spotify: string;
+    },
+    href: string;
+    type: string;
+    uri: string;
+  },
+}
+
 /* API Response formats */
 
 export interface SpotifyTopTracksResponse {

@@ -16,13 +16,12 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   
   let topTracks: SpotifyItem[] = [];
+  let currentlyPlaying = null;
 
   if (!session) {
     console.log("No session found.")
     redirect('/api/auth/signin?callbackUrl=/');
   }
-
-  let currentlyPlaying = null;
 
   if (session.accessToken) {
     try {
