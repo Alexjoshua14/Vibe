@@ -13,9 +13,12 @@ const tokenExpirationFromNow = (time: number) => {
   return Math.floor(Date.now() / 1000 + time);
 }
 
+const tokenExpired = (expires_at?: number) => {
+  return (expires_at ?? 0) < Date.now() / 1000;
+}
+
 async function refreshAccessToken(token: JWT) {
-  console.log("ATTEMPTING TO REFRESH ACCESS TOKEN");
-  console.log("TOKEN: " + token.refreshToken);
+  console.log("Refreshing access token");
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_SPOTIFY_TOKEN_URL!, {
       headers: { "Content-Type": "application/x-www-form-urlencoded"},
@@ -67,12 +70,12 @@ export const authOptions: NextAuthOptions = {
         return {
           accessToken: account.access_token,
           id: account.id,
-          accessTokenExpires: tokenExpirationFromNow(account.expires_in),
+          accessTokenExpires: account.expires_at ?? Date.now() / 1000,
           refreshToken: account.refresh_token,
         }
       }
       // Return previous token if the access token has not expired yet
-      else if (token.accessTokenExpires && Date.now() / 1000 < token.accessTokenExpires) {
+      else if (!tokenExpired(token.accessTokenExpires)) {
         return token;
       }
       const refreshedToken = await refreshAccessToken(token);
