@@ -1,22 +1,17 @@
-import NextAuth, { DefaultSession, Account as NextAuthAccount} from "next-auth";
-import axios from "axios";
-import type { NextAuthOptions } from "next-auth";
+import NextAuth, { DefaultSession, Account as NextAuthAccoun, NextAuthOptions, Account} from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
-import { spotifyScope } from "@/constants/spotify";
 import { JWT } from "next-auth/jwt";
-import { Account } from "next-auth";
+import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
+import { spotifyScope } from "@/constants/spotify";
 
-/*
-* Convert current time to seconds and add token expiration time to it
-*/
-const tokenExpirationFromNow = (time: number) => {
-  return Math.floor(Date.now() / 1000 + time);
-}
-
-const tokenExpired = (expires_at?: number) => {
-  return (expires_at ?? 0) < Date.now() / 1000;
-}
-
+/**
+ * Attempt to refresh access token
+ * If unable to refresh, return original token with error
+ * 
+ * @param token JWT token
+ * @returns JWT token with refreshed access token
+ * @throws Error if unable to refresh access token
+ */
 async function refreshAccessToken(token: JWT) {
   console.log("Refreshing access token");
   try {
@@ -54,6 +49,11 @@ async function refreshAccessToken(token: JWT) {
   }
 }
 
+/**
+ * NextAuthOptions
+ * 
+ * @see https://next-auth.js.org/configuration/options
+ */
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
@@ -94,6 +94,9 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 }
 
+/**
+ * Export handler as GET and POST
+ */
 const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

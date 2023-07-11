@@ -1,6 +1,11 @@
 import { alpha, styled } from '@mui/material/styles';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
- 
+
+/**
+ * Customize the TextField component for search input
+ * 
+ * @see https://mui.com/components/text-fields/#customized-inputs
+ */
 export const SearchField = styled(TextField)({
   '& label.Mui-focused': {
     color: '#A0AAB4',

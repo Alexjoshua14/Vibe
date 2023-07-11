@@ -59,7 +59,7 @@ export interface SpotifyItemBrief {
   };
 }
 
-export interface CurrentlyPlaying extends SpotifyItemWrapper {
+export interface CurrentlyPlaying {
   timestamp: number;
   progress_ms: number;
   item: SpotifyItem;
@@ -86,9 +86,9 @@ export interface SpotifyTracks extends SpotifyItemWrapper {
   offset: number;
   previous?: string;
   total: number;
-}
+} 
 
-/* API Response formats */
+/* API Response types */
 
 export interface SpotifyTopTracksResponse {
   items: SpotifyItem[];

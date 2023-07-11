@@ -2,14 +2,18 @@
 
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { topTracksURL, currentlyPlayingURL, searchURL, addToQueueURL } from '@/constants/spotify';
 import { mapToCurrentlyPlaying, mapToSongs } from '@/utilities/helper';
+import { topTracksURL, currentlyPlayingURL, searchURL, addToQueueURL } from '@/constants/spotify';
 
-import { SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse } from '@/types/spotifyTypes';
+import { CurrentlyPlaying, SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse } from '@/types/spotifyTypes';
 
-/*
-* Get the user's top tracks
-*/
+/**
+ * Get the user's top tracks
+ * 
+ * @param access_token Spotify access_token
+ * @returns SpotifyTopTracksResponse
+ * @throws Error if response is not ok
+ */
 export async function getTopTracks(access_token: string): Promise<SpotifyTopTracksResponse> {
   const res = await fetch(topTracksURL, {
     headers: {
@@ -24,9 +28,12 @@ export async function getTopTracks(access_token: string): Promise<SpotifyTopTrac
   
 }
 
-/*
-* Get the user's currently playing track
-*/
+/**
+ * Fetch currently playing track from Spotify
+ * 
+ * @param access_token Spotify access_token
+ * @returns promise containing CurrentlyPlayingResponse
+ */
 export async function getCurrentlyPlaying(access_token: string): Promise<CurrentlyPlayingResponse> {
   const res = await fetch(currentlyPlayingURL, {
     headers: {
@@ -44,9 +51,12 @@ export async function getCurrentlyPlaying(access_token: string): Promise<Current
   return res.json();
 }
 
-/*
-* Accept client side request to fetch currently playing track
-*/
+/**
+ * Accept client side request to fetch currently playing track from Spotify
+ * 
+ * @returns CurrentlyPlaying
+ * @throws Error if no session or access token found
+ */
 export async function getClientCurrentlyPlaying() {
   const session = await getServerSession(authOptions);
 
@@ -64,9 +74,13 @@ export async function getClientCurrentlyPlaying() {
   }
 }
 
-/*
-* Search Spotify for a track
-*/
+/**
+ * Search Spotify for a track
+ * 
+ * @param access_token 
+ * @param query string to search for
+ * @returns promise containing SpotifySearchResponse
+ */
 export async function search(access_token: string, query: string): Promise<SpotifySearchResponse> {
   const queryURI = encodeURIComponent(query);
   const res = await fetch(`${searchURL}${queryURI}&type=track`, {
@@ -82,9 +96,13 @@ export async function search(access_token: string, query: string): Promise<Spoti
   return res.json();
 }
 
-/*
-* Accept client side request to search Spotify for a track
-*/
+/**
+ * Accept client side request to search Spotify for a track
+ * 
+ * @param query string to search for
+ * @returns 
+ * @throws Error if no session or access token found
+ */
 export async function searchSpotify(query: string) {
   const session = await getServerSession(authOptions);
 
@@ -102,9 +120,13 @@ export async function searchSpotify(query: string) {
   }
 }
 
-/*
-* Add track to queue
-*/
+/**
+ * Add track to queue
+ * 
+ * @param access_token 
+ * @param uri track uri to add to queue
+ * @returns boolean indicating success
+ */
 export async function addToQueue(access_token: string, uri: string) {
   const queryURI = encodeURIComponent(uri);
   const res = await fetch(`${addToQueueURL}${queryURI}`, {
@@ -117,9 +139,13 @@ export async function addToQueue(access_token: string, uri: string) {
   return res.ok;
 }
 
-/*
-* Accept client side request to add track to queue
-*/
+/**
+ * Accept client side request to add track to queue
+ * 
+ * @param uri track uri to add to queue
+ * @returns boolean indicating success
+ * @throws Error if no session or access token found
+ */
 export async function addToQueueClient(uri: string) {
   const session = await getServerSession(authOptions);
 

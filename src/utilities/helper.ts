@@ -1,5 +1,11 @@
-import { SpotifyItemWrapper, SpotifyItem, CurrentlyPlaying, CurrentlyPlayingResponse } from '@/types/spotifyTypes';
+import { SpotifyItemWrapper, SpotifyItem, SpotifyItemBrief, CurrentlyPlaying, CurrentlyPlayingResponse } from '@/types/spotifyTypes';
 
+/**
+ * Extract SpotifyItems from json response
+ * 
+ * @param json SpotifyItemWrapper
+ * @returns array of SpotifyItems
+ */
 export function mapToSongs(json: SpotifyItemWrapper) {
   return json.items.map((item: SpotifyItem) => {
     return {
@@ -17,7 +23,13 @@ export function mapToSongs(json: SpotifyItemWrapper) {
   })
 }
 
-export function songDataToSongBrief(song: SpotifyItem) {
+/**
+ * Extract core information from SpotifyItem
+ * 
+ * @param song SpotifyItem
+ * @returns SpotifyItemBrief
+ */
+export function songDataToSongBrief(song: SpotifyItem): SpotifyItemBrief {
   return {
     id: song.id,
     name: song.name,
@@ -30,7 +42,13 @@ export function songDataToSongBrief(song: SpotifyItem) {
   }
 }
 
-export function mapToCurrentlyPlaying(json: CurrentlyPlayingResponse) {
+/**
+ * Extract CurrentlyPlaying data from CurrentlyPlayingResponse
+ * 
+ * @param json CurrentlyPlayingResponse
+ * @returns CurrentlyPlaying
+ */
+export function mapToCurrentlyPlaying(json: CurrentlyPlayingResponse): CurrentlyPlaying {
   return {
     timestamp: json.timestamp,
     progress_ms: json.progress_ms,
@@ -40,7 +58,6 @@ export function mapToCurrentlyPlaying(json: CurrentlyPlayingResponse) {
   }
 }
 
-
 export function logTopTracks(topTracks: SpotifyItem[]) {
   for (const track of topTracks) {
     console.log(track);
@@ -48,7 +65,13 @@ export function logTopTracks(topTracks: SpotifyItem[]) {
   }
 }
 
-export function msToTime(duration: number) {
+/**
+ * Convert ms to formatted timestamp
+ * 
+ * @param duration in milliseconds
+ * @returns timestamp in format mm:ss
+ */
+export function msToTime(duration: number): string {
   const seconds = Math.floor((duration / 1000) % 60);
   const minutes = Math.floor((duration / (1000 * 60)) % 60);
 
@@ -58,4 +81,24 @@ export function msToTime(duration: number) {
   ].join(':');
 
   return formatedTimestamp;
+}
+
+/**
+ * Convert expiration time length to timestamp
+ * 
+ * @param time in seconds
+ * @returns timestamp in seconds
+*/
+export const tokenExpirationFromNow = (time: number) => {
+  return Math.floor(Date.now() / 1000 + time);
+}
+
+/**
+ * Check if token is expired
+ * 
+ * @param expires_at seconds since epoch
+ * @returns boolean indicating whether token is expired
+ */
+export const tokenExpired = (expires_at?: number): boolean => {
+  return (expires_at ?? 0) < Date.now() / 1000;
 }

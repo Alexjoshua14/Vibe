@@ -1,8 +1,13 @@
 'use client'
 
-import {signIn, signOut} from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 
+
+/**
+ * NextAuth authentication buttons
+ * 
+ */
 export const LoginButton = () => {
   return (
     <button onClick={() => signIn()}>Sign In</button>
@@ -14,6 +19,11 @@ export const LogoutButton = () => {
     <button onClick={() => signOut()}>Sign Out</button>
   )
 }
+
+/**
+ * Next.js page navigation buttons
+ * 
+ */
 
 export const HomeButton = () => {
   return (

@@ -1,5 +1,7 @@
 
-
+/**
+ * Spotify API scope
+ */
 export const spotifyScope = [
   "user-read-email",
   "user-read-playback-state",
@@ -10,8 +12,14 @@ export const spotifyScope = [
   "user-top-read",
 ]
 
+/**
+ * Spotify API base URL
+ */
 export const spotifyAPI = "https://api.spotify.com/v1/";
 
+/**
+ * Spotify API URLs
+ */
 export const topTracksURL = `${spotifyAPI}me/top/tracks`;
 export const topArtistsURL = `${spotifyAPI}me/top/artists`;
 export const recentlyPlayedURL = `${spotifyAPI}me/player/recently-played`;
