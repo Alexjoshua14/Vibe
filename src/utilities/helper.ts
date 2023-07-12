@@ -102,3 +102,24 @@ export const tokenExpirationFromNow = (time: number) => {
 export const tokenExpired = (expires_at?: number): boolean => {
   return (expires_at ?? 0) < Date.now() / 1000;
 }
+
+/**
+ * Determine realtime playback progress based on latest data fetch
+ * 
+ * @param ts timestamp of latest progress check
+ * @param progress progress in ms
+ */
+export function playbackTime(ts: number, progress: number) {
+  return Math.floor(Date.now() - ts + progress);
+}
+
+/**
+ * Convert playtime to progress bar percentage [0, 100]
+ * 
+ * @param time in ms
+ * @param duration in ms
+ * @returns percentage [0, 100]
+ */
+export function progressToPercentage(time: number, duration: number): number {
+  return Math.floor((time / duration) * 100);
+}

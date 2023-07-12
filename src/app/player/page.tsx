@@ -6,7 +6,7 @@ import { SearchField } from "@/components/searchField";
 import { SongCard, SearchResult } from "@/components/songCard";
 
 import { getClientCurrentlyPlaying, searchSpotify, addToQueueClient } from "@/utilities/spotifyAPI";
-import { msToTime } from "@/utilities/helper";
+import { msToTime, playbackTime, progressToPercentage } from "@/utilities/helper";
 
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 import { BiSolidSend } from "react-icons/bi";
@@ -24,10 +24,9 @@ import { songs } from "@/data/songs";
  * @returns The player page
  */
 export default function Player() {
-
   const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null>(null);
-  const [progress, setProgress] = useState<number>(0);
-  const [filters, setFilters] = useState<string[]>([]);
+  const [progress, setProgress] = useState<{ time: number, percentage: number }>({ time: 0, percentage: 0 });
+  //const [filters, setFilters] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<SpotifyItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [offset, setOffset] = useState<number>(0);
@@ -68,10 +67,8 @@ export default function Player() {
    * @param item The item to add to the queue
    */
   const addToQueue = async (item: SpotifyItem) => {
-    console.log(item);
     const result = await addToQueueClient(item.uri);
     if (result) {
-      console.log("Added to queue");
       setSearchResults([]);
     } else {
       console.log("Failed to add to queue");
@@ -85,20 +82,42 @@ export default function Player() {
    * Clears the interval on component unmount
    */
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const currentlyPlaying = await getClientCurrentlyPlaying();
+    const fetchData = async () => {
+      const currentlyPlaying: CurrentlyPlaying | null = await getClientCurrentlyPlaying();
       if (currentlyPlaying) {
         setCurrentlyPlaying(currentlyPlaying);
-        setProgress(Math.floor((currentlyPlaying.progress_ms / currentlyPlaying.item.duration_ms) * 100));
       } else {
         console.log("No song playing");
       }
-    }, 10000);
+    }
+
+    const interval = setInterval(fetchData, 10000);
 
     return () => {
       clearInterval(interval);
     }
-  },);
+  }, []);
+
+  /*** NOTE: Spotify API's timestamp has had noteable problems for years
+    * @see https://community.spotify.com/t5/Spotify-for-Developers/API-playback-timestamp/m-p/5291948#M3571
+    * @see https://github.com/spotify/web-api/issues/1073 
+    */
+  useEffect(() => {
+    const progressInterval = setInterval(() => {
+      if (currentlyPlaying) {
+        let progress_ms = Date.now() - currentlyPlaying.timestamp;
+        if (progress_ms > currentlyPlaying.item.duration_ms) {
+          progress_ms = currentlyPlaying.item.duration_ms;
+        }
+        const progressPercentage = progressToPercentage(progress_ms, currentlyPlaying.item.duration_ms);
+        setProgress({ time: progress_ms, percentage: progressPercentage });
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(progressInterval);
+    }
+  }, [currentlyPlaying]);
 
   return (
     <main className="flex-1 p-16 flex flex-col items-center justify-between border-2 border-orange-500">
@@ -107,7 +126,7 @@ export default function Player() {
           {currentlyPlaying ?
             <SongCard
               song={currentlyPlaying ? currentlyPlaying.item : songs[4]}
-              progress={progress}
+              progress_ms={progress.time}
             /> :
             <div>
               <h1>

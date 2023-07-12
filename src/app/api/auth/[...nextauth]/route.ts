@@ -13,7 +13,6 @@ import { spotifyScope } from "@/constants/spotify";
  * @throws Error if unable to refresh access token
  */
 async function refreshAccessToken(token: JWT) {
-  console.log("Refreshing access token");
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_SPOTIFY_TOKEN_URL!, {
       headers: { "Content-Type": "application/x-www-form-urlencoded"},

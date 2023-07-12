@@ -22,6 +22,7 @@ export const spotifyAPI = "https://api.spotify.com/v1/";
  */
 export const topTracksURL = `${spotifyAPI}me/top/tracks`;
 export const topArtistsURL = `${spotifyAPI}me/top/artists`;
+export const playbackStateURL = `${spotifyAPI}me/player`;
 export const recentlyPlayedURL = `${spotifyAPI}me/player/recently-played`;
 export const currentlyPlayingURL = `${spotifyAPI}me/player/currently-playing`;
 export const pauseURL = `${spotifyAPI}me/player/pause`;

@@ -1,3 +1,4 @@
+import { type } from "os";
 
 export interface SpotifyImage {
   height: number;
@@ -98,6 +99,33 @@ export interface SpotifyTopTracksResponse {
   href: string;
   next?: string;
   previous?: string;
+}
+
+export interface PlaybackStateResponse {
+  device: {
+    id: string;
+    is_active: boolean;
+    is_private_session: boolean;
+    is_restricted: boolean;
+    name: string;
+    type: string;
+    volume_percent: number;
+  };
+  repeat_state: string;
+  shuffle_state: boolean;
+  context?: {
+    type: string;
+    href: string;
+    external_urls: {
+      spotify: string;
+    };
+    uri: string;
+  };
+  timestamp: number;
+  progress_ms: number;
+  is_playing: boolean;
+  currently_playing_type: string;
+  item: SpotifyItem;
 }
 
 export interface SpotifySearchResponse {

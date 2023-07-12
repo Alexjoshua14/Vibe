@@ -3,9 +3,9 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { mapToCurrentlyPlaying, mapToSongs } from '@/utilities/helper';
-import { topTracksURL, currentlyPlayingURL, searchURL, addToQueueURL } from '@/constants/spotify';
+import { topTracksURL, currentlyPlayingURL, searchURL, addToQueueURL, playbackStateURL } from '@/constants/spotify';
 
-import { CurrentlyPlaying, SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse } from '@/types/spotifyTypes';
+import { CurrentlyPlaying, PlaybackStateResponse, SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse } from '@/types/spotifyTypes';
 
 /**
  * Get the user's top tracks
@@ -28,13 +28,15 @@ export async function getTopTracks(access_token: string): Promise<SpotifyTopTrac
   
 }
 
+
 /**
  * Fetch currently playing track from Spotify
  * 
  * @param access_token Spotify access_token
  * @returns promise containing CurrentlyPlayingResponse
  */
-export async function getCurrentlyPlaying(access_token: string): Promise<CurrentlyPlayingResponse> {
+export async function getCurrentlyPlaying(access_token: string) {  
+
   const res = await fetch(currentlyPlayingURL, {
     headers: {
       Authorization: `Bearer ${access_token}`
@@ -65,10 +67,16 @@ export async function getClientCurrentlyPlaying() {
   }
 
   if (session.accessToken) {
-    const currentlyPlayingData = await getCurrentlyPlaying(session.accessToken);
-    if (currentlyPlayingData)
-      return mapToCurrentlyPlaying(currentlyPlayingData);
-    return currentlyPlayingData;
+    try {
+      const currentlyPlayingData = await getCurrentlyPlaying(session.accessToken);
+      if (currentlyPlayingData) {
+        return mapToCurrentlyPlaying(currentlyPlayingData);
+      }
+      return currentlyPlayingData;
+    } catch (error) {
+      
+      return null;
+    }  
   } else {
     throw new Error("No access token found");
   }

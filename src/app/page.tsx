@@ -2,19 +2,19 @@
 import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 import { authOptions } from './api/auth/[...nextauth]/route';
+
 import { LoginButton, LogoutButton } from "@/components/buttons";
+import { SongCard } from "@/components/songCard";
 
 import { getTopTracks } from "@/utilities/spotifyAPI";
 import { mapToSongs } from "@/utilities/helper";
 
-import { SongCard } from "@/components/songCard";
 import { songs } from "@/data/songs";
 import { SpotifyItem } from "@/types/spotifyTypes";
-import { logTopTracks } from "@/utilities/helper";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  
+
   let topTracks: SpotifyItem[] = [];
   let currentlyPlaying = null;
 
@@ -25,15 +25,11 @@ export default async function Home() {
 
   if (session.accessToken) {
     try {
-    const topTracksData = await getTopTracks(session.accessToken);
-    // const topTracksResponse = await Promise.all([topTracksData]);
-    // console.log(topTracks);
-    topTracks = mapToSongs(topTracksData);
-    // console.log("_____________________________________");
-    // logTopTracks(topTracks);
-  } catch (error) {
-    console.log(error);
-  }
+      const topTracksData = await getTopTracks(session.accessToken);
+      topTracks = mapToSongs(topTracksData);
+    } catch (error) {
+      console.log(error);
+    }
   } else {
     throw new Error("No access token found.");
   }

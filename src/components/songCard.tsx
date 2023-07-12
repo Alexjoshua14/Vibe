@@ -13,6 +13,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { BsFillExplicitFill } from 'react-icons/bs';
 
+import { msToTime, progressToPercentage } from '@/utilities/helper';
+
 import { SpotifyItem } from '../types/spotifyTypes';
 
 /**
@@ -21,7 +23,7 @@ import { SpotifyItem } from '../types/spotifyTypes';
  * @param song The song to create a card for
  * @param progress The progress of the song 
  */
-export const SongCard = ({ song, progress }: { song: SpotifyItem, progress?: number }) => {
+export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms: number }) => {
   return (
     <Card sx={{ display: 'flex' }} className={`rounded-lg min-w-[400px] pe-4 max-w-[38rem] bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
       <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
@@ -42,7 +44,11 @@ export const SongCard = ({ song, progress }: { song: SpotifyItem, progress?: num
               </Typography>
             </div>
             <div className="w-full">
-              <LinearProgress variant="determinate" value={progress} />
+              <LinearProgress variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
+              <Typography component="div" variant="subtitle2">
+                {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
+              </Typography>
+
             </div>
           </CardContent>
         </Box>
