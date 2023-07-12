@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import { SearchField } from "@/components/searchField";
-import { SongCard, SearchResult } from "@/components/songCard";
+import { SongCard, SearchResult, AddToQueueModal } from "@/components/songCard";
 
 import { getClientCurrentlyPlaying, searchSpotify, addToQueueClient } from "@/utilities/spotifyAPI";
 import { msToTime, playbackTime, progressToPercentage } from "@/utilities/helper";
@@ -34,6 +34,9 @@ export default function Player() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectedSong, setSelectedSong] = useState<SpotifyItem | null>(null);
 
   /**
    * Increments the offset by the limit if the offset + limit is less than the length of the search results
@@ -65,17 +68,32 @@ export default function Player() {
   }
 
   /**
-   * Adds provided item to the queue
+   * Adds selected item to the queue
    * 
    * @param item The item to add to the queue
    */
-  const addToQueue = async (item: SpotifyItem) => {
-    const result = await addToQueueClient(item.uri);
-    if (result) {
-      setSearchResults([]);
-    } else {
-      console.log("Failed to add to queue");
+  const addToQueue = async () => {
+    try {
+      if (!selectedSong) throw new Error("No song selected");
+      const result = await addToQueueClient(selectedSong.uri);
+      if (result) {
+        setSearchResults([]);
+        setModalOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setModalOpen(false);
     }
+  }
+
+  const handleModalOpen = (item: SpotifyItem) => {
+    setSelectedSong(item);
+    setModalOpen(true);
+  }
+
+  const handleModalClose = () => {
+    setModalOpen(false);
   }
 
   /**
@@ -125,7 +143,7 @@ export default function Player() {
   }, [currentlyPlaying, song_completed]);
 
   return (
-    <main className="flex-1 p-16 flex flex-col items-center justify-between border-2 border-orange-500">
+    <main className="flex-1 p-16 flex flex-col items-center justify-around border-2 border-orange-500">
       <div className="flex flex-col">
         <div className="flex gap-4">
           {currentlyPlaying ?
@@ -162,7 +180,7 @@ export default function Player() {
             {searchResults.slice(offset, offset + limit).map((item, index) => (
               <motion.button
                 key={item.id}
-                onClick={() => addToQueue(item)}
+                onClick={() => handleModalOpen(item)}
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1, transition: { duration: .4, delay: index * 0.2 } }}
@@ -180,6 +198,8 @@ export default function Player() {
               <BsChevronRight size={24} />
             </button>
           </div>
+
+          <AddToQueueModal item={selectedSong} open={modalOpen} addToQueue={() => addToQueue} cancelAddToQueue={handleModalClose} />
         </div>
       )}
     </main>

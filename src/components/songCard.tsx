@@ -16,6 +16,7 @@ import { BsFillExplicitFill } from 'react-icons/bs';
 import { msToTime, progressToPercentage } from '@/utilities/helper';
 
 import { SpotifyItem } from '../types/spotifyTypes';
+import { Modal } from '@mui/material';
 
 /**
  * Creates a feature card for a song with a progress bar
@@ -69,7 +70,6 @@ export const SearchResult = ({ item }: { item: SpotifyItem }) => {
       className={`rounded-lg w-[400px] pe-4 
                   bg-gray-600 bg-opacity-20 backdrop-blur-xl 
                   text-white overflow-hidden cursor-pointer`}
-      onClick={() => console.log(item.id)}
     >
       <div className="flex w-full">
         <div className="flex justify-center items-center p-2">
@@ -104,4 +104,62 @@ export const SearchResult = ({ item }: { item: SpotifyItem }) => {
       </div>
     </div>
   )
+}
+
+
+export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
+  {
+    item: SpotifyItem | null,
+    open: boolean,
+    addToQueue: () => any,
+    cancelAddToQueue: () => void,
+  }) => {
+  return (
+    <Modal
+      open={open}
+      onClose={cancelAddToQueue}
+    >
+      <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] 
+                      w-[500px] h-96 
+                      flex flex-col items-center justify-center
+                      backdrop-filter backdrop-blur-lg
+                      border-2 border-teal-500">
+        <div className="flex flex-col justify-center w-fit" >
+          <Image
+            src={item?.album.images[0].url ?? ""}
+            height={140}
+            width={140}
+            alt={item?.album.name ?? ""}
+          />
+          <div className="flex flex-col justify-between items-center">
+            <p className="text-md whitespace-nowrap overflow-x-auto no-scrollbar max-w-full">
+              {item?.name}
+            </p>
+            <div className="flex text-xs gap-2 text-gray-300 items-center">
+              {<BsFillExplicitFill />}
+              <div className="flex gap-1">
+                <p>
+                  {item ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : ""}
+                </p>
+                <p>
+                  •
+                </p>
+                <p>
+                  {item?.artists[0].name ?? ""}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="p-4 flex items-center justify-center gap-4">
+          <button onClick={addToQueue()} className="px-3 py-1 bg-green-500 bg-opacity-60 rounded-lg">
+            Add to Queue
+          </button>
+          <button onClick={cancelAddToQueue} className="px-3 py-1 bg-red-500 bg-opacity-50 rounded-lg">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
 }
