@@ -67,7 +67,7 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
 export const SearchResult = ({ item }: { item: SpotifyItem }) => {
   return (
     <div
-      className={`rounded-lg w-[400px] pe-4 
+      className={`rounded-lg w-[300px] md:w-[400px] pe-4 
                   bg-gray-600 bg-opacity-20 backdrop-blur-xl 
                   text-white overflow-hidden cursor-pointer`}
     >
@@ -80,7 +80,7 @@ export const SearchResult = ({ item }: { item: SpotifyItem }) => {
             alt={item.album.name}
           />
         </div>
-        <div className="flex flex-col w-full p-4 max-w-[300px]">
+        <div className="flex flex-col w-full p-4 max-w-[200px] md:max-w-[300px]">
           <div className="flex flex-col justify-between items-start">
             <p className="text-md whitespace-nowrap overflow-x-auto no-scrollbar max-w-full">
               {item.name}
@@ -120,17 +120,19 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
       onClose={cancelAddToQueue}
     >
       <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] 
-                      w-[500px] h-96 
+                      w-[80%] h-2/3 md:w-[500px] md:h-96 rounded-lg
                       flex flex-col items-center justify-center
-                      backdrop-filter backdrop-blur-lg
-                      border-2 border-teal-500">
-        <div className="flex flex-col justify-center w-fit" >
-          <Image
-            src={item?.album.images[0].url ?? ""}
-            height={140}
-            width={140}
-            alt={item?.album.name ?? ""}
-          />
+                      backdrop-filter backdrop-blur-lg"
+      >
+        <div className="flex flex-col justify-center items-center w-fit gap-4">
+          <div className="rounded-lg overflow-hidden">
+            <Image
+              src={item?.album.images[0].url ?? ""}
+              height={140}
+              width={140}
+              alt={item?.album.name ?? ""}
+            />
+          </div>
           <div className="flex flex-col justify-between items-center">
             <p className="text-md whitespace-nowrap overflow-x-auto no-scrollbar max-w-full">
               {item?.name}
@@ -151,7 +153,7 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
             </div>
           </div>
         </div>
-        <div className="p-4 flex items-center justify-center gap-4">
+        <div className="p-4 flex items-center justify-center gap-2 md:gap-4">
           <button onClick={addToQueue()} className="px-3 py-1 bg-green-500 bg-opacity-60 rounded-lg">
             Add to Queue
           </button>

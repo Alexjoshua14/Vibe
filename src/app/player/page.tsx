@@ -143,7 +143,7 @@ export default function Player() {
   }, [currentlyPlaying, song_completed]);
 
   return (
-    <main className="flex-1 p-16 flex flex-col items-center justify-around border-2 border-orange-500">
+    <main className="flex-1 p-16 flex flex-col items-center justify-around border-2 border-orange-500 overflow-hidden">
       <div className="flex flex-col">
         <div className="flex gap-4">
           {currentlyPlaying ?
