@@ -20,6 +20,7 @@ export const spotifyAPI = "https://api.spotify.com/v1/";
 /**
  * Spotify API URLs
  */
+export const tokenURL = "https://accounts.spotify.com/api/token";
 export const topTracksURL = `${spotifyAPI}me/top/tracks`;
 export const topArtistsURL = `${spotifyAPI}me/top/artists`;
 export const playbackStateURL = `${spotifyAPI}me/player`;

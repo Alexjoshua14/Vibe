@@ -2,7 +2,7 @@ import NextAuth, { DefaultSession, Account as NextAuthAccoun, NextAuthOptions, A
 import SpotifyProvider from "next-auth/providers/spotify";
 import { JWT } from "next-auth/jwt";
 import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
-import { spotifyScope } from "@/constants/spotify";
+import { spotifyScope, tokenURL } from "@/constants/spotify"; 
 
 /**
  * Attempt to refresh access token
@@ -14,7 +14,7 @@ import { spotifyScope } from "@/constants/spotify";
  */
 async function refreshAccessToken(token: JWT) {
   try {
-    const res = await fetch(process.env.NEXT_PUBLIC_SPOTIFY_TOKEN_URL!, {
+    const res = await fetch(tokenURL, {
       headers: { "Content-Type": "application/x-www-form-urlencoded"},
       body: 
        new URLSearchParams({
