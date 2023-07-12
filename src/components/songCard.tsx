@@ -23,7 +23,7 @@ import { SpotifyItem } from '../types/spotifyTypes';
  * @param song The song to create a card for
  * @param progress The progress of the song 
  */
-export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms: number }) => {
+export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms?: number }) => {
   return (
     <Card sx={{ display: 'flex' }} className={`rounded-lg min-w-[400px] pe-4 max-w-[38rem] bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
       <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
@@ -43,13 +43,15 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
                 {song.artists[0].name}
               </Typography>
             </div>
-            <div className="w-full">
-              <LinearProgress variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
-              <Typography component="div" variant="subtitle2">
-                {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
-              </Typography>
+            {progress_ms &&
+              <div className="w-full">
+                <LinearProgress variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
+                <Typography component="div" variant="subtitle2">
+                  {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
+                </Typography>
 
-            </div>
+              </div>
+            }
           </CardContent>
         </Box>
       </Box>
@@ -79,9 +81,9 @@ export const SearchResult = ({ item }: { item: SpotifyItem }) => {
             alt={item.album.name}
           />
         </div>
-        <div className="flex flex-col w-full p-4">
-          <div className="flex flex-col justify-between">
-            <p className="text-md">
+        <div className="flex flex-col w-full p-4 max-w-[300px]">
+          <div className="flex flex-col justify-between items-start">
+            <p className="text-md whitespace-nowrap overflow-x-auto no-scrollbar max-w-full">
               {item.name}
             </p>
             <div className="flex text-xs gap-2 text-gray-300 items-center">

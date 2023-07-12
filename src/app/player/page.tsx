@@ -26,6 +26,7 @@ import { songs } from "@/data/songs";
 export default function Player() {
   const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null>(null);
   const [progress, setProgress] = useState<{ time: number, percentage: number }>({ time: 0, percentage: 0 });
+  const [song_completed, setSongCompleted] = useState<boolean>(false);
   //const [filters, setFilters] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<SpotifyItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -86,6 +87,7 @@ export default function Player() {
       const currentlyPlaying: CurrentlyPlaying | null = await getClientCurrentlyPlaying();
       if (currentlyPlaying) {
         setCurrentlyPlaying(currentlyPlaying);
+        setSongCompleted(false);
       } else {
         console.log("No song playing");
       }
@@ -96,7 +98,7 @@ export default function Player() {
     return () => {
       clearInterval(interval);
     }
-  }, []);
+  }, [song_completed]);
 
   /*** NOTE: Spotify API's timestamp has had noteable problems for years
     * @see https://community.spotify.com/t5/Spotify-for-Developers/API-playback-timestamp/m-p/5291948#M3571
@@ -104,10 +106,11 @@ export default function Player() {
     */
   useEffect(() => {
     const progressInterval = setInterval(() => {
-      if (currentlyPlaying) {
+      if (currentlyPlaying && song_completed == false) {
         let progress_ms = Date.now() - currentlyPlaying.timestamp;
         if (progress_ms > currentlyPlaying.item.duration_ms) {
           progress_ms = currentlyPlaying.item.duration_ms;
+          setSongCompleted(true);
         }
         const progressPercentage = progressToPercentage(progress_ms, currentlyPlaying.item.duration_ms);
         setProgress({ time: progress_ms, percentage: progressPercentage });
@@ -117,7 +120,7 @@ export default function Player() {
     return () => {
       clearInterval(progressInterval);
     }
-  }, [currentlyPlaying]);
+  }, [currentlyPlaying, song_completed]);
 
   return (
     <main className="flex-1 p-16 flex flex-col items-center justify-between border-2 border-orange-500">
@@ -159,12 +162,12 @@ export default function Player() {
             ))
             }
           </div>
-          <div className="flex">
+          <div className="flex justify-end p-2 gap-2">
             <button onClick={decrementOffset} disabled={offset == 0} className="disabled:text-gray-400">
-              <BsChevronLeft />
+              <BsChevronLeft size={24} />
             </button>
             <button onClick={incrementOffset} disabled={offset + limit >= searchResults.length} className="disabled:text-gray-400">
-              <BsChevronRight />
+              <BsChevronRight size={24} />
             </button>
           </div>
         </div>
