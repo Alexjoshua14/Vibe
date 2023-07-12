@@ -7,7 +7,7 @@ import { FeedButton, PlayerButton, ProfileButton } from './buttons';
 
 export const BottomNav = () => {
   return (
-    <Grid container spacing={2} className="p-4 text-center bg-zinc-800 h-20 bg-opacity-50 backdrop-blur-lg">
+    <Grid container spacing={2} className="fixed bottom-0 left-0 right-0 p-4 text-center bg-zinc-800 h-20 bg-opacity-50 backdrop-blur-lg">
       <Grid xs={4}>
         <FeedButton />
       </Grid>

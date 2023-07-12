@@ -1,4 +1,5 @@
-import { type } from "os";
+
+export type SongInformationVariant = "main" | "secondary" | "modal";
 
 export interface SpotifyImage {
   height: number;

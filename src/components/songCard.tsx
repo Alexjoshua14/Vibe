@@ -1,8 +1,9 @@
 'use client'
 
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -15,8 +16,114 @@ import { BsFillExplicitFill } from 'react-icons/bs';
 
 import { msToTime, progressToPercentage } from '@/utilities/helper';
 
-import { SpotifyItem } from '../types/spotifyTypes';
+import { SpotifyItem, SongInformationVariant } from '../types/spotifyTypes';
 import { Modal } from '@mui/material';
+
+
+/**
+ * Displays text in confined to it's container 
+ * and scrolls it if it overflows
+ * 
+ * @param text string to be displayed
+ * @param containerRef reference to the container element
+ */
+const ScrollingText = ({ text, containerRef }: { text: string, containerRef: React.RefObject<HTMLDivElement> }) => {
+  const [translation, setTranslation] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(1);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const containerWidth = containerRef.current?.offsetWidth;
+      const textWidth = containerRef.current?.scrollWidth;
+      if (containerWidth && textWidth) {
+        const overflow = textWidth > containerWidth;
+
+        if (overflow) {
+          let distance = (textWidth - containerWidth) + 20;
+          if (distance < 0) { distance *= -1 } //Ensure distance is always positive
+          let duration = (distance * .03);
+          if (duration < 1.5) duration = 1.5;
+
+          setDuration(duration);
+          setTranslation(-distance);
+        } else {
+          setTranslation(0);
+        }
+      }
+    }
+    handleResize();
+    // window.addEventListener('resize', handleResize);
+  }, [text, containerRef])
+
+  return (
+    <motion.p
+      whileInView={{ x: [0, translation, 0] }}
+      viewport={{ once: true }}
+      transition={{ ease: "linear", delay: 2, duration: duration, times: [0, .7, 1], repeat: Infinity, repeatDelay: 4 }}
+      className="max-w-full whitespace-nowrap"
+    >
+      {text}
+    </motion.p>
+  )
+}
+
+/**
+ * Returns a SongInformation component that displays:
+ * - The name of the song (scrolling if it overflows)
+ * - If the song is explicit
+ * - The type of the song
+ * - The artists of the song (scrolling if it overflows)
+ * 
+ * @param item SpotifyItem to display information for
+ * @param variant The variant of the SongInformation component
+ */
+const SongInformation = ({ item, variant }: { item: SpotifyItem, variant?: SongInformationVariant }) => {
+  const titleRef = useRef<HTMLDivElement>(null);
+  const artistRef = useRef<HTMLDivElement>(null);
+
+  const artists = item.artists.map(artist => artist.name).join(", ")
+
+  return (
+    <div className={`flex flex-col w-full justify-between ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"}`}>
+      <div
+        ref={titleRef}
+        className={`
+        ${variant == "secondary" || variant == undefined && "text-md"}
+        ${variant == "main" || variant == "modal" && "text-xl"} 
+        whitespace-nowrap overflow-x-hidden max-w-full`}
+      >
+        <ScrollingText text={item.name} containerRef={titleRef} />
+      </div>
+      <div
+        className={`
+          flex gap-2 text-gray-300 items-center
+          max-w-[90%] ${variant == "modal" && "max-w-[80%]"}
+          text-xs`}
+      >
+        {item.explicit &&
+          <span className="w-fit h-fit">
+            <BsFillExplicitFill />
+          </span>
+        }
+        <div className={`flex gap-1 overflow-hidden`}>
+          {variant != "main" && (
+            <>
+              <p>
+                {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+              </p>
+              <p>
+                •
+              </p>
+            </>
+          )}
+          <div ref={artistRef} className={`overflow-hidden whitespace-nowrap max-w-full`}>
+            <ScrollingText text={artists} containerRef={artistRef} />
+          </div>
+        </div>
+      </div>
+    </div >
+  )
+}
 
 /**
  * Creates a feature card for a song with a progress bar
@@ -26,36 +133,29 @@ import { Modal } from '@mui/material';
  */
 export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms?: number }) => {
   return (
-    <Card sx={{ display: 'flex' }} className={`rounded-lg min-w-[400px] pe-4 max-w-[38rem] bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+    <Card sx={{ display: 'flex' }}
+      className={`rounded-lg w-[300px] sm:w-[400px] overflow-hidden
+                 bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
+      <Box className="flex flex-col sm:flex-row justify-center items-center w-ful overflow-hidden">
         <CardMedia
           component="img"
-          sx={{ width: 140 }}
+          className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
           image={song.album.images[0].url}
           alt={song.album.name}
         />
-        <Box sx={{ display: 'flex', flexDirection: 'col', width: '100%' }}>
-          <CardContent sx={{ flex: '1 0 auto' }} className="flex flex-col justify-between max-w-full">
-            <div className="flex-1">
-              <Typography component="div" variant="h5">
-                {song.name}
-              </Typography>
-              <Typography component="div" variant="subtitle1">
-                {song.artists[0].name}
+        <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
+          <SongInformation item={song} variant={"main"} />
+          {progress_ms &&
+            <div className="w-full">
+              <LinearProgress variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
+              <Typography component="div" variant="subtitle2">
+                {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
               </Typography>
             </div>
-            {progress_ms &&
-              <div className="w-full">
-                <LinearProgress variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
-                <Typography component="div" variant="subtitle2">
-                  {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
-                </Typography>
-              </div>
-            }
-          </CardContent>
-        </Box>
+          }
+        </CardContent>
       </Box>
-    </Card>
+    </Card >
   )
 }
 
@@ -67,7 +167,7 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
 export const SearchResult = ({ item }: { item: SpotifyItem }) => {
   return (
     <div
-      className={`rounded-lg w-[300px] md:w-[400px] pe-4 
+      className={`rounded-lg w-[300px] sm:w-[400px] pe-4 
                   bg-gray-600 bg-opacity-20 backdrop-blur-xl 
                   text-white overflow-hidden cursor-pointer`}
     >
@@ -80,36 +180,27 @@ export const SearchResult = ({ item }: { item: SpotifyItem }) => {
             alt={item.album.name}
           />
         </div>
-        <div className="flex flex-col w-full p-4 max-w-[200px] md:max-w-[300px]">
-          <div className="flex flex-col justify-between items-start">
-            <p className="text-md whitespace-nowrap overflow-x-auto no-scrollbar max-w-full">
-              {item.name}
-            </p>
-            <div className="flex text-xs gap-2 text-gray-300 items-center">
-              {<BsFillExplicitFill />}
-              <div className="flex gap-1">
-                <p>
-                  {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
-                </p>
-                <p>
-                  •
-                </p>
-                <p>
-                  {item.artists[0].name}
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-col w-full p-4 max-w-[200px] sm:max-w-[300px]">
+          <SongInformation item={item} />
         </div>
       </div>
     </div>
   )
 }
 
-
+/**
+ * Modal that displays information about a Spotify Item
+ * and allows the user to add it to the queue
+ * 
+ * @param item SpotifyItem to display information for
+ * @param open Whether the modal is open or not
+ * @param addToQueue Function to add the item to the queue
+ * @param cancelAddToQueue Function to cancel adding the item to the queue
+ * @returns 
+ */
 export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
   {
-    item: SpotifyItem | null,
+    item: SpotifyItem,
     open: boolean,
     addToQueue: () => any,
     cancelAddToQueue: () => void,
@@ -120,11 +211,11 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
       onClose={cancelAddToQueue}
     >
       <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] 
-                      w-[80%] h-2/3 md:w-[500px] md:h-96 rounded-lg
+                      w-[90%] h-1/2 sm:w-[500px] sm:h-96 rounded-lg
                       flex flex-col items-center justify-center
                       backdrop-filter backdrop-blur-lg"
       >
-        <div className="flex flex-col justify-center items-center w-fit gap-4">
+        <div className="flex flex-col justify-center items-center w-fit max-w-full gap-4">
           <div className="rounded-lg overflow-hidden">
             <Image
               src={item?.album.images[0].url ?? ""}
@@ -133,27 +224,11 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
               alt={item?.album.name ?? ""}
             />
           </div>
-          <div className="flex flex-col justify-between items-center">
-            <p className="text-md whitespace-nowrap overflow-x-auto no-scrollbar max-w-full">
-              {item?.name}
-            </p>
-            <div className="flex text-xs gap-2 text-gray-300 items-center">
-              {<BsFillExplicitFill />}
-              <div className="flex gap-1">
-                <p>
-                  {item ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : ""}
-                </p>
-                <p>
-                  •
-                </p>
-                <p>
-                  {item?.artists[0].name ?? ""}
-                </p>
-              </div>
-            </div>
+          <div className="max-w-[80%]">
+            <SongInformation item={item} variant={"modal"} />
           </div>
         </div>
-        <div className="p-4 flex items-center justify-center gap-2 md:gap-4">
+        <div className="p-4 flex items-center justify-center gap-2 sm:gap-4">
           <button onClick={addToQueue()} className="px-3 py-1 bg-green-500 bg-opacity-60 rounded-lg">
             Add to Queue
           </button>

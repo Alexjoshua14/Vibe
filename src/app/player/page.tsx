@@ -32,6 +32,7 @@ export default function Player() {
   //const [filters, setFilters] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<SpotifyItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchFieldDisabled, setSearchFieldDisabled] = useState<boolean>(false);
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
 
@@ -62,9 +63,21 @@ export default function Player() {
    * Handles the search query and sets the search results
    */
   const handleSearch = async () => {
+    const searchField = document.getElementById("search-music") as HTMLInputElement;
+    if (searchField) {
+      searchField.blur();
+      setSearchFieldDisabled(true);
+    }
     const results = await searchSpotify(searchQuery);
     setSearchQuery("");
+    setSearchFieldDisabled(false);
     setSearchResults(results);
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      handleSearch();
+    }
   }
 
   /**
@@ -143,7 +156,7 @@ export default function Player() {
   }, [currentlyPlaying, song_completed]);
 
   return (
-    <main className="flex-1 p-16 flex flex-col items-center justify-around border-2 border-orange-500 overflow-hidden">
+    <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">
       <div className="flex flex-col">
         <div className="flex gap-4">
           {currentlyPlaying ?
@@ -165,6 +178,8 @@ export default function Player() {
             variant="outlined"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyPress}
+            disabled={searchFieldDisabled}
           />
           <motion.button
             onClick={handleSearch}
@@ -183,6 +198,7 @@ export default function Player() {
                 onClick={() => handleModalOpen(item)}
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0 }}
+                viewport={{ once: true }}
                 whileInView={{ opacity: 1, transition: { duration: .4, delay: index * 0.2 } }}
               >
                 <SearchResult item={item} />
@@ -199,7 +215,7 @@ export default function Player() {
             </button>
           </div>
 
-          <AddToQueueModal item={selectedSong} open={modalOpen} addToQueue={() => addToQueue} cancelAddToQueue={handleModalClose} />
+          {selectedSong && <AddToQueueModal item={selectedSong} open={modalOpen} addToQueue={() => addToQueue} cancelAddToQueue={handleModalClose} />}
         </div>
       )}
     </main>
