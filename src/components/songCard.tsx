@@ -49,7 +49,6 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
                 <Typography component="div" variant="subtitle2">
                   {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
                 </Typography>
-
               </div>
             }
           </CardContent>

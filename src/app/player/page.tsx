@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { motion } from "framer-motion";
+
 import { SearchField } from "@/components/searchField";
 import { SongCard, SearchResult } from "@/components/songCard";
 
@@ -137,7 +139,6 @@ export default function Player() {
               </h1>
             </div>
           }
-          <div>{msToTime(currentlyPlaying ? currentlyPlaying.progress_ms : 0)}</div>
         </div>
         <div className="flex justify-center items-center p-4 gap-2">
           <SearchField
@@ -147,18 +148,27 @@ export default function Player() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button onClick={handleSearch}>
+          <motion.button
+            onClick={handleSearch}
+            whileHover={{ scale: 1.07, transition: { duration: .4 } }}
+          >
             <BiSolidSend size={24} />
-          </button>
+          </motion.button>
         </div>
       </div>
       {searchResults.length > 0 && (
         <div>
           <div className="flex flex-col gap-2">
             {searchResults.slice(offset, offset + limit).map((item, index) => (
-              <button key={index} onClick={() => addToQueue(item)}>
+              <motion.button
+                key={item.id}
+                onClick={() => addToQueue(item)}
+                whileHover={{ scale: 1.05 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1, transition: { duration: .4, delay: index * 0.2 } }}
+              >
                 <SearchResult item={item} />
-              </button>
+              </motion.button>
             ))
             }
           </div>
