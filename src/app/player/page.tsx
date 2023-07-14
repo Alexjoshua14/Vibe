@@ -117,6 +117,7 @@ export default function Player() {
    */
   useEffect(() => {
     const fetchData = async () => {
+      //Could alter this to check if song has changed
       const currentlyPlaying: CurrentlyPlaying | null = await getClientCurrentlyPlaying();
       if (currentlyPlaying) {
         setCurrentlyPlaying(currentlyPlaying);
@@ -158,15 +159,15 @@ export default function Player() {
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">
       <div className="flex flex-col">
-        <div className="flex gap-4">
+        <div className="flex gap-4 h-[400px] sm:h-[140px]">
           {currentlyPlaying ?
             <SongCard
               song={currentlyPlaying ? currentlyPlaying.item : songs[4]}
               progress_ms={progress.time}
             /> :
-            <div>
+            <div className="flex h-full w-full justify-center items-center text-center">
               <h1>
-                Start listening to something
+                Start listening to something..
               </h1>
             </div>
           }
