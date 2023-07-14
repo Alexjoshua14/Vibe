@@ -18,6 +18,7 @@ import { msToTime, progressToPercentage } from '@/utilities/helper';
 
 import { SpotifyItem, SongInformationVariant } from '../types/spotifyTypes';
 import { Modal } from '@mui/material';
+import { PostData } from '@/types';
 
 
 /**
@@ -134,7 +135,7 @@ const SongInformation = ({ item, variant }: { item: SpotifyItem, variant?: SongI
 export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms?: number }) => {
   return (
     <Card sx={{ display: 'flex' }}
-      className={`rounded-lg w-[300px] sm:w-[400px] overflow-hidden
+      className={`rounded-lg w-[300px] sm:w-[400px] overflow-hidden h-[400px] sm:h-[140px]
                  bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
       <Box className="flex flex-col sm:flex-row justify-center items-center w-ful overflow-hidden">
         <CardMedia
@@ -187,6 +188,48 @@ export const SearchResult = ({ item }: { item: SpotifyItem }) => {
     </div>
   )
 }
+
+export const Post = ({ post }: { post: PostData }) => {
+  return (
+    <div className="flex flex-row min-w-[300px] w-full max-w-[360px] h-[220px] border-2 border-teal-500">
+      <div className="flex flex-col w-1/3 h-full border-2 border-yellow-500">
+        <div className="w-full aspect-square rounded-full flex justify-center items-center border-2 border-orange-500">Image</div>
+        <div className="flex-1 flex flex-col items-center justify-center whitespace-nowrap overflow-hidden">
+          <span>{post.item.name}</span>
+          <span>{post.item.artists[0].name}</span>
+          <span>{post.item.album.name}</span>
+        </div>
+      </div>
+      <div className="flex-1 flex flex-col py-4 px-2 border-2 border-pink-500">
+        <div className="flex gap-2 min-h-[30px]">
+          <div className="w-[50px] aspect-square rounded-full flex justify-center items-center border-2 border-orange-500">
+            <span>IMG</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-lg">
+              {post.user.name}
+            </span>
+            <span className="text-xs text-gray-300">
+              {post.createdAt}
+            </span>
+          </div>
+        </div>
+        <div className="max-w-[200px] overflow-hidden px-2">
+          <span className="text-gray-500">________________________________________________</span>
+        </div>
+        <div className="flex flex-col flex-1 justify-center gap-1">
+          <div className="text-lg">
+            {post.title}
+          </div>
+          <div className="text-sm">
+            {post.body}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 
 /**
  * Modal that displays information about a Spotify Item

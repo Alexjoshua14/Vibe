@@ -1,4 +1,5 @@
 import { SpotifyItem } from "../types/spotifyTypes";
+import { PostData } from "../types";
 
 export const songs: SpotifyItem[] = [
   {
@@ -303,3 +304,66 @@ export const songs: SpotifyItem[] = [
   },
 
 ];
+
+
+export const postSampleData: PostData = {
+  id: 1,
+  user: {
+    id: 1,
+    name: "Heliophys14",
+    username: "test",
+    spotifyProfile: "https://picsum.photos/200",
+  },
+  item: {
+    id: 1,
+    name: "Grumpy Old Man",
+    explicit: false,
+    popularity: 100,
+    artists: [
+      {
+        id: "1",
+        name: "Remi Wolf",
+        href: "https://picsum.photos/200",
+        uri: "https://picsum.photos/200",
+        type: "artist",
+      },
+    ],
+    album: {
+      id: "1",
+      name: "We Love Dogs!",
+      album_type: "test",
+      artists: [
+        {
+          id: "1",
+          name: "test",
+          href: "https://picsum.photos/200",
+          uri: "https://picsum.photos/200",
+          type: "artist",
+        },
+      ],
+      external_urls: {
+        spotify: "https://picsum.photos/200",
+      },
+      href: "https://picsum.photos/200",
+      release_date: "2021-07-14",
+      total_tracks: 1,
+      uri: "https://picsum.photos/200",
+      type: "album",
+      images: [
+        {
+          url: "https://picsum.photos/200",
+          height: 640,
+          width: 640,
+
+        },
+      ],
+    },
+    duration_ms: 100000,
+    href: "https://picsum.photos/200",
+    uri: "https://picsum.photos/200",
+    type: "track",
+  },
+  title: "New Beattles song!",
+  body: "Really loving this song at the moment!",
+  createdAt: "2 hours ago",
+}
