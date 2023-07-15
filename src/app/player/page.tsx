@@ -21,21 +21,25 @@ import {
 import { songs } from "@/data/songs";
 
 /**
- * The player page
+ * The player page, displays the currently playing song 
+ * and allows the user to search for songs to add to the queue
  * 
- * @returns The player page
  */
 export default function Player() {
+  /* Currently Playing Music */
   const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null>(null);
   const [progress, setProgress] = useState<{ time: number, percentage: number }>({ time: 0, percentage: 0 });
   const [song_completed, setSongCompleted] = useState<boolean>(false);
-  //const [filters, setFilters] = useState<string[]>([]);
+
+  /* Search */
   const [searchResults, setSearchResults] = useState<SpotifyItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchFieldDisabled, setSearchFieldDisabled] = useState<boolean>(false);
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
+  //const [filters, setFilters] = useState<string[]>([]);
 
+  /* Add to Queue */
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedSong, setSelectedSong] = useState<SpotifyItem | null>(null);
 
@@ -74,6 +78,11 @@ export default function Player() {
     setSearchResults(results);
   }
 
+  /**
+   * Enable search on 'enter' key press
+   * 
+   * @param e The key press event
+   */
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
       handleSearch();
@@ -100,11 +109,19 @@ export default function Player() {
     }
   }
 
+  /**
+   * Open modal to prompt user to confirm adding item to queue
+   * 
+   * @param item The item to display in the modal
+   */
   const handleModalOpen = (item: SpotifyItem) => {
     setSelectedSong(item);
     setModalOpen(true);
   }
 
+  /**
+   * Close modal
+   */
   const handleModalClose = () => {
     setModalOpen(false);
   }
@@ -134,10 +151,13 @@ export default function Player() {
     }
   }, [song_completed]);
 
-  /*** NOTE: Spotify API's timestamp has had noteable problems for years
-    * @see https://community.spotify.com/t5/Spotify-for-Developers/API-playback-timestamp/m-p/5291948#M3571
-    * @see https://github.com/spotify/web-api/issues/1073 
-    */
+  /** 
+   * Constantly updates the progress of the currently playing song
+   * 
+   * NOTE: Spotify API's timestamp has had noteable problems for years
+   * @see https://community.spotify.com/t5/Spotify-for-Developers/API-playback-timestamp/m-p/5291948#M3571
+   * @see https://github.com/spotify/web-api/issues/1073 
+   */
   useEffect(() => {
     const progressInterval = setInterval(() => {
       if (currentlyPlaying && song_completed == false) {

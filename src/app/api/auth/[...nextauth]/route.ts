@@ -54,7 +54,6 @@ async function refreshAccessToken(token: JWT) {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
   providers: [
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID!,

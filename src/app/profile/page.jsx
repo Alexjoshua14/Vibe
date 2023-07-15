@@ -3,8 +3,11 @@
 import React from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
-
-export default function Settings() {
+/**
+ * Profile page, where user can change their settings
+ * Currently only has a sign in/out button
+ */
+export default function Profile() {
   const { data: session, status } = useSession();
   let user = {
     name: "John Doe",

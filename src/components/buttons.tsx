@@ -3,7 +3,6 @@
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 
-
 /**
  * NextAuth authentication buttons
  * 
@@ -20,11 +19,11 @@ export const LogoutButton = () => {
   )
 }
 
+
 /**
  * Next.js page navigation buttons
  * 
  */
-
 export const HomeButton = () => {
   return (
     <Link href="/">
