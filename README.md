@@ -6,14 +6,4 @@ ____
 
 ## Starting a preview
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+There is no current way to view this application due to the use of Spotify API which requires me to manually input who can be authenticated.
