@@ -54,11 +54,7 @@ export interface SpotifyItemBrief {
   duration_ms: number;
   href: string;
   release_date: string;
-  image: {
-    height: number;
-    url: string;
-    width: number;
-  };
+  image: SpotifyImage;
 }
 
 export interface CurrentlyPlaying {
