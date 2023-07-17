@@ -1,7 +1,7 @@
 # Vibe
 ____
 
-##### Vibe is a music-centric social media application in early development. Currently utilizing Next.js, NextAuth.js, Tailwind CSS, and Framer Motion, this application aims to provide an enjoyable way to share and discover music with friends.
+##### Vibe is a music-centric social media application in early development. Currently utilizing Next.js, NextAuth.js, Spotify API, Tailwind CSS, and Framer Motion, this application aims to provide an enjoyable way to share and discover music with friends.
 ____
 
 ## Starting a preview
