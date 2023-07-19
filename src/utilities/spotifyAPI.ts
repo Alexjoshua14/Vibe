@@ -70,6 +70,7 @@ export async function getClientCurrentlyPlaying() {
     try {
       const currentlyPlayingData = await getCurrentlyPlaying(session.accessToken);
       if (currentlyPlayingData) {
+        console.log(`Current time:  ${Date.now()}  Response Timestamp: ${currentlyPlayingData.timestamp} Difference: ${Date.now() - currentlyPlayingData.timestamp}`);
         return mapToCurrentlyPlaying(currentlyPlayingData);
       }
       return currentlyPlayingData;
