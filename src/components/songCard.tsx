@@ -137,7 +137,7 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
     <Card sx={{ display: 'flex' }}
       className={`rounded-lg w-[300px] sm:w-[400px] overflow-hidden h-[400px] sm:h-[140px]
                  bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
-      <Box className="flex flex-col sm:flex-row justify-center items-center w-ful overflow-hidden">
+      <Box className="flex flex-col sm:flex-row justify-center items-center w-full overflow-hidden">
         <CardMedia
           component="img"
           className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
