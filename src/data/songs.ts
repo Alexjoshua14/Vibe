@@ -25,7 +25,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -55,7 +55,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -85,7 +85,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -115,7 +115,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -145,7 +145,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -175,7 +175,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -205,7 +205,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -235,7 +235,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -265,7 +265,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -295,7 +295,7 @@ export const songs: SpotifyItem[] = [
       id: "",
       type: ""
     },
-    duration_ms: 1000,
+    duration_ms: 10000,
     explicit: false,
     href: "",
     uri: "",
@@ -358,7 +358,7 @@ export const postSampleData: PostData = {
         },
       ],
     },
-    duration_ms: 100000,
+    duration_ms: 1000000,
     href: "https://picsum.photos/200",
     uri: "https://picsum.photos/200",
     type: "track",
