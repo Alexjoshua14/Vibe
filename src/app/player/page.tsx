@@ -222,6 +222,8 @@ export default function Player() {
                 initial={{ opacity: 0 }}
                 viewport={{ once: true }}
                 whileInView={{ opacity: 1, transition: { duration: .4, delay: index * 0.2 } }}
+                aria-label={`Add ${item.name} by ${item.artists[0].name} to queue`}
+                className={`rounded glassmorphism-white-secondary glassmorphism-0-interactive overflow-hidden cursor-pointer`}
               >
                 <SearchResult item={item} />
               </motion.button>

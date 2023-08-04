@@ -166,12 +166,11 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
  * 
  * @param item The item to create a search card for
  */
-export const SearchResult = ({ item }: { item: SpotifyItem }) => {
+export const SearchResult = ({ item, props }: { item: SpotifyItem, [key: string]: any }) => {
   return (
     <div
-      className={`rounded w-[300px] sm:w-[400px] pe-4 flex h-fit
-                 glassmorphism-white-secondary glassmorphism-1-interactive
-                  text-white overflow-hidden cursor-pointer`}
+      className={`rounded w-[300px] sm:w-[400px] pe-4 flex h-fit`}
+      {...props}
     >
       <div className="flex center">
         <Image

@@ -76,6 +76,10 @@ body {
   @apply bg-opacity-20 backdrop-blur-xl border-[1px] border-zinc-50 border-opacity-10 shadow-md;
 }
 
+.glassmorphism-0-interactive {
+  @apply hover:!bg-opacity-30;
+}
+
 .glassmorphism-1 {
   @apply !bg-opacity-30;
 }
