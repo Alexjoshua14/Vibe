@@ -152,7 +152,7 @@ export default function Player() {
   }, [song_completed]);
 
   /** 
-   * Constantly updates the progress of the currently playing song
+   * Constantly updates the progress of the currently playing song every second
    * 
    * NOTE: Spotify API's timestamp has had noteable problems for years
    * @see https://community.spotify.com/t5/Spotify-for-Developers/API-playback-timestamp/m-p/5291948#M3571
@@ -195,12 +195,13 @@ export default function Player() {
         <div className="flex justify-center items-center p-4 gap-2">
           <SearchField
             id="search-music"
-            label="Add to Queue"
+            label="Add to Queue.."
             variant="outlined"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyPress}
             disabled={searchFieldDisabled}
+
           />
           <motion.button
             onClick={handleSearch}
