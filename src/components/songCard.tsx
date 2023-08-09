@@ -225,7 +225,7 @@ export const Post = ({ post }: { post: PostData }) => {
                   min-w-[250px] min-h-[200px] w-[80%] h-[200px]
                   sm:w-[60%] sm:min-h-[100px] sm:max-w-[500px] sm:max-h-[250px] 
                   rounded overflow-hidden
-                  bg-gradient-to-tr from-gray-950 to-gray-700 glassmorphism
+                  bg-gradient-to-tr from-gray-950 to-gray-700 glassmorphism 
                   ">
 
       <div className="flex flex-col pb-2 pe-1 min-w-fit">

@@ -1,5 +1,6 @@
 'use client'
 
+import React from "react";
 import { useEffect, useState } from "react";
 
 import { motion } from "framer-motion";
@@ -175,6 +176,9 @@ export default function Player() {
       clearInterval(progressInterval);
     }
   }, [currentlyPlaying, song_completed]);
+
+  // Creates a ref
+  const ref = React.createRef<HTMLDivElement>();
 
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">
