@@ -28,7 +28,7 @@ import { PostData } from '@/types';
  * @param text string to be displayed
  * @param containerRef reference to the container element
  */
-const ScrollingText = ({ text, containerRef }: { text: string, containerRef: React.RefObject<HTMLDivElement> }) => {
+const ScrollingText = ({ text, containerRef, ...props }: { text: string, containerRef: React.RefObject<HTMLDivElement> }) => {
   const [translation, setTranslation] = useState<number>(0);
   const [duration, setDuration] = useState<number>(1);
 
@@ -62,6 +62,7 @@ const ScrollingText = ({ text, containerRef }: { text: string, containerRef: Rea
       viewport={{ once: true }}
       transition={{ ease: "linear", delay: 2, duration: duration, times: [0, .7, 1], repeat: Infinity, repeatDelay: 4 }}
       className="max-w-full whitespace-nowrap"
+      {...props}
     >
       {text}
     </motion.p>
@@ -85,20 +86,21 @@ const SongInformation = ({ item, variant }: { item: SpotifyItem, variant?: SongI
   const artists = item.artists.map(artist => artist.name).join(", ")
 
   return (
-    <div className={`flex flex-col w-full justify-between ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"}`}>
+    <div className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"} ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"}`}>
       <div
         ref={titleRef}
         className={`
         ${variant == "secondary" || variant == undefined && "text-md"}
         ${variant == "main" || variant == "modal" && "text-xl"} 
         whitespace-nowrap overflow-x-hidden max-w-full text-primary
+        text-center sm:text-left
         `}
       >
         <ScrollingText text={item.name} containerRef={titleRef} />
       </div>
       <div
         className={`
-          flex gap-2 text-secondary items-center
+          flex gap-2 text-secondary items-center text-center sm:text-left
           max-w-[90%] ${variant == "modal" && "max-w-[80%]"}
           text-xs`}
       >
@@ -150,7 +152,7 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
           {progress_ms != null &&
             <div role="progress" className="w-full">
               <LinearProgress role="progressbar" variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
-              <Typography component="div" variant="subtitle2" className="text-[.65rem] text-tertiary">
+              <Typography component="div" variant="subtitle2" className="text-[.65rem] text-tertiary text-right sm:text-left">
                 {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
               </Typography>
             </div>
@@ -297,7 +299,7 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
     >
       <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] 
                       w-[90%] h-1/2 sm:w-[500px] sm:h-96 rounded-lg
-                      flex flex-col center
+                      flex flex-col center glassmorphism-white text-white
                       backdrop-filter backdrop-blur-lg"
       >
         <div className="flex flex-col center w-fit max-w-full gap-4">
