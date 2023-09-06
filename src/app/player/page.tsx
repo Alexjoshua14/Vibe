@@ -20,6 +20,7 @@ import {
 } from "@/types/spotifyTypes";
 
 import { songs } from "@/data/songs";
+import { useSearch } from "../hooks/useSearch";
 
 /**
  * The player page, displays the currently playing song 
@@ -32,52 +33,21 @@ export default function Player() {
   const [progress, setProgress] = useState<{ time: number, percentage: number }>({ time: 0, percentage: 0 });
   const [song_completed, setSongCompleted] = useState<boolean>(false);
 
-  /* Search */
-  const [searchResults, setSearchResults] = useState<SpotifyItem[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchFieldDisabled, setSearchFieldDisabled] = useState<boolean>(false);
-  const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-  //const [filters, setFilters] = useState<string[]>([]);
+  const {
+    searchResults,
+    clearSearchResults,
+    searchQuery,
+    setSearchQuery,
+    searchFieldDisabled,
+    handleSearch,
+    incrementOffset,
+    decrementOffset,
+    offset, limit
+  } = useSearch();
 
   /* Add to Queue */
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedSong, setSelectedSong] = useState<SpotifyItem | null>(null);
-
-  /**
-   * Increments the offset by the limit if the offset + limit is less than the length of the search results
-   */
-  const incrementOffset = () => {
-    if (offset + limit <= searchResults.length) {
-      setOffset(offset + limit);
-    }
-  }
-
-  /**
-   * Decrements the offset by the limit if the offset - limit is greater than 0
-   */
-  const decrementOffset = () => {
-    if (offset - limit < 0) {
-      setOffset(0);
-    } else {
-      setOffset(offset - limit);
-    }
-  }
-
-  /**
-   * Handles the search query and sets the search results
-   */
-  const handleSearch = async () => {
-    const searchField = document.getElementById("search-music") as HTMLInputElement;
-    if (searchField) {
-      searchField.blur();
-      setSearchFieldDisabled(true);
-    }
-    const results = await searchSpotify(searchQuery);
-    setSearchQuery("");
-    setSearchFieldDisabled(false);
-    setSearchResults(results);
-  }
 
   /**
    * Enable search on 'enter' key press
@@ -100,7 +70,7 @@ export default function Player() {
       if (!selectedSong) throw new Error("No song selected");
       const result = await addToQueueClient(selectedSong.uri);
       if (result) {
-        setSearchResults([]);
+        clearSearchResults();
         setModalOpen(false);
       }
     } catch (error) {
