@@ -121,5 +121,13 @@ export function playbackTime(ts: number, progress: number) {
  * @returns percentage [0, 100]
  */
 export function progressToPercentage(time: number, duration: number): number {
-  return Math.floor((time / duration) * 100);
+  if (time == null || duration == null || duration == 0)
+    return 0;
+
+  let percentage = (time / duration);
+
+  if (percentage < 0 || percentage > 1)
+    percentage = time < duration ? 0 : 1;
+
+  return Math.floor(percentage * 100);
 }
