@@ -11,7 +11,7 @@ export const useSearch = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchFieldDisabled, setSearchFieldDisabled] = useState<boolean>(false);
   const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
+  const limit = 5;
 
   /**
    * Increments the offset by the limit if the offset + limit is less than the length of the search results

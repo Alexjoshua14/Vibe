@@ -1,26 +1,25 @@
 'use client'
 
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { motion } from "framer-motion";
-
-import { SearchField } from "@/components/searchField";
-import { SongCard, SearchResult, AddToQueueModal } from "@/components/songCard";
-
-import { getClientCurrentlyPlaying, searchSpotify, addToQueueClient } from "@/utilities/spotifyAPI";
-import { msToTime, playbackTime, progressToPercentage } from "@/utilities/helper";
 
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 import { BiSolidSend } from "react-icons/bi";
 
-import {
-  SpotifyItem,
-  CurrentlyPlaying,
-} from "@/types/spotifyTypes";
+import { SearchField } from "@/components/searchField";
+import { SongCard, SearchResult, AddToQueueModal } from "@/components/songCard";
+
+import { searchSpotify, addToQueueClient } from "@/utilities/spotifyAPI";
+
+import { SpotifyItem } from "@/types/spotifyTypes";
 
 import { songs } from "@/data/songs";
+
+/* Custom hooks */
 import { useSearch } from "../hooks/useSearch";
+import { useCurrentlyPlaying } from "../hooks/useCurrentlyPlaying";
 
 /**
  * The player page, displays the currently playing song 
@@ -29,10 +28,9 @@ import { useSearch } from "../hooks/useSearch";
  */
 export default function Player() {
   /* Currently Playing Music */
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null>(null);
-  const [progress, setProgress] = useState<{ time: number, percentage: number }>({ time: 0, percentage: 0 });
-  const [song_completed, setSongCompleted] = useState<boolean>(false);
+  const { currentlyPlaying, progress } = useCurrentlyPlaying();
 
+  /* Search Spotify for Tracks */
   const {
     searchResults,
     clearSearchResults,
@@ -96,56 +94,6 @@ export default function Player() {
   const handleModalClose = () => {
     setModalOpen(false);
   }
-
-  /**
-   * Gets the currently playing song and sets the currently playing state
-   * Currently playing is updated every 10 seconds
-   * 
-   * Clears the interval on component unmount
-   */
-  useEffect(() => {
-    const fetchData = async () => {
-      //Could alter this to check if song has changed
-      const currentlyPlaying: CurrentlyPlaying | null = await getClientCurrentlyPlaying();
-      if (currentlyPlaying) {
-        setCurrentlyPlaying(currentlyPlaying);
-        setSongCompleted(false);
-      } else {
-        console.log("No song playing");
-      }
-    }
-
-    const interval = setInterval(fetchData, 15000);
-
-    return () => {
-      clearInterval(interval);
-    }
-  }, [song_completed]);
-
-  /** 
-   * Constantly updates the progress of the currently playing song every second
-   * 
-   * NOTE: Spotify API's timestamp has had noteable problems for years
-   * @see https://community.spotify.com/t5/Spotify-for-Developers/API-playback-timestamp/m-p/5291948#M3571
-   * @see https://github.com/spotify/web-api/issues/1073 
-   */
-  useEffect(() => {
-    const progressInterval = setInterval(() => {
-      if (currentlyPlaying && song_completed == false) {
-        let progress_ms = Date.now() - currentlyPlaying.timestamp;
-        if (progress_ms > currentlyPlaying.item.duration_ms) {
-          progress_ms = currentlyPlaying.item.duration_ms;
-          setSongCompleted(true);
-        }
-        const progressPercentage = progressToPercentage(progress_ms, currentlyPlaying.item.duration_ms);
-        setProgress({ time: progress_ms, percentage: progressPercentage });
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(progressInterval);
-    }
-  }, [currentlyPlaying, song_completed]);
 
   // Creates a ref
   const ref = React.createRef<HTMLDivElement>();
