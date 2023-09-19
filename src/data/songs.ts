@@ -1,5 +1,5 @@
-import { SpotifyItem } from "../types/spotifyTypes";
-import { PostData } from "../types";
+import { SpotifyItem } from "../lib/validators/spotify";
+import { PostData } from "../lib/validators/posts";
 
 export const songs: SpotifyItem[] = [
   {

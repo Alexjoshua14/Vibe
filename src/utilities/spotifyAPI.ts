@@ -5,7 +5,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { mapToCurrentlyPlaying, mapToSongs } from '@/utilities/helper';
 import { topTracksURL, currentlyPlayingURL, searchURL, addToQueueURL, playbackStateURL } from '@/constants/spotify';
 
-import { CurrentlyPlaying, PlaybackStateResponse, SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse } from '@/types/spotifyTypes';
+import { CurrentlyPlaying, PlaybackStateResponse, SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse } from '@/lib/validators/spotify';
 
 /**
  * Get the user's top tracks
