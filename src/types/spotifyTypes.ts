@@ -1,13 +1,13 @@
 
-export type SongInformationVariant = "main" | "secondary" | "modal";
+type SongInformationVariant = "main" | "secondary" | "modal";
 
-export interface SpotifyImage {
+interface SpotifyImage {
   height: number;
   url: string;
   width: number;
 }
 
-export interface SpotifyArtist {
+interface SpotifyArtist {
   href: string;
   id: string;
   name: string;
@@ -15,7 +15,7 @@ export interface SpotifyArtist {
   uri: string;
 }
 
-export interface SpotifyAlbum {
+interface SpotifyAlbum {
   album_type: string;
   artists: SpotifyArtist[];
   external_urls: { spotify: string };
@@ -29,7 +29,7 @@ export interface SpotifyAlbum {
   uri: string;
 }
 
-export interface SpotifyItem {
+interface SpotifyItem {
   id: number;
   name: string;
   artists: SpotifyArtist[];
@@ -42,11 +42,11 @@ export interface SpotifyItem {
   explicit: boolean;
 }
 
-export interface SpotifyItemWrapper {
+interface SpotifyItemWrapper {
   items: SpotifyItem[];
 }
 
-export interface SpotifyItemBrief {
+interface SpotifyItemBrief {
   id: number;
   name: string;
   artists: string[];
@@ -57,7 +57,7 @@ export interface SpotifyItemBrief {
   image: SpotifyImage;
 }
 
-export interface CurrentlyPlaying {
+interface CurrentlyPlaying {
   timestamp: number;
   progress_ms: number;
   item: SpotifyItem;
@@ -65,7 +65,7 @@ export interface CurrentlyPlaying {
   is_playing: boolean;
 }
 
-export interface CurrentlyPlayingResponse extends CurrentlyPlaying {
+interface CurrentlyPlayingResponse extends CurrentlyPlaying {
   context: {
     external_urls: {
       spotify: string;
@@ -76,7 +76,7 @@ export interface CurrentlyPlayingResponse extends CurrentlyPlaying {
   },
 }
 
-export interface SpotifyTracks extends SpotifyItemWrapper {
+interface SpotifyTracks extends SpotifyItemWrapper {
   href: string;
   items: SpotifyItem[];
   limit: number;
@@ -88,7 +88,7 @@ export interface SpotifyTracks extends SpotifyItemWrapper {
 
 /* API Response types */
 
-export interface SpotifyTopTracksResponse {
+interface SpotifyTopTracksResponse {
   items: SpotifyItem[];
   total: number;
   limit: number;
@@ -98,7 +98,7 @@ export interface SpotifyTopTracksResponse {
   previous?: string;
 }
 
-export interface PlaybackStateResponse {
+interface PlaybackStateResponse {
   device: {
     id: string;
     is_active: boolean;
@@ -125,6 +125,6 @@ export interface PlaybackStateResponse {
   item: SpotifyItem;
 }
 
-export interface SpotifySearchResponse {
+interface SpotifySearchResponse {
   tracks: SpotifyTracks;
 }

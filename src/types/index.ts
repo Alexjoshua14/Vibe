@@ -1,13 +1,13 @@
-import { SpotifyItem } from './spotifyTypes';
+// import { SpotifyItem } from './spotifyTypes';
 
-export interface User {
+interface User {
   id: number;
   name: string;
   username: string;
   spotifyProfile: string;
 }
 
-export interface PostData {
+interface PostData {
   id: number;
   title: string;
   body: string;
