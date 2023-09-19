@@ -16,7 +16,7 @@
     "@fontsource/roboto": "^5.0.4",
     "@mui/icons-material": "^5.13.7",
     "@mui/material": "^5.13.7",
-    "@prisma/client": "5.0.0",
+    "@prisma/client": "latest",
     "@types/node": "20.4.0",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -39,7 +39,7 @@
     "@testing-library/react": "^14.0.0",
     "bun-types": "^1.0.1",
     "jsdom": "^22.1.0",
-    "prisma": "^5.0.0",
+    "prisma": "latest",
     "vitest": "^0.33.0"
   }
 }
