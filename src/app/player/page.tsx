@@ -13,7 +13,7 @@ import { SongCard, SearchResult, AddToQueueModal } from "@/components/songCard";
 
 import { searchSpotify, addToQueueClient } from "@/utilities/spotifyAPI";
 
-import { SpotifyItem } from "@/types/spotifyTypes";
+import { SpotifyItem } from "@/lib/validators/spotify";
 
 import { songs } from "@/data/songs";
 

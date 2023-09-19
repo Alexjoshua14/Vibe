@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import { CurrentlyPlaying } from '@/types/spotifyTypes';
+import { CurrentlyPlaying } from '@/lib/validators/spotify';
 import { getClientCurrentlyPlaying } from '@/utilities/spotifyAPI';
 import { progressToPercentage } from '@/utilities/helper';
 

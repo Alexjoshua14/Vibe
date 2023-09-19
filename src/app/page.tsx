@@ -10,7 +10,7 @@ import { getTopTracks } from "@/utilities/spotifyAPI";
 import { mapToSongs } from "@/utilities/helper";
 
 import { songs } from "@/data/songs";
-import { SpotifyItem } from "@/types/spotifyTypes";
+import { SpotifyItem } from "@/lib/validators/spotify";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -22,6 +22,13 @@ export default async function Home() {
     console.log("No session found.")
     redirect('/api/auth/signin?callbackUrl=/');
   }
+
+  if (process.env.NEXT_RUNTIME == 'nodejs') {
+    console.log("Still using nodejs..");
+  } else if (process.env.NEXT_RUNTIME == 'bun') {
+    console.log("🚀 Using Bun runtime!!! 🚀");
+  }
+  // console.log(`NEXT_RUNTIME: ${process.env.NEXT_RUNTIME}`);
 
   if (session.accessToken) {
     try {

@@ -16,9 +16,9 @@ import { BsFillExplicitFill } from 'react-icons/bs';
 
 import { msToTime, progressToPercentage } from '@/utilities/helper';
 
-import { SpotifyItem, SongInformationVariant } from '../types/spotifyTypes';
+import { SpotifyItem, SongInformationVariant } from '../lib/validators/spotify';
 import { Divider, Modal } from '@mui/material';
-import { PostData } from '@/types';
+import { PostData } from '@/lib/validators/posts';
 
 
 /**
