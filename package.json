@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.13.7",
     "@mui/material": "^5.13.7",
     "@prisma/client": "latest",
+    "@tanstack/react-query": "^4.35.3",
     "@types/node": "20.4.0",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -36,6 +37,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.34.1",
     "@testing-library/react": "^14.0.0",
     "bun-types": "^1.0.1",
     "jsdom": "^22.1.0",
