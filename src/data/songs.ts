@@ -3,7 +3,7 @@ import { PostData } from "../lib/validators/posts";
 
 export const songs: SpotifyItem[] = [
   {
-    id: 1,
+    id: '1',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -33,7 +33,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 2,
+    id: '2',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -63,7 +63,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 3,
+    id: '3',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -93,7 +93,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 4,
+    id: '4',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -123,7 +123,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 5,
+    id: '5',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -153,7 +153,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 6,
+    id: '6',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -183,7 +183,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 7,
+    id: '7',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -213,7 +213,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 8,
+    id: '8',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -243,7 +243,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 9,
+    id: '9',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -273,7 +273,7 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: 10,
+    id: '10',
     name: "Hello Hello Hello",
     artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
     album: {
@@ -315,7 +315,7 @@ export const postSampleData: PostData = {
     spotifyProfile: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
   },
   item: {
-    id: 1,
+    id: '1',
     name: "Grumpy Old Man",
     explicit: false,
     popularity: 100,
