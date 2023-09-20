@@ -41,7 +41,7 @@ export const SpotifyAlbumSchema = z.object({
 export type SpotifyAlbum = z.infer<typeof SpotifyAlbumSchema>
 
 export const SpotifyItemSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   name: z.string(),
   artists: z.array(SpotifyArtistSchema),
   album: SpotifyAlbumSchema,
@@ -114,9 +114,9 @@ export const SpotifyTopTracksResponseSchema = z.object({
   total: z.number(),
   limit: z.number(),
   offset: z.number(),
-  href: z.string(),
-  next: z.optional(z.string()),
-  previous: z.optional(z.string())
+  href: z.string().url(),
+  next: z.nullable(z.string().url()),
+  previous: z.nullable(z.string().url())
 })
 
 export type SpotifyTopTracksResponse = z.infer<typeof SpotifyTopTracksResponseSchema>
