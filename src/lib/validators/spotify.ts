@@ -62,7 +62,7 @@ export const SpotifyItemWrapperSchema = z.object({
 export type SpotifyItemWrapper = z.infer<typeof SpotifyItemWrapperSchema>
 
 export const SpotifyItemBriefSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   name: z.string(),
   artists: z.array(z.string()),
   album: z.string(),
