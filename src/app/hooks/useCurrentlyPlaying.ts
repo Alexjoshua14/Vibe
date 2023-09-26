@@ -28,7 +28,7 @@ export const useCurrentlyPlaying = () => {
     }
 
     // Fetch currently playing song every 15 seconds
-    const intervalID = setInterval(fetchData, 15000);
+    const intervalID = setInterval(fetchData, 10000);
 
     return () => {
       clearInterval(intervalID);
