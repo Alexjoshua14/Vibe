@@ -23,13 +23,6 @@ export default async function Home() {
     redirect('/api/auth/signin?callbackUrl=/');
   }
 
-  if (process.env.NEXT_RUNTIME == 'nodejs') {
-    console.log("Still using nodejs..");
-  } else if (process.env.NEXT_RUNTIME == 'bun') {
-    console.log("🚀 Using Bun runtime!!! 🚀");
-  }
-  // console.log(`NEXT_RUNTIME: ${process.env.NEXT_RUNTIME}`);
-
   if (session.accessToken) {
     try {
       const topTracksData = await getTopTracks(session.accessToken);
