@@ -3,7 +3,9 @@ import {
   SpotifyItem, 
   SpotifyItemBrief, 
   CurrentlyPlaying, 
-  CurrentlyPlayingResponse 
+  CurrentlyPlayingResponse, 
+  CurrentlyPlayingSchema,
+  SpotifyItemSchema
 } from '@/lib/validators/spotify';
 
 /**
@@ -14,18 +16,7 @@ import {
  */
 export function mapToSongs(json: SpotifyItemWrapper) {
   return json.items.map((item: SpotifyItem) => {
-    return {
-      id: item.id,
-      name: item.name,
-      artists: item.artists,
-      album: item.album,
-      duration_ms: item.duration_ms,
-      href: item.href,
-      uri: item.uri,
-      type: item.type,
-      popularity: item.popularity,
-      explicit: item.explicit,
-    }
+    return SpotifyItemSchema.parse(item);
   })
 }
 
@@ -55,13 +46,7 @@ export function songDataToSongBrief(song: SpotifyItem): SpotifyItemBrief {
  * @returns CurrentlyPlaying
  */
 export function mapToCurrentlyPlaying(json: CurrentlyPlayingResponse): CurrentlyPlaying {
-  return {
-    timestamp: json.timestamp,
-    progress_ms: json.progress_ms,
-    item: json.item,
-    currently_playing_type: json.currently_playing_type,
-    is_playing: json.is_playing,
-  }
+  return CurrentlyPlayingSchema.parse(json);
 }
 
 export function logTopTracks(topTracks: SpotifyItem[]) {
