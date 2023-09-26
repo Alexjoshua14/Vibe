@@ -10,7 +10,7 @@ import { getTopTracks } from "@/utilities/spotifyAPI";
 import { mapToSongs } from "@/utilities/helper";
 
 import { songs } from "@/data/songs";
-import { SpotifyItem } from "@/types/spotifyTypes";
+import { SpotifyItem } from "@/lib/validators/spotify";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -36,14 +36,17 @@ export default async function Home() {
 
   return (
     <main className="flex-1 p-16 flex flex-col items-center justify-between border-2 border-orange-500">
-      <div className="flex flex-col">
+      <section className="flex flex-col">
+        <h1>
+          Welcome Home!
+        </h1>
         <div className="p-4 border-2 border-yellow-500">
           {session ? <LogoutButton /> : <LoginButton />}
         </div>
         <div className="flex gap-4">
           <SongCard song={topTracks[0] ? topTracks[0] : songs[4]} />
         </div>
-      </div>
+      </section>
     </main>
   )
 }

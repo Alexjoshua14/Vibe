@@ -8,13 +8,13 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
  */
 export const SearchField = styled(TextField)({
   '& label.Mui-focused': {
-    color: '#A0AAB4',
+    color: '#FFF',
   },
   '& label': {
-    color: '#6F7E8C',
+    color: '#DDD',
   },
   '& .MuiInput-underline:after': {
-    borderBottomColor: '#B2BAC2',
+    borderBottomColor: '#BBB',
   },
   '& .MuiOutlinedInput-root': {
     color: 'pink',
@@ -23,14 +23,14 @@ export const SearchField = styled(TextField)({
       borderColor: '#E0E3E7',
     },
     '&:hover fieldset': {
-      borderColor: '#B2BAC2',
+      borderColor: '#BBB',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#6F7E8C',
+      borderColor: '#FFF',
     },
   },
   '& .MuiOutlinedInput-input': {
-    color: '#E0E3E7',
+    color: '#FFF',
     '&::placeholder': {
       color: '#A0AAB4',
     },

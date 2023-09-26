@@ -1,6 +1,5 @@
 
 import { Post } from "@/components/songCard";
-import { PostData } from "@/types";
 import { postSampleData } from "@/data/songs";
 
 /**
@@ -9,9 +8,15 @@ import { postSampleData } from "@/data/songs";
  * 
  */
 export default function Feed() {
+  // Get Posts from Supabase using Prisma
+
+
   return (
     <div className="max-w-full">
-      <div className="flex flex-col gap-8 w-full px-1">
+      <div className="list">
+        <Post post={postSampleData} />
+        <Post post={postSampleData} />
+        <Post post={postSampleData} />
         <Post post={postSampleData} />
         <Post post={postSampleData} />
         <Post post={postSampleData} />

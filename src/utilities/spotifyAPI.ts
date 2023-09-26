@@ -5,7 +5,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { mapToCurrentlyPlaying, mapToSongs } from '@/utilities/helper';
 import { topTracksURL, currentlyPlayingURL, searchURL, addToQueueURL, playbackStateURL } from '@/constants/spotify';
 
-import { CurrentlyPlaying, PlaybackStateResponse, SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse } from '@/types/spotifyTypes';
+import { CurrentlyPlaying, PlaybackStateResponse, SpotifyTopTracksResponse, CurrentlyPlayingResponse, SpotifySearchResponse, SpotifyTopTracksResponseSchema } from '@/lib/validators/spotify';
 
 /**
  * Get the user's top tracks
@@ -24,8 +24,16 @@ export async function getTopTracks(access_token: string): Promise<SpotifyTopTrac
   if (!res.ok) {
     throw new Error("Failed to fetch top tracks..\n" + res.statusText);
   }
-  return res.json();
-  
+
+  try {
+    const response = await res.json()
+
+    const topTracks = SpotifyTopTracksResponseSchema.parse(response);
+    return topTracks;
+  } catch (e) {
+    console.error(e);
+    return Promise.reject(e)
+  }
 }
 
 
@@ -70,6 +78,15 @@ export async function getClientCurrentlyPlaying() {
     try {
       const currentlyPlayingData = await getCurrentlyPlaying(session.accessToken);
       if (currentlyPlayingData) {
+        console.log(
+          `Current time: ` +
+          Date.now().toString() +
+          `\nResponse Timestamp: ` +
+          currentlyPlayingData.timestamp +
+          `\nDifference: ` +
+          (Date.now() - currentlyPlayingData.timestamp)
+        );
+        
         return mapToCurrentlyPlaying(currentlyPlayingData);
       }
       return currentlyPlayingData;

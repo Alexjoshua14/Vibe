@@ -1,4 +1,12 @@
-import { SpotifyItemWrapper, SpotifyItem, SpotifyItemBrief, CurrentlyPlaying, CurrentlyPlayingResponse } from '@/types/spotifyTypes';
+import { 
+  SpotifyItemWrapper, 
+  SpotifyItem, 
+  SpotifyItemBrief, 
+  CurrentlyPlaying, 
+  CurrentlyPlayingResponse, 
+  CurrentlyPlayingSchema,
+  SpotifyItemSchema
+} from '@/lib/validators/spotify';
 
 /**
  * Extract SpotifyItems from json response
@@ -8,18 +16,7 @@ import { SpotifyItemWrapper, SpotifyItem, SpotifyItemBrief, CurrentlyPlaying, Cu
  */
 export function mapToSongs(json: SpotifyItemWrapper) {
   return json.items.map((item: SpotifyItem) => {
-    return {
-      id: item.id,
-      name: item.name,
-      artists: item.artists,
-      album: item.album,
-      duration_ms: item.duration_ms,
-      href: item.href,
-      uri: item.uri,
-      type: item.type,
-      popularity: item.popularity,
-      explicit: item.explicit,
-    }
+    return SpotifyItemSchema.parse(item);
   })
 }
 
@@ -49,13 +46,7 @@ export function songDataToSongBrief(song: SpotifyItem): SpotifyItemBrief {
  * @returns CurrentlyPlaying
  */
 export function mapToCurrentlyPlaying(json: CurrentlyPlayingResponse): CurrentlyPlaying {
-  return {
-    timestamp: json.timestamp,
-    progress_ms: json.progress_ms,
-    item: json.item,
-    currently_playing_type: json.currently_playing_type,
-    is_playing: json.is_playing,
-  }
+  return CurrentlyPlayingSchema.parse(json);
 }
 
 export function logTopTracks(topTracks: SpotifyItem[]) {
@@ -121,5 +112,13 @@ export function playbackTime(ts: number, progress: number) {
  * @returns percentage [0, 100]
  */
 export function progressToPercentage(time: number, duration: number): number {
-  return Math.floor((time / duration) * 100);
+  if (time == null || duration == null || duration == 0)
+    return 0;
+
+  let percentage = (time / duration);
+
+  if (percentage < 0 || percentage > 1)
+    percentage = time < duration ? 0 : 1;
+
+  return Math.floor(percentage * 100);
 }

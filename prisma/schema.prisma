@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// datasource db {
+//   provider  = "postgresql"
+//   url       = env("DATABASE_URL")
+//   directUrl = env("DIRECT_URL")
+// }
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  followers User[]   @relation(name: "Followers")
+  following User[]   @relation(name: "Followers")
+
+  // Spotify
+  CurrentlyPlaying   CurrentlyPlaying?
+  CurrentlyPlayingId Int?
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  song      Song     @relation(fields: [songId], references: [id])
+  songId    Int
+  published Boolean  @default(false)
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Song {
+  id               Int                @id @default(autoincrement())
+  name             String
+  artists          Artist[]
+  album            Album              @relation(fields: [albumId], references: [id])
+  albumId          Int
+  duration_ms      Int
+  href             String
+  uri              String
+  type             String
+  explicit         Boolean
+  popularity       Int
+  posts            Post[]
+  CurrentlyPlaying CurrentlyPlaying[]
+
+  @@unique([name, albumId])
+}
+
+model Artist {
+  id     Int     @id @default(autoincrement())
+  name   String
+  href   String
+  uri    String
+  songs  Song[]
+  albums Album[]
+}
+
+model Album {
+  id      Int      @id @default(autoincrement())
+  name    String
+  href    String
+  uri     String
+  images  Image[]
+  songs   Song[]
+  artists Artist[]
+}
+
+model Image {
+  id      Int    @id @default(autoincrement())
+  url     String
+  height  Int
+  width   Int
+  album   Album  @relation(fields: [albumId], references: [id])
+  albumId Int
+}
+
+model CurrentlyPlaying {
+  id          Int      @id @default(autoincrement())
+  song        Song     @relation(fields: [songId], references: [id])
+  songId      Int
+  progress_ms Int
+  is_playing  Boolean
+  timestamp   DateTime
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int      @unique
+}

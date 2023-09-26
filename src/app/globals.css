@@ -71,3 +71,70 @@ body {
     }
   }
 }
+
+.glassmorphism {
+  @apply bg-opacity-20 backdrop-blur-xl border-[1px] border-zinc-50 border-opacity-10 shadow-md;
+}
+
+.glassmorphism-0-interactive {
+  @apply hover:!bg-opacity-30;
+}
+
+.glassmorphism-1 {
+  @apply !bg-opacity-30;
+}
+
+.glassmorphism-1-interactive {
+  @apply glassmorphism-1 hover:!bg-opacity-40;
+}
+
+.glassmorphism-2 {
+  @apply !bg-opacity-40;
+}
+
+.glassmorphism-2-interactive {
+  @apply glassmorphism-2 hover:!bg-opacity-50;
+}
+
+.glassmorphism-white {
+  @apply glassmorphism bg-zinc-50 text-zinc-800;
+}
+
+.glassmorphism-white-secondary {
+  @apply glassmorphism bg-zinc-300 text-zinc-800;
+}
+
+.text-primary {
+  @apply text-zinc-950;
+}
+
+.text-secondary {
+  @apply text-zinc-800 font-light;
+}
+
+.text-tertiary {
+  @apply text-zinc-600 font-extralight;
+}
+
+.logo {
+  @apply font-bold text-xl;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(to left, #a8edea 0%, #fed6e3 100%);
+}
+
+.center {
+  @apply justify-center items-center;
+}
+
+.header {
+  @apply text-4xl my-4 sm:h-4 sm:my-12 md:h-8 md:my-14;
+}
+
+.section-main {
+  @apply z-10 w-full h-full flex flex-col items-center;
+}
+
+.list {
+  @apply flex-1 flex flex-col gap-4 center w-full;
+}

@@ -16,9 +16,9 @@ import { BsFillExplicitFill } from 'react-icons/bs';
 
 import { msToTime, progressToPercentage } from '@/utilities/helper';
 
-import { SpotifyItem, SongInformationVariant } from '../types/spotifyTypes';
-import { Modal } from '@mui/material';
-import { PostData } from '@/types';
+import { SpotifyItem, SongInformationVariant } from '../lib/validators/spotify';
+import { Divider, Modal } from '@mui/material';
+import { PostData } from '@/lib/validators/posts';
 
 
 /**
@@ -28,7 +28,7 @@ import { PostData } from '@/types';
  * @param text string to be displayed
  * @param containerRef reference to the container element
  */
-const ScrollingText = ({ text, containerRef }: { text: string, containerRef: React.RefObject<HTMLDivElement> }) => {
+const ScrollingText = ({ text, containerRef, ...props }: { text: string, containerRef: React.RefObject<HTMLDivElement> }) => {
   const [translation, setTranslation] = useState<number>(0);
   const [duration, setDuration] = useState<number>(1);
 
@@ -62,6 +62,7 @@ const ScrollingText = ({ text, containerRef }: { text: string, containerRef: Rea
       viewport={{ once: true }}
       transition={{ ease: "linear", delay: 2, duration: duration, times: [0, .7, 1], repeat: Infinity, repeatDelay: 4 }}
       className="max-w-full whitespace-nowrap"
+      {...props}
     >
       {text}
     </motion.p>
@@ -85,19 +86,21 @@ const SongInformation = ({ item, variant }: { item: SpotifyItem, variant?: SongI
   const artists = item.artists.map(artist => artist.name).join(", ")
 
   return (
-    <div className={`flex flex-col w-full justify-between ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"}`}>
+    <div className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"} ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"}`}>
       <div
         ref={titleRef}
         className={`
         ${variant == "secondary" || variant == undefined && "text-md"}
         ${variant == "main" || variant == "modal" && "text-xl"} 
-        whitespace-nowrap overflow-x-hidden max-w-full`}
+        whitespace-nowrap overflow-x-hidden max-w-full text-primary
+        text-center sm:text-left
+        `}
       >
         <ScrollingText text={item.name} containerRef={titleRef} />
       </div>
       <div
         className={`
-          flex gap-2 text-gray-300 items-center
+          flex gap-2 text-secondary items-center text-center sm:text-left
           max-w-[90%] ${variant == "modal" && "max-w-[80%]"}
           text-xs`}
       >
@@ -135,9 +138,9 @@ const SongInformation = ({ item, variant }: { item: SpotifyItem, variant?: SongI
 export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms?: number }) => {
   return (
     <Card sx={{ display: 'flex' }}
-      className={`rounded-lg w-[300px] sm:w-[400px] overflow-hidden h-[400px] sm:h-[140px]
-                 bg-gradient-to-tr from-gray-800 to-gray-600 bg-opacity-40 backdrop-blur-lg text-white`}>
-      <Box className="flex flex-col sm:flex-row justify-center items-center w-ful overflow-hidden">
+      className={`rounded w-[300px] sm:w-[400px] overflow-hidden h-[400px] sm:h-[140px]
+                 glassmorphism-white glassmorphism-2`}>
+      <Box className="flex flex-col sm:flex-row center w-full overflow-hidden">
         <CardMedia
           component="img"
           className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
@@ -146,10 +149,10 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
         />
         <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
           <SongInformation item={song} variant={"main"} />
-          {progress_ms &&
-            <div className="w-full">
-              <LinearProgress variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
-              <Typography component="div" variant="subtitle2">
+          {progress_ms != null &&
+            <div role="progress" className="w-full">
+              <LinearProgress role="progressbar" variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
+              <Typography component="div" variant="subtitle2" className="text-[.65rem] text-tertiary text-right sm:text-left">
                 {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
               </Typography>
             </div>
@@ -165,63 +168,104 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
  * 
  * @param item The item to create a search card for
  */
-export const SearchResult = ({ item }: { item: SpotifyItem }) => {
+export const SearchResult = ({ item, props }: { item: SpotifyItem, [key: string]: any }) => {
   return (
     <div
-      className={`rounded-lg w-[300px] sm:w-[400px] pe-4 
-                  bg-gray-600 bg-opacity-20 backdrop-blur-xl 
-                  text-white overflow-hidden cursor-pointer`}
+      className={`rounded w-[300px] sm:w-[400px] pe-4 flex h-fit`}
+      {...props}
     >
-      <div className="flex w-full">
-        <div className="flex justify-center items-center p-2">
-          <Image
-            src={item.album.images[0].url}
-            height={60}
-            width={60}
-            alt={item.album.name}
-          />
-        </div>
-        <div className="flex flex-col w-full p-4 max-w-[200px] sm:max-w-[300px]">
-          <SongInformation item={item} />
-        </div>
+      <div className="flex center">
+        <Image
+          src={item.album.images[0].url}
+          height={75}
+          width={75}
+          alt={item.album.name}
+        />
+      </div>
+      <div className="flex flex-col w-full p-4 max-w-[200px] sm:max-w-[300px]">
+        <SongInformation item={item} />
       </div>
     </div>
   )
 }
 
-export const Post = ({ post }: { post: PostData }) => {
+const PostImage = ({ imageUrl, altText, ...props }: { imageUrl: string, altText: string, [key: string]: any }) => {
   return (
-    <div className="flex flex-row min-w-[300px] w-full max-w-[360px] h-[220px] border-2 border-teal-500">
-      <div className="flex flex-col w-1/3 h-full border-2 border-yellow-500">
-        <div className="w-full aspect-square rounded-full flex justify-center items-center border-2 border-orange-500">Image</div>
-        <div className="flex-1 flex flex-col items-center justify-center whitespace-nowrap overflow-hidden">
-          <span>{post.item.name}</span>
-          <span>{post.item.artists[0].name}</span>
-          <span>{post.item.album.name}</span>
+    <div className="relative h-1/2 aspect-square flex center rounded-br overflow-hidden">
+      <Image
+        src={imageUrl}
+        alt={altText}
+        // width={250}
+        // height={250}
+        fill={true}
+        {...props}
+      />
+    </div>
+  )
+}
+
+const ProfileImage = ({ imageUrl, altText, ...props }: { imageUrl: string, altText: string, [key: string]: any }) => {
+  return (
+    <div className="aspect-square rounded-full flex center">
+      <Image
+        src={imageUrl}
+        alt={altText}
+        width={50}
+        height={50}
+        {...props}
+      />
+    </div>
+  )
+}
+
+
+export const Post = ({ post }: { post: PostData }) => {
+
+  return (
+    <div
+      className=" grid grid-row-1 grid-cols-[1fr,3fr]
+                  min-w-[250px] min-h-[200px] w-[80%] h-[200px]
+                  sm:w-[60%] sm:min-h-[100px] sm:max-w-[500px] sm:max-h-[250px] 
+                  rounded overflow-hidden
+                  bg-gradient-to-tr from-gray-950 to-gray-700 glassmorphism 
+                  ">
+
+      <div className="flex flex-col pb-2 pe-1 min-w-fit">
+        <PostImage
+          imageUrl={post.item.album.images[0].url}
+          altText={post.item.album.name}
+        />
+
+        <div className="flex-1 flex flex-col center whitespace-nowrap overflow-hidden py-1 sm:py-2">
+          <span className="text-xs">{post.item.name}</span>
+          <span className="text-xs">{post.item.artists[0].name}</span>
+          <span className="text-[.65rem] text-zinc-200">{post.item.album.name}</span>
         </div>
+
       </div>
-      <div className="flex-1 flex flex-col py-4 px-2 border-2 border-pink-500">
-        <div className="flex gap-2 min-h-[30px]">
-          <div className="w-[50px] aspect-square rounded-full flex justify-center items-center border-2 border-orange-500">
-            <span>IMG</span>
-          </div>
+
+      <div className="grid grid-rows-[2fr, 1fr, 6fr] py-6 px-4">
+
+        <div className="flex items-center gap-2 min-h-[30px]">
+          <ProfileImage imageUrl={post.user.spotifyProfile} altText={`${post.user.name} profile picture`} className="rounded-full" />
           <div className="flex flex-col">
-            <span className="text-lg">
+            <span className="text-sm sm:text-md">
               {post.user.name}
             </span>
-            <span className="text-xs text-gray-300">
+            <span className="text-[.65rem] sm:text-xs text-zinc-300">
               {post.createdAt}
             </span>
           </div>
         </div>
-        <div className="max-w-[200px] overflow-hidden px-2">
+
+        <div className="max-w-full sm:max-w-[80%] overflow-hidden px-1 sm:px-2">
           <span className="text-gray-500">________________________________________________</span>
         </div>
         <div className="flex flex-col flex-1 justify-center gap-1">
-          <div className="text-lg">
+          <div className="text-md sm:text-lg">
             {post.title}
           </div>
-          <div className="text-sm">
+          <div className="text-xs sm:text-sm text-zinc-100 text-ellipsis">
             {post.body}
           </div>
         </div>
@@ -255,10 +299,10 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
     >
       <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] 
                       w-[90%] h-1/2 sm:w-[500px] sm:h-96 rounded-lg
-                      flex flex-col items-center justify-center
+                      flex flex-col center glassmorphism-white text-white
                       backdrop-filter backdrop-blur-lg"
       >
-        <div className="flex flex-col justify-center items-center w-fit max-w-full gap-4">
+        <div className="flex flex-col center w-fit max-w-full gap-4">
           <div className="rounded-lg overflow-hidden">
             <Image
               src={item?.album.images[0].url ?? ""}
@@ -271,7 +315,7 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
             <SongInformation item={item} variant={"modal"} />
           </div>
         </div>
-        <div className="p-4 flex items-center justify-center gap-2 sm:gap-4">
+        <div className="p-4 flex center gap-2 sm:gap-4">
           <button onClick={addToQueue()} className="px-3 py-1 bg-green-500 bg-opacity-60 rounded-lg">
             Add to Queue
           </button>
