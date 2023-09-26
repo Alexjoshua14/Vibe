@@ -12,12 +12,12 @@ interface ProvidersProps {
 const Providers: FC<ProvidersProps> = ({ children }) => {
 
   return (
-    <SessionProvider>
-      <Provider store={store}>
+    <Provider store={store}>
+      <SessionProvider>
         {children}
-      </Provider>
-    </SessionProvider>
+      </SessionProvider>
+    </Provider>
   )
 }
 
-export default Providers
+export default Providers;
