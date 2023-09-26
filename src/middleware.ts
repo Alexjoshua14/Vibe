@@ -15,8 +15,8 @@ export async function middleware(req: NextRequest) {
   const ip = req.ip ?? '127.0.0.1'
 
   try {
+    // rate limit based on ip address
     const { success } = await rateLimiter.limit(ip)
-
     console.log("Middleware: " + success);
 
     return success ?
