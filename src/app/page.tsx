@@ -31,6 +31,7 @@ export default async function Home() {
       console.log(error);
     }
   } else {
+    console.log(session)
     throw new Error("No access token found.");
   }
 

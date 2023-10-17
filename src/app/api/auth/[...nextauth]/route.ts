@@ -3,6 +3,9 @@ import SpotifyProvider from "next-auth/providers/spotify";
 import { JWT } from "next-auth/jwt";
 import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
 import { spotifyScope, tokenURL } from "@/constants/spotify"; 
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import prisma from "@/lib/prisma";
+import type { Adapter } from "next-auth/adapters";
 
 /**
  * Attempt to refresh access token
@@ -54,6 +57,7 @@ async function refreshAccessToken(token: JWT) {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID!,
@@ -62,9 +66,11 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // Called on JWT creation
     // Arguments: user, account, profile, and isNewUser are only passed on a new session
     async jwt({ token, account }: {token: JWT, account: Account | null}) {
       if (account) {
+        console.log("In JWT Callback")
         return {
           accessToken: account.access_token,
           id: account.id,
@@ -79,12 +85,24 @@ export const authOptions: NextAuthOptions = {
       const refreshedToken = await refreshAccessToken(token);
       return refreshedToken;
     },
-    // Access token needs to be explicitly declared to be made available
-    // If using a database, may want to accept user argument and persist user.id
-    async session({ session, token }) {
-      
-      session.accessToken = token.accessToken;
-      session.error = token.error;
+    // Called whenever a session is checked
+    // Params:
+    //    token is passed if using JWT's
+    //    user is passed when using database persistence
+    async session({ session, token, user }) {
+      if (token) {
+        session.accessToken = token.accessToken;
+        session.error = token.error
+      } else if (user) {
+        const token = await prisma.account.findFirst({
+          where: {
+            userId: user.id
+          },
+        });
+
+        const accessToken = token?.access_token ?? undefined; 
+        session.accessToken = accessToken
+      }
       
       return session;
     }
