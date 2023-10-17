@@ -18,6 +18,7 @@ export const useCurrentlyPlaying = () => {
   useEffect(() => {
     const fetchData = async () => {
       const cp: CurrentlyPlaying | null = await getClientCurrentlyPlaying();
+      console.log("CURRENTLY PLAYING: " + JSON.stringify(cp))
 
       if (cp) {
         setCurrentlyPlaying(cp);
