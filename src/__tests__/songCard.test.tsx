@@ -5,6 +5,14 @@
 // import { songs } from '@/data/songs';
 // import { PostData } from '@/types';
 
+import { describe, test, expect } from "vitest";
+
+describe("1 == 1", () => {
+  test('1 == 1', () => {
+    expect(1).toBe(1)
+  })
+})
+
 // beforeEach(() => {
 //   // IntersectionOvserver is not available in test environment
 //   // Mocking it to prevent errors
