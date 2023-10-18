@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postinstall": "prisma generate",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest -c ./vitest.config.unit.ts ./src/app/hooks/__tests__/useCurrentlyPlaying",
