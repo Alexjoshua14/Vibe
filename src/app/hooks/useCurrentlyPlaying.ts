@@ -28,6 +28,8 @@ export const useCurrentlyPlaying = () => {
       }
     }
 
+    fetchData()
+
     // Fetch currently playing song every 15 seconds
     const intervalID = setInterval(fetchData, 10000);
 

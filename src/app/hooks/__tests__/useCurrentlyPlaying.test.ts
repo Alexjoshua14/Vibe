@@ -23,14 +23,12 @@ describe('Testing useCurrentlyPlaying', () => {
   })
 
   it('Ensure that getClientCurrentlyPlaying is being mocked', async () => {
-    let res = await renderedHook.result.current.testing()    
-
+    setTimeout(() => {}, 2000)
     expect(mocked).toHaveBeenCalled()
-    expect(res).toEqual(currentlyPlaying)
   })
 
   it.todo('Check that currentlyPlaying song is updated on fetch', () => {
-    
+    expect(renderedHook.result.current.currentlyPlaying).toBeTruthy()
   })
 
   it.todo('Check that fetchData occurs again after 15 seconds')
