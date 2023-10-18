@@ -91,7 +91,9 @@ export const tokenExpirationFromNow = (time: number) => {
  * @returns boolean indicating whether token is expired
  */
 export const tokenExpired = (expires_at?: number): boolean => {
-  return (expires_at ?? 0) < Date.now() / 1000;
+  if (expires_at == undefined)
+    return false;
+  return (expires_at ?? 0) <= Date.now() / 1000;
 }
 
 /**
@@ -112,7 +114,7 @@ export function playbackTime(ts: number, progress: number) {
  * @returns percentage [0, 100]
  */
 export function progressToPercentage(time: number, duration: number): number {
-  if (time == null || duration == null || duration == 0)
+  if (time == null || duration == null || duration <= 0)
     return 0;
 
   let percentage = (time / duration);
