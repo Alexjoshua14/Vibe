@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, Account as NextAuthAccoun, NextAuthOptions, Account} from "next-auth";
+import NextAuth, { DefaultSession, Account as NextAuthAccoun, NextAuthOptions, Account, TokenSet, Session} from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 import { JWT } from "next-auth/jwt";
 import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
@@ -52,6 +52,66 @@ async function refreshAccessToken(token: JWT) {
 }
 
 /**
+ * Attempt to refresh access token
+ * If unable to refresh, set error field on session object
+ * 
+ * @param userId User's id
+ * @param session Session object from Auth.js Session callback
+ */
+async function refreshDatabaseAccessToken(userId: string, session: Session) {
+  // Grab user's spotify account information from database
+  try {
+    const spotify = await prisma.account.findFirst({
+      where: { userId: userId, provider: 'spotify' }
+    })
+
+    if (!spotify?.refresh_token) {
+      throw new Error("No refresh token in database..")
+    }
+
+    // Request a refreshed access token from Spotify
+    const res = await fetch(tokenURL, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded"},
+      body: 
+       new URLSearchParams({
+        client_id: process.env.SPOTIFY_CLIENT_ID!,
+        client_secret: process.env.SPOTIFY_CLIENT_SECRET!,
+        grant_type: "refresh_token",
+        refresh_token: spotify?.refresh_token,
+       }),
+       method: "POST",
+    });
+
+    // Parse response and check for error
+    const tokens: TokenSet = await res.json()
+    if (!res.ok) {
+      throw tokens
+    }
+
+    // Update tokens and expiration time in database
+    await prisma.account.update({
+      data: {
+        access_token: tokens.access_token,
+        expires_at: tokens.expires_at,
+        refresh_token: tokens.refresh_token
+      },
+      where: {
+        provider_providerAccountId: {
+          provider: 'spotify',
+          providerAccountId: spotify.providerAccountId
+        }
+        
+      }
+    })
+
+  } catch (err) {
+    // On error, log to console and set error message on session object
+    console.error(`Error trying to refresh accces token: ${err}`)
+    session.error = "RefreshAccessTokenError"
+  }
+}
+
+/**
  * NextAuthOptions
  * 
  * @see https://next-auth.js.org/configuration/options
@@ -94,6 +154,14 @@ export const authOptions: NextAuthOptions = {
         session.accessToken = token.accessToken;
         session.error = token.error
       } else if (user) {
+
+        const spotify = await prisma.account.findFirst({
+          where: { userId: user.id, provider: 'spotify' }
+        })
+        if (tokenExpired(spotify?.expires_at ?? -1)) {
+          refreshDatabaseAccessToken(user.id, session)
+        }
+
         const token = await prisma.account.findFirst({
           where: {
             userId: user.id
