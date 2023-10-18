@@ -17,7 +17,10 @@ export const SpotifyArtistSchema = z.object({
   id: z.string(),
   name: z.string(),
   type: z.string(),
-  uri: z.string()
+  uri: z.string(),
+  external_urls: z.object({
+    spotify: z.string(),
+  }).optional(),
 })
 
 export type SpotifyArtist = z.infer<typeof SpotifyArtistSchema>
@@ -50,7 +53,8 @@ export const SpotifyItemSchema = z.object({
   uri: z.string(),
   type: z.string(),
   popularity: z.number(),
-  explicit: z.boolean()
+  explicit: z.boolean(),
+  avilable_markets: z.array(z.string()).optional(),
 })
 
 export type SpotifyItem = z.infer<typeof SpotifyItemSchema>
@@ -155,3 +159,6 @@ export const SpotifySearchResponseSchema = z.object({
 })
 
 export type SpotifySearchResponse = z.infer<typeof SpotifySearchResponseSchema>
+
+export const SpotifySearchResponseParsed = z.array(SpotifyItemSchema)
+export type SpotifySearch = z.infer<typeof SpotifySearchResponseParsed>

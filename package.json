@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest -c ./vitest.config.unit.ts",
-    "vitest": "vitest",
+    "test": "vitest -c ./vitest.config.unit.ts ./src/app/hooks/__tests__/useCurrentlyPlaying",
+    "vitest": "vitest ./src/app/hooks/__tests__/useCurrentlyPlaying",
     "coverage": "vitest run --coverage",
     "test:e2e:open": "cypress open",
     "test:e2e:run": "cypress run"
@@ -42,9 +42,11 @@
     "redux": "^4.2.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.6",
+    "vitest": "^0.34.6",
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^12.9.1",
     "@testing-library/cypress": "^10.0.1",
     "@testing-library/react": "^14.0.0",
     "bun-types": "^1.0.6",

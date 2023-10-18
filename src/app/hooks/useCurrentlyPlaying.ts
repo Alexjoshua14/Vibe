@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { CurrentlyPlaying } from '@/lib/validators/spotify';
-import { getClientCurrentlyPlaying } from '@/utilities/spotifyAPI';
+import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI";
 import { progressToPercentage } from '@/utilities/helper';
 
 export const useCurrentlyPlaying = () => {
@@ -18,6 +18,7 @@ export const useCurrentlyPlaying = () => {
   useEffect(() => {
     const fetchData = async () => {
       const cp: CurrentlyPlaying | null = await getClientCurrentlyPlaying();
+      console.log(cp)
 
       if (cp) {
         setCurrentlyPlaying(cp);
