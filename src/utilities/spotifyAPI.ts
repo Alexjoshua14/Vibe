@@ -68,6 +68,7 @@ export async function getCurrentlyPlaying(access_token: string) {
  * @throws Error if no session or access token found
  */
 export async function getClientCurrentlyPlaying() {
+  console.log("Get client CurrentlyPlaying has been called")
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -78,14 +79,14 @@ export async function getClientCurrentlyPlaying() {
     try {
       const currentlyPlayingData = await getCurrentlyPlaying(session.accessToken);
       if (currentlyPlayingData) {
-        console.log(
-          `Current time: ` +
-          Date.now().toString() +
-          `\nResponse Timestamp: ` +
-          currentlyPlayingData.timestamp +
-          `\nDifference: ` +
-          (Date.now() - currentlyPlayingData.timestamp)
-        );
+        // console.log(
+        //   `Current time: ` +
+        //   Date.now().toString() +
+        //   `\nResponse Timestamp: ` +
+        //   currentlyPlayingData.timestamp +
+        //   `\nDifference: ` +
+        //   (Date.now() - currentlyPlayingData.timestamp)
+        // );
         
         return mapToCurrentlyPlaying(currentlyPlayingData);
       }
