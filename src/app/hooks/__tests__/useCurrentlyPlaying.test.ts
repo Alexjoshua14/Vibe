@@ -27,7 +27,7 @@ describe('Testing useCurrentlyPlaying', () => {
     expect(mocked).toHaveBeenCalled()
   })
 
-  it.todo('Check that currentlyPlaying song is updated on fetch', () => {
+  it('Check that currentlyPlaying song is updated on fetch', () => {
     expect(renderedHook.result.current.currentlyPlaying).toBeTruthy()
   })
 
