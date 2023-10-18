@@ -3,6 +3,7 @@ import 'client-only'
 import React, {useEffect, useState} from 'react'
 import { SpotifyItem } from '@/lib/validators/spotify';
 import { searchSpotify } from '@/utilities/spotifyAPI';
+import { sampleSearchResults } from '@/testData/searchData';
 
 export const useSearch = () => {
 
@@ -17,7 +18,7 @@ export const useSearch = () => {
    * Increments the offset by the limit if the offset + limit is less than the length of the search results
    */
   const incrementOffset = () => {
-    if (offset + limit <= searchResults.length) {
+    if (offset + limit <= searchResults.length - 1) {
       setOffset(offset + limit);
     }
   }
@@ -43,6 +44,7 @@ export const useSearch = () => {
       setSearchFieldDisabled(true);
     }
     const results = await searchSpotify(searchQuery);
+    console.log(results);
     setSearchQuery("");
     setSearchFieldDisabled(false);
     setSearchResults(results);
@@ -53,6 +55,6 @@ export const useSearch = () => {
   }
 
 
-  return { searchResults, clearSearchResults, searchQuery, setSearchQuery, searchFieldDisabled, offset, limit, incrementOffset, decrementOffset, handleSearch }
+  return { searchResults, clearSearchResults, searchQuery, setSearchQuery, searchFieldDisabled, offset, limit, incrementOffset, decrementOffset, handleSearch, setSearchResults }
   
 }
