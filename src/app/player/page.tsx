@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useState } from "react";
 
 import { motion } from "framer-motion";
@@ -20,6 +20,7 @@ import { songs } from "@/data/songs";
 /* Custom hooks */
 import { useSearch } from "../hooks/useSearch";
 import { useCurrentlyPlaying } from "../hooks/useCurrentlyPlaying";
+import CurrentlyPlaying from "@/components/currentlyPlaying";
 
 /**
  * The player page, displays the currently playing song 
@@ -40,7 +41,8 @@ export default function Player() {
     handleSearch,
     incrementOffset,
     decrementOffset,
-    offset, limit
+    offset,
+    limit
   } = useSearch();
 
   /* Add to Queue */
@@ -68,13 +70,11 @@ export default function Player() {
       if (!selectedSong) throw new Error("No song selected");
       const result = await addToQueueClient(selectedSong.uri);
       if (result) {
-        clearSearchResults();
-        setModalOpen(false);
+        handleModalClose('success');
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setModalOpen(false);
+      handleModalClose('error', error as string);
     }
   }
 
@@ -91,7 +91,9 @@ export default function Player() {
   /**
    * Close modal
    */
-  const handleModalClose = () => {
+  const handleModalClose = (status: 'success' | 'error', statusCode?: string) => {
+    if (status == 'success')
+      clearSearchResults();
     setModalOpen(false);
   }
 
@@ -102,17 +104,9 @@ export default function Player() {
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">
       <div className="flex flex-col">
         <div className="flex gap-4 h-[400px] sm:h-[140px]">
-          {currentlyPlaying ?
-            <SongCard
-              song={currentlyPlaying ? currentlyPlaying.item : songs[4]}
-              progress_ms={progress.time}
-            /> :
-            <div className="flex h-full w-full justify-center items-center text-center">
-              <h1>
-                Start listening to something..
-              </h1>
-            </div>
-          }
+          <Suspense fallback={<div>Loading stuff</div>}>
+            <CurrentlyPlaying />
+          </Suspense>
         </div>
         <div className="flex justify-center items-center p-4 gap-2">
           <SearchField
@@ -161,7 +155,7 @@ export default function Player() {
             </button>
           </div>
 
-          {selectedSong && <AddToQueueModal item={selectedSong} open={modalOpen} addToQueue={() => addToQueue} cancelAddToQueue={handleModalClose} />}
+          {selectedSong && <AddToQueueModal item={selectedSong} open={modalOpen} addToQueue={addToQueue} cancelAddToQueue={() => handleModalClose('error', 'cancelled')} />}
         </div>
       )}
     </main>
