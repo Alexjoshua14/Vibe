@@ -11,13 +11,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 import { BsFillExplicitFill } from 'react-icons/bs';
 
 import { msToTime, progressToPercentage } from '@/utilities/helper';
 
 import { SpotifyItem, SongInformationVariant } from '../lib/validators/spotify';
-import { Divider, Modal } from '@mui/material';
+import { Modal } from '@mui/material';
 import { PostData } from '@/lib/validators/posts';
 
 

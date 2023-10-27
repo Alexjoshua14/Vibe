@@ -23,18 +23,6 @@ export default async function Home() {
     redirect('/api/auth/signin?callbackUrl=/');
   }
 
-  if (session.accessToken) {
-    try {
-      const topTracksData = await getTopTracks(session.accessToken);
-      topTracks = mapToSongs(topTracksData);
-    } catch (error) {
-      console.log(error);
-    }
-  } else {
-    console.log(session)
-    throw new Error("No access token found.");
-  }
-
   return (
     <main className="flex-1 p-16 flex flex-col items-center justify-between border-2 border-orange-500">
       <section className="flex flex-col">
