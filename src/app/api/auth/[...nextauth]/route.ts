@@ -170,6 +170,7 @@ export const authOptions: NextAuthOptions = {
 
         const accessToken = token?.access_token ?? undefined; 
         session.accessToken = accessToken
+        session.user.id = user.id
       }
       
       return session;

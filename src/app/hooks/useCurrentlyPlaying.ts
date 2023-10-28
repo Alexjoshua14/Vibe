@@ -5,7 +5,7 @@ import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI";
 import { progressToPercentage } from '@/utilities/helper';
 
 export const useCurrentlyPlaying = () => {
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null>(null);
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null | undefined>(undefined);
   const [progress, setProgress] = useState<{ time: number, percentage: number }>({ time: 0, percentage: 0 });
   const [song_completed, setSongCompleted] = useState<boolean>(false);
 

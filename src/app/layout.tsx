@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="overscroll-none">
 
-      <body className={`inter.className z-10 bg-gradient-to-t from-purple-700 to-teal-500`}>
+      <body className={`inter.className z-10 bg-primary text-primary`}>
         <div className={`flex flex-col min-h-screen p-2 z-20`}>
           <div className="flex-1 flex pb-[5rem]">
             <Providers>

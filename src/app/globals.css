@@ -16,16 +16,6 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 .gradient-01 {
   position: absolute;
   width: 300px;
@@ -95,7 +85,7 @@ body {
 }
 
 .glassmorphism-white {
-  @apply glassmorphism bg-zinc-50 text-zinc-800;
+  @apply glassmorphism bg-zinc-200;
 }
 
 .glassmorphism-white-secondary {
