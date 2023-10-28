@@ -129,8 +129,8 @@ model Image {
 model CurrentlyPlaying {
   id          String   @id @default(cuid())
   userId      String   @unique
-  songId      Int
-  song        Song     @relation(fields: [songId], references: [id])
+  songId      Int?
+  song        Song?    @relation(fields: [songId], references: [id])
   members     User[]
   progress_ms Int      @default(0)
   is_playing  Boolean  @default(false)
