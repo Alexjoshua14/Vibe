@@ -6,17 +6,10 @@ import { authOptions } from './api/auth/[...nextauth]/route';
 import { LoginButton, LogoutButton } from "@/components/buttons";
 import { SongCard } from "@/components/songCard";
 
-import { getTopTracks } from "@/utilities/spotifyAPI";
-import { mapToSongs } from "@/utilities/helper";
-
 import { songs } from "@/data/songs";
-import { SpotifyItem } from "@/lib/validators/spotify";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-
-  let topTracks: SpotifyItem[] = [];
-  let currentlyPlaying = null;
 
   if (!session) {
     console.log("No session found.")
@@ -33,7 +26,7 @@ export default async function Home() {
           {session ? <LogoutButton /> : <LoginButton />}
         </div>
         <div className="flex gap-4">
-          <SongCard song={topTracks[0] ? topTracks[0] : songs[4]} />
+          <SongCard song={songs[4]} />
         </div>
       </section>
     </main>
