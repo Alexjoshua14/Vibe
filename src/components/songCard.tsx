@@ -148,7 +148,7 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
         />
         <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
           <SongInformation item={song} variant={"main"} />
-          {progress_ms != null &&
+          {progress_ms !== undefined && progress_ms !== null &&
             <div role="progress" className="w-full">
               <LinearProgress role="progressbar" variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
               <Typography component="div" variant="subtitle2" className="text-[.65rem] text-tertiary text-right sm:text-left">
