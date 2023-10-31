@@ -1,6 +1,6 @@
+import React from "react"
 
-import React from 'react';
-import { NewPost } from '@/components/newPost';
+import { NewPost } from "@/components/newPost"
 
 export default function Post() {
   return (

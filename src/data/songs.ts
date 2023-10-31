@@ -1,11 +1,11 @@
-import { SpotifyItem } from "../lib/validators/spotify";
-import { PostData } from "../lib/validators/posts";
+import { PostData } from "../lib/validators/posts"
+import { SpotifyItem } from "../lib/validators/spotify"
 
 export const songs: SpotifyItem[] = [
   {
-    id: '1',
+    id: "1",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -13,7 +13,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -23,7 +23,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -33,9 +33,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '2',
+    id: "2",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -43,7 +43,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -53,7 +53,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -63,9 +63,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '3',
+    id: "3",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -73,7 +73,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -83,7 +83,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -93,9 +93,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '4',
+    id: "4",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -103,7 +103,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -113,7 +113,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -123,9 +123,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '5',
+    id: "5",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -133,7 +133,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -143,7 +143,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -153,9 +153,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '6',
+    id: "6",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -163,7 +163,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -173,7 +173,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -183,9 +183,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '7',
+    id: "7",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -193,7 +193,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -203,7 +203,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -213,9 +213,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '8',
+    id: "8",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -223,7 +223,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -233,7 +233,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -243,9 +243,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '9',
+    id: "9",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -253,7 +253,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -263,7 +263,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -273,9 +273,9 @@ export const songs: SpotifyItem[] = [
     popularity: 100,
   },
   {
-    id: '10',
+    id: "10",
     name: "Hello Hello Hello",
-    artists: [{name: "Remi Wolf", href: "", id: "", type: "", uri: ""}],
+    artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
     album: {
       name: "I'm Allergic to Dogs!",
       images: [
@@ -283,7 +283,7 @@ export const songs: SpotifyItem[] = [
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           width: 640,
           height: 640,
-        }
+        },
       ],
       album_type: "",
       artists: [{ name: "Remi Wolf", href: "", id: "", type: "", uri: "" }],
@@ -293,7 +293,7 @@ export const songs: SpotifyItem[] = [
       uri: "",
       href: "",
       id: "",
-      type: ""
+      type: "",
     },
     duration_ms: 10000,
     explicit: false,
@@ -302,9 +302,7 @@ export const songs: SpotifyItem[] = [
     type: "song",
     popularity: 100,
   },
-
-];
-
+]
 
 export const postSampleData: PostData = {
   id: 1,
@@ -312,10 +310,11 @@ export const postSampleData: PostData = {
     id: 1,
     name: "Heliophys14",
     username: "test",
-    spotifyProfile: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
+    spotifyProfile:
+      "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
   },
   item: {
-    id: '1',
+    id: "1",
     name: "Grumpy Old Man",
     explicit: false,
     popularity: 100,
@@ -342,7 +341,8 @@ export const postSampleData: PostData = {
         },
       ],
       external_urls: {
-        spotify: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
+        spotify:
+          "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
       },
       href: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
       release_date: "2021-07-14",
@@ -354,7 +354,6 @@ export const postSampleData: PostData = {
           url: "https://i.scdn.co/image/ab67616d0000b2730e68fefa1408603f54a4d664",
           height: 640,
           width: 640,
-
         },
       ],
     },
