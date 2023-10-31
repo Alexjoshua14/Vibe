@@ -1,6 +1,7 @@
 import { z } from 'zod'
-import { UserSchema } from './user'
+
 import { SpotifyItemSchema } from './spotify'
+import { UserSchema } from './user'
 
 export const PostDataSchema = z.object({
   id: z.number(),

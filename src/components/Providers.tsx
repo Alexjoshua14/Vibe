@@ -1,8 +1,9 @@
 'use client'
 
 import { FC } from 'react'
-import { SessionProvider } from 'next-auth/react'
 import { Provider } from 'react-redux'
+import { SessionProvider } from 'next-auth/react'
+
 import store from './store';
 
 interface ProvidersProps {

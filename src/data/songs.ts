@@ -1,5 +1,5 @@
-import { SpotifyItem } from "../lib/validators/spotify";
 import { PostData } from "../lib/validators/posts";
+import { SpotifyItem } from "../lib/validators/spotify";
 
 export const songs: SpotifyItem[] = [
   {

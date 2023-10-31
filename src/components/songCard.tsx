@@ -1,23 +1,21 @@
 'use client'
 
-import React, { useRef, useEffect, useState } from 'react';
-
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-
+import React, { useEffect, useRef, useState } from 'react';
+import { BsFillExplicitFill } from 'react-icons/bs';
+import { Modal } from '@mui/material';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
-import { BsFillExplicitFill } from 'react-icons/bs';
+import Typography from '@mui/material/Typography';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
+import { PostData } from '@/lib/validators/posts';
 import { msToTime, progressToPercentage } from '@/utilities/helper';
 
-import { SpotifyItem, SongInformationVariant } from '../lib/validators/spotify';
-import { Modal } from '@mui/material';
-import { PostData } from '@/lib/validators/posts';
+import { SongInformationVariant,SpotifyItem } from '../lib/validators/spotify';
 
 
 /**

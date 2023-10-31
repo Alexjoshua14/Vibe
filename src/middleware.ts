@@ -1,5 +1,6 @@
-import { rateLimiter } from "@/lib/rate-limiting/rate-limiter"
 import { NextRequest, NextResponse } from "next/server"
+
+import { rateLimiter } from "@/lib/rate-limiting/rate-limiter"
 
 export { default } from "next-auth/middleware"
 

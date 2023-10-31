@@ -1,7 +1,9 @@
-import { describe, it, expect, beforeAll, beforeEach, jest } from 'bun:test'
-import { RenderHookResult, render, renderHook, act } from '@testing-library/react'
-import { useSearch } from '../useSearch'
+import { act,render, renderHook, RenderHookResult } from '@testing-library/react'
+import { beforeAll, beforeEach, describe, expect, it, jest } from 'bun:test'
+
 import { sampleSearchResults, sampleSearchResults2 } from '@/testData/searchData'
+
+import { useSearch } from '../useSearch'
 
 type HookReturnType = ReturnType<typeof useSearch>
 

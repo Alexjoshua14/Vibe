@@ -1,14 +1,16 @@
 'use client'
 
-import { useSearch } from '@/app/hooks/useSearch';
 import { FC, useState } from 'react'
-import { SearchField } from './searchField';
-import { addToQueue, addToQueueClient } from '@/utilities/spotifyAPI';
-import { motion } from 'framer-motion';
 import { BiSolidSend } from 'react-icons/bi';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import { SearchResult, AddToQueueModal } from './songCard';
+import { motion } from 'framer-motion';
+
+import { useSearch } from '@/app/hooks/useSearch';
 import { SpotifyItem } from "@/lib/validators/spotify";
+import { addToQueue, addToQueueClient } from '@/utilities/spotifyAPI';
+
+import { SearchField } from './searchField';
+import { AddToQueueModal,SearchResult } from './songCard';
 
 interface searchProps {
 

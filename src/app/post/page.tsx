@@ -1,5 +1,6 @@
 
 import React from 'react';
+
 import { NewPost } from '@/components/newPost';
 
 export default function Post() {

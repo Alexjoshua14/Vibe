@@ -1,11 +1,12 @@
-import NextAuth, { DefaultSession, Account as NextAuthAccoun, NextAuthOptions, Account, TokenSet, Session} from "next-auth";
-import SpotifyProvider from "next-auth/providers/spotify";
-import { JWT } from "next-auth/jwt";
-import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
-import { spotifyScope, tokenURL } from "@/constants/spotify"; 
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import prisma from "@/lib/prisma";
+import NextAuth, { Account, Account as NextAuthAccoun, DefaultSession, NextAuthOptions, Session,TokenSet} from "next-auth";
 import type { Adapter } from "next-auth/adapters";
+import { JWT } from "next-auth/jwt";
+import SpotifyProvider from "next-auth/providers/spotify";
+
+import { spotifyScope, tokenURL } from "@/constants/spotify"; 
+import prisma from "@/lib/prisma";
+import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
 
 /**
  * Attempt to refresh access token

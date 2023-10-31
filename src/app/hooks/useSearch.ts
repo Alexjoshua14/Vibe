@@ -1,9 +1,11 @@
 
-import 'client-only'
 import React, {useEffect, useState} from 'react'
+
 import { SpotifyItem } from '@/lib/validators/spotify';
-import { searchSpotify } from '@/utilities/spotifyAPI';
 import { sampleSearchResults } from '@/testData/searchData';
+import { searchSpotify } from '@/utilities/spotifyAPI';
+
+import 'client-only'
 
 export const useSearch = () => {
 

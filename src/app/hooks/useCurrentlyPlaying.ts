@@ -1,8 +1,9 @@
 
 import React, { useEffect, useState } from 'react'
+
 import { CurrentlyPlaying } from '@/lib/validators/spotify';
-import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI";
 import { progressToPercentage } from '@/utilities/helper';
+import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI";
 
 export const useCurrentlyPlaying = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState<CurrentlyPlaying | null | undefined>(undefined);

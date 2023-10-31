@@ -1,8 +1,10 @@
 
-import { describe, it, beforeAll, expect, vi, SpyInstance} from "vitest"
-import * as spotifyAPI from "@/utilities/spotifyAPI"
+import { renderHook,RenderHookResult } from "@testing-library/react";
+import { beforeAll, describe, expect, it, SpyInstance,vi} from "vitest"
+
 import { currentlyPlaying } from "@/testData/currentlyPlayingData";
-import { RenderHookResult, renderHook } from "@testing-library/react";
+import * as spotifyAPI from "@/utilities/spotifyAPI"
+
 import { useCurrentlyPlaying } from "../useCurrentlyPlaying";
 
 describe('Testing useCurrentlyPlaying', () => {

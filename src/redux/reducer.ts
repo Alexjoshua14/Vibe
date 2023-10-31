@@ -1,5 +1,5 @@
 
-import { createReducer, createAction } from "@reduxjs/toolkit"
+import { createAction,createReducer } from "@reduxjs/toolkit"
 
 const increment = createAction('counter/incremenet');
 const decrement = createAction('counter/decrement');

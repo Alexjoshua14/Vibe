@@ -1,6 +1,7 @@
+import { FC, Suspense } from 'react'
+
 import CurrentlyPlaying from '@/components/currentlyPlaying'
 import Search from '@/components/search'
-import { FC, Suspense } from 'react'
 
 interface pageProps {
   params: {

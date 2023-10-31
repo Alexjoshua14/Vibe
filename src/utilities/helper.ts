@@ -1,12 +1,11 @@
 import { 
-  SpotifyItemWrapper, 
-  SpotifyItem, 
-  SpotifyItemBrief, 
   CurrentlyPlaying, 
   CurrentlyPlayingResponse, 
   CurrentlyPlayingSchema,
-  SpotifyItemSchema
-} from '@/lib/validators/spotify';
+  SpotifyItem, 
+  SpotifyItemBrief, 
+  SpotifyItemSchema,
+  SpotifyItemWrapper} from '@/lib/validators/spotify';
 
 /**
  * Extract SpotifyItems from json response

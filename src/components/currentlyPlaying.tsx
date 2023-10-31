@@ -1,7 +1,9 @@
 'use client'
 
-import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlaying'
 import { FC } from 'react'
+
+import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlaying'
+
 import { SongCard } from './songCard'
 
 interface currentlyPlayingProps {

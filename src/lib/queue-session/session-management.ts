@@ -1,7 +1,9 @@
 'use server'
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
+
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+
 import prisma from "../prisma"
 
 export async function createSession() {
@@ -183,12 +185,11 @@ export async function destroySession() {
     suggestedPromise = prisma.suggested.delete({
       where: {
         id: user.suggestedId
-      }})
-    
-  
+      }
+    })
 
-  let promArray = await Promise.all([userPromise, currentlyPlayingPromise, queuePromise, suggestedPromise])
-  console.log("Prom Array: \n" + JSON.stringify(promArray))
+  let promismArray = await Promise.all([userPromise, currentlyPlayingPromise, queuePromise, suggestedPromise])
+  console.log("Promise Array: \n" + JSON.stringify(promismArray))
   } catch (err) {
     console.error(err)  
   }

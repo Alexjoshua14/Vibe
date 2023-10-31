@@ -1,7 +1,7 @@
 import { 
   Image, 
-  SpotifyArtist, 
   SpotifyAlbum, 
+  SpotifyArtist, 
   SpotifyItem, 
   SpotifyItemBrief, 
   SpotifyItemWrapper
