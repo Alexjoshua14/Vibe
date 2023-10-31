@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 
-import { createSession } from "@/lib/queue-session/session-management";
+import { createSession, destroySession } from "@/lib/queue-session/session-management";
 
 /**
  * Allows the user to either start a shared queue session or join one
@@ -25,6 +25,9 @@ export default function Player() {
       </button>
       <button className="px-14 py-7 bg-fuchsia-900 text-slate-50 text-2xl rounded">
         Join a Session
+      </button>
+      <button className="px-14 py-7 bg-red-900 text-slate-50 text-2xl rounded" onClick={() => destroySession()}>
+        Delete a Session ⚠️
       </button>
     </main>
   )

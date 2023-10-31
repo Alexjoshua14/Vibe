@@ -4,7 +4,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
 import prisma from "../prisma"
 
-
 export async function createSession() {
   // Set up database objects delegating this user as the host
 
@@ -17,27 +16,6 @@ export async function createSession() {
 
   // Create session database objects
   try {
-  // const user = await prisma.user.findFirst({
-  //   where: {id: session.user.id },
-  //   include: {queue: true}
-  // })
-
-  // if (user == null) {
-  //   throw new Error("No user found..")
-  // }
-
-
-  
-  
-
-  // const currentlyPlaying = await prisma.currentlyPlaying.create({
-  //   data: {
-  //     userId: session.user.id,
-  //     queueId: queue.id,
-  //     suggestedId: '12356'
-  //   }
-  // })
-
   /** Ensure user doesn't have a currently playing already */
   let user = await prisma.user.findFirst({
     where: {
@@ -74,6 +52,11 @@ export async function createSession() {
         create: {}
       }
     },
+    include: {
+      queue: true,
+      suggested: true,
+      currentlyPlaying: true,
+    }
   })
 
   /* Ensure user was found and queue & suggested were created */
@@ -101,7 +84,9 @@ export async function createSession() {
         }
       },
       include: {
-        currentlyPlaying: true
+        currentlyPlaying: true,
+        queue: true,
+        suggested: true,
       }
     })
 
@@ -125,13 +110,86 @@ export async function createSession() {
     throw new Error("Invalid queueId or suggestedId")
   }
 } catch (err) {
-  console.log(err)
+  console.error(err)
 }
 
   // Send user to delegated page
 
 }
 
+/** This should destroy a session completely */
 export async function destroySession() {
   // Clean up database structures and handle any lingering users still connected
+  // Get user information
+  const session = await getServerSession(authOptions)
+  console.log(session?.user.id)
+  if (!session?.user.id) {
+    throw new Error('No user id found')
+  }
+
+  try {
+  /** Ensure user doesn't have a currently playing already */
+  let user = await prisma.user.findFirst({
+    where: {
+      id: session.user.id
+    },
+    include: {
+      queue: true,
+      suggested: true,
+      currentlyPlaying: true
+    }
+  }) 
+
+  if (user === null) {
+    
+    throw new Error("No user found in database")
+  }
+    
+
+  /** TODO: Handle any lingering queue listeners */
+
+
+  /** Destroy queue, suggested, and currentlyPlaying */
+  let queuePromise
+  let suggestedPromise
+  let currentlyPlayingPromise
+  
+  let userPromise = prisma.user.update({
+    where: {
+      id: session.user.id
+    },
+    data: {
+      queueId: null,
+      
+    }
+  })
+
+  if (user.currentlyPlayingId) 
+    currentlyPlayingPromise = prisma.currentlyPlaying.delete({
+      where: {
+        userId: session.user.id,
+        id: user.currentlyPlayingId
+      }
+    })
+
+  if (user.queueId)
+    queuePromise = prisma.queue.delete({
+      where: {
+        id: user.queueId
+      }
+    })
+
+  if (user.suggestedId)
+    suggestedPromise = prisma.suggested.delete({
+      where: {
+        id: user.suggestedId
+      }})
+    
+  
+
+  let promArray = await Promise.all([userPromise, currentlyPlayingPromise, queuePromise, suggestedPromise])
+  console.log("Prom Array: \n" + JSON.stringify(promArray))
+  } catch (err) {
+    console.error(err)  
+  }
 }
