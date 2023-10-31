@@ -1,55 +1,63 @@
-'use client'
+"use client"
 
-import React, { useEffect, useRef, useState } from 'react';
-import { BsFillExplicitFill } from 'react-icons/bs';
-import { Modal } from '@mui/material';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import LinearProgress from '@mui/material/LinearProgress';
-import Typography from '@mui/material/Typography';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import React, { useEffect, useRef, useState } from "react"
+import { BsFillExplicitFill } from "react-icons/bs"
+import { Modal } from "@mui/material"
+import Box from "@mui/material/Box"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
+import CardMedia from "@mui/material/CardMedia"
+import LinearProgress from "@mui/material/LinearProgress"
+import Typography from "@mui/material/Typography"
+import { motion } from "framer-motion"
+import Image from "next/image"
 
-import { PostData } from '@/lib/validators/posts';
-import { msToTime, progressToPercentage } from '@/utilities/helper';
+import { PostData } from "@/lib/validators/posts"
+import { msToTime, progressToPercentage } from "@/utilities/helper"
 
-import { SongInformationVariant,SpotifyItem } from '../lib/validators/spotify';
-
+import { SongInformationVariant, SpotifyItem } from "../lib/validators/spotify"
 
 /**
- * Displays text in confined to it's container 
+ * Displays text in confined to it's container
  * and scrolls it if it overflows
- * 
+ *
  * @param text string to be displayed
  * @param containerRef reference to the container element
  */
-const ScrollingText = ({ text, containerRef, ...props }: { text: string, containerRef: React.RefObject<HTMLDivElement> }) => {
-  const [translation, setTranslation] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(1);
+const ScrollingText = ({
+  text,
+  containerRef,
+  ...props
+}: {
+  text: string
+  containerRef: React.RefObject<HTMLDivElement>
+}) => {
+  const [translation, setTranslation] = useState<number>(0)
+  const [duration, setDuration] = useState<number>(1)
 
   useEffect(() => {
     const handleResize = () => {
-      const containerWidth = containerRef.current?.offsetWidth;
-      const textWidth = containerRef.current?.scrollWidth;
+      const containerWidth = containerRef.current?.offsetWidth
+      const textWidth = containerRef.current?.scrollWidth
       if (containerWidth && textWidth) {
-        const overflow = textWidth > containerWidth;
+        const overflow = textWidth > containerWidth
 
         if (overflow) {
-          let distance = (textWidth - containerWidth) + 20;
-          if (distance < 0) { distance *= -1 } //Ensure distance is always positive
-          let duration = (distance * .03);
-          if (duration < 1.5) duration = 1.5;
+          let distance = textWidth - containerWidth + 20
+          if (distance < 0) {
+            distance *= -1
+          } //Ensure distance is always positive
+          let duration = distance * 0.03
+          if (duration < 1.5) duration = 1.5
 
-          setDuration(duration);
-          setTranslation(-distance);
+          setDuration(duration)
+          setTranslation(-distance)
         } else {
-          setTranslation(0);
+          setTranslation(0)
         }
       }
     }
-    handleResize();
+    handleResize()
     // window.addEventListener('resize', handleResize);
   }, [text, containerRef])
 
@@ -57,7 +65,14 @@ const ScrollingText = ({ text, containerRef, ...props }: { text: string, contain
     <motion.p
       whileInView={{ x: [0, translation, 0] }}
       viewport={{ once: true }}
-      transition={{ ease: "linear", delay: 2, duration: duration, times: [0, .7, 1], repeat: Infinity, repeatDelay: 4 }}
+      transition={{
+        ease: "linear",
+        delay: 2,
+        duration: duration,
+        times: [0, 0.7, 1],
+        repeat: Infinity,
+        repeatDelay: 4,
+      }}
       className="max-w-full whitespace-nowrap"
       {...props}
     >
@@ -72,23 +87,35 @@ const ScrollingText = ({ text, containerRef, ...props }: { text: string, contain
  * - If the song is explicit
  * - The type of the song
  * - The artists of the song (scrolling if it overflows)
- * 
+ *
  * @param item SpotifyItem to display information for
  * @param variant The variant of the SongInformation component
  */
-const SongInformation = ({ item, variant }: { item: SpotifyItem, variant?: SongInformationVariant }) => {
-  const titleRef = useRef<HTMLDivElement>(null);
-  const artistRef = useRef<HTMLDivElement>(null);
+const SongInformation = ({
+  item,
+  variant,
+}: {
+  item: SpotifyItem
+  variant?: SongInformationVariant
+}) => {
+  const titleRef = useRef<HTMLDivElement>(null)
+  const artistRef = useRef<HTMLDivElement>(null)
 
-  const artists = item.artists.map(artist => artist.name).join(", ")
+  const artists = item.artists.map((artist) => artist.name).join(", ")
 
   return (
-    <div className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"} ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"}`}>
+    <div
+      className={`flex flex-col w-full justify-between ${
+        variant === "main" && "items-center sm:items-start"
+      } ${variant != "modal" && "items-start"} ${
+        variant == "modal" && "items-center"
+      }`}
+    >
       <div
         ref={titleRef}
         className={`
-        ${variant == "secondary" || variant == undefined && "text-md"}
-        ${variant == "main" || variant == "modal" && "text-xl"} 
+        ${variant == "secondary" || (variant == undefined && "text-md")}
+        ${variant == "main" || (variant == "modal" && "text-xl")} 
         whitespace-nowrap overflow-x-hidden max-w-full text-primary
         text-center sm:text-left
         `}
@@ -101,42 +128,49 @@ const SongInformation = ({ item, variant }: { item: SpotifyItem, variant?: SongI
           max-w-[90%] ${variant == "modal" && "max-w-[80%]"}
           text-xs`}
       >
-        {item.explicit &&
+        {item.explicit && (
           <span className="w-fit h-fit">
             <BsFillExplicitFill />
           </span>
-        }
+        )}
         <div className={`flex gap-1 overflow-hidden`}>
           {variant != "main" && (
             <>
-              <p>
-                {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
-              </p>
-              <p>
-                •
-              </p>
+              <p>{item.type.charAt(0).toUpperCase() + item.type.slice(1)}</p>
+              <p>•</p>
             </>
           )}
-          <div ref={artistRef} className={`overflow-hidden whitespace-nowrap max-w-full`}>
+          <div
+            ref={artistRef}
+            className={`overflow-hidden whitespace-nowrap max-w-full`}
+          >
             <ScrollingText text={artists} containerRef={artistRef} />
           </div>
         </div>
       </div>
-    </div >
+    </div>
   )
 }
 
 /**
  * Creates a feature card for a song with a progress bar
- * 
+ *
  * @param song The song to create a card for
- * @param progress The progress of the song 
+ * @param progress The progress of the song
  */
-export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms?: number }) => {
+export const SongCard = ({
+  song,
+  progress_ms,
+}: {
+  song: SpotifyItem
+  progress_ms?: number
+}) => {
   return (
-    <Card sx={{ display: 'flex' }}
+    <Card
+      sx={{ display: "flex" }}
       className={`rounded w-[300px] sm:w-[400px] overflow-hidden h-[400px] sm:h-[140px]
-                 glassmorphism-white glassmorphism-2`}>
+                 glassmorphism-white glassmorphism-2`}
+    >
       <Box className="flex flex-col sm:flex-row center w-full overflow-hidden">
         <CardMedia
           component="img"
@@ -146,26 +180,40 @@ export const SongCard = ({ song, progress_ms }: { song: SpotifyItem, progress_ms
         />
         <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
           <SongInformation item={song} variant={"main"} />
-          {progress_ms !== undefined && progress_ms !== null &&
+          {progress_ms !== undefined && progress_ms !== null && (
             <div role="progress" className="w-full">
-              <LinearProgress role="progressbar" variant="determinate" value={progressToPercentage(progress_ms, song.duration_ms)} />
-              <Typography component="div" variant="subtitle2" className="text-[.65rem] text-tertiary text-right sm:text-left">
+              <LinearProgress
+                role="progressbar"
+                variant="determinate"
+                value={progressToPercentage(progress_ms, song.duration_ms)}
+              />
+              <Typography
+                component="div"
+                variant="subtitle2"
+                className="text-[.65rem] text-tertiary text-right sm:text-left"
+              >
                 {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
               </Typography>
             </div>
-          }
+          )}
         </CardContent>
       </Box>
-    </Card >
+    </Card>
   )
 }
 
 /**
  * Creates a simple card to display a Spotify Item's information
- * 
+ *
  * @param item The item to create a search card for
  */
-export const SearchResult = ({ item, props }: { item: SpotifyItem, [key: string]: any }) => {
+export const SearchResult = ({
+  item,
+  props,
+}: {
+  item: SpotifyItem
+  [key: string]: any
+}) => {
   return (
     <div
       className={`rounded w-[300px] sm:w-[400px] pe-4 flex h-fit`}
@@ -186,7 +234,15 @@ export const SearchResult = ({ item, props }: { item: SpotifyItem, [key: string]
   )
 }
 
-const PostImage = ({ imageUrl, altText, ...props }: { imageUrl: string, altText: string, [key: string]: any }) => {
+const PostImage = ({
+  imageUrl,
+  altText,
+  ...props
+}: {
+  imageUrl: string
+  altText: string
+  [key: string]: any
+}) => {
   return (
     <div className="relative h-1/2 aspect-square flex center rounded-br overflow-hidden">
       <Image
@@ -201,23 +257,23 @@ const PostImage = ({ imageUrl, altText, ...props }: { imageUrl: string, altText:
   )
 }
 
-const ProfileImage = ({ imageUrl, altText, ...props }: { imageUrl: string, altText: string, [key: string]: any }) => {
+const ProfileImage = ({
+  imageUrl,
+  altText,
+  ...props
+}: {
+  imageUrl: string
+  altText: string
+  [key: string]: any
+}) => {
   return (
     <div className="aspect-square rounded-full flex center">
-      <Image
-        src={imageUrl}
-        alt={altText}
-        width={50}
-        height={50}
-        {...props}
-      />
+      <Image src={imageUrl} alt={altText} width={50} height={50} {...props} />
     </div>
   )
 }
 
-
 export const Post = ({ post }: { post: PostData }) => {
-
   return (
     <div
       className=" grid grid-row-1 grid-cols-[1fr,3fr]
@@ -225,8 +281,8 @@ export const Post = ({ post }: { post: PostData }) => {
                   sm:w-[60%] sm:min-h-[100px] sm:max-w-[500px] sm:max-h-[250px] 
                   rounded overflow-hidden
                   bg-gradient-to-tr from-gray-950 to-gray-700 glassmorphism 
-                  ">
-
+                  "
+    >
       <div className="flex flex-col pb-2 pe-1 min-w-fit">
         <PostImage
           imageUrl={post.item.album.images[0].url}
@@ -236,19 +292,21 @@ export const Post = ({ post }: { post: PostData }) => {
         <div className="flex-1 flex flex-col center whitespace-nowrap overflow-hidden py-1 sm:py-2">
           <span className="text-xs">{post.item.name}</span>
           <span className="text-xs">{post.item.artists[0].name}</span>
-          <span className="text-[.65rem] text-zinc-200">{post.item.album.name}</span>
+          <span className="text-[.65rem] text-zinc-200">
+            {post.item.album.name}
+          </span>
         </div>
-
       </div>
 
       <div className="grid grid-rows-[2fr, 1fr, 6fr] py-6 px-4">
-
         <div className="flex items-center gap-2 min-h-[30px]">
-          <ProfileImage imageUrl={post.user.spotifyProfile} altText={`${post.user.name} profile picture`} className="rounded-full" />
+          <ProfileImage
+            imageUrl={post.user.spotifyProfile}
+            altText={`${post.user.name} profile picture`}
+            className="rounded-full"
+          />
           <div className="flex flex-col">
-            <span className="text-sm sm:text-md">
-              {post.user.name}
-            </span>
+            <span className="text-sm sm:text-md">{post.user.name}</span>
             <span className="text-[.65rem] sm:text-xs text-zinc-300">
               {post.createdAt}
             </span>
@@ -256,12 +314,12 @@ export const Post = ({ post }: { post: PostData }) => {
         </div>
 
         <div className="max-w-full sm:max-w-[80%] overflow-hidden px-1 sm:px-2">
-          <span className="text-gray-500">________________________________________________</span>
+          <span className="text-gray-500">
+            ________________________________________________
+          </span>
         </div>
         <div className="flex flex-col flex-1 justify-center gap-1">
-          <div className="text-md sm:text-lg">
-            {post.title}
-          </div>
+          <div className="text-md sm:text-lg">{post.title}</div>
           <div className="text-xs sm:text-sm text-zinc-100 text-ellipsis">
             {post.body}
           </div>
@@ -271,30 +329,31 @@ export const Post = ({ post }: { post: PostData }) => {
   )
 }
 
-
 /**
  * Modal that displays information about a Spotify Item
  * and allows the user to add it to the queue
- * 
+ *
  * @param item SpotifyItem to display information for
  * @param open Whether the modal is open or not
  * @param addToQueue Function to add the item to the queue
  * @param cancelAddToQueue Function to cancel adding the item to the queue
- * @returns 
+ * @returns
  */
-export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
-  {
-    item: SpotifyItem,
-    open: boolean,
-    addToQueue: () => any,
-    cancelAddToQueue: () => void,
-  }) => {
+export const AddToQueueModal = ({
+  item,
+  open,
+  addToQueue,
+  cancelAddToQueue,
+}: {
+  item: SpotifyItem
+  open: boolean
+  addToQueue: () => any
+  cancelAddToQueue: () => void
+}) => {
   return (
-    <Modal
-      open={open}
-      onClose={cancelAddToQueue}
-    >
-      <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] 
+    <Modal open={open} onClose={cancelAddToQueue}>
+      <div
+        className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] 
                       w-[90%] h-1/2 sm:w-[500px] sm:h-96 rounded-lg
                       flex flex-col center glassmorphism-white text-white
                       backdrop-filter backdrop-blur-lg"
@@ -313,14 +372,20 @@ export const AddToQueueModal = ({ item, open, addToQueue, cancelAddToQueue }:
           </div>
         </div>
         <div className="p-4 flex center gap-2 sm:gap-4">
-          <button onClick={addToQueue()} className="px-3 py-1 bg-green-500 bg-opacity-60 rounded-lg">
+          <button
+            onClick={addToQueue()}
+            className="px-3 py-1 bg-green-500 bg-opacity-60 rounded-lg"
+          >
             Add to Queue
           </button>
-          <button onClick={cancelAddToQueue} className="px-3 py-1 bg-red-500 bg-opacity-50 rounded-lg">
+          <button
+            onClick={cancelAddToQueue}
+            className="px-3 py-1 bg-red-500 bg-opacity-50 rounded-lg"
+          >
             Cancel
           </button>
         </div>
       </div>
     </Modal>
-  );
+  )
 }

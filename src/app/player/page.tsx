@@ -1,16 +1,18 @@
-'use client'
-import React from "react";
+"use client"
+import React from "react"
 
-import { createSession, destroySession } from "@/lib/queue-session/session-management";
+import {
+  createSession,
+  destroySession,
+} from "@/lib/queue-session/session-management"
 
 /**
  * Allows the user to either start a shared queue session or join one
- * 
+ *
  * TODO: Checks that need to be instantiated
  *  - Verify user is logged in
  */
 export default function Player() {
-
   //Upon creating new session
   // Need to create the database objects
   // Then need to update the currently playing track and ideally set up
@@ -18,7 +20,8 @@ export default function Player() {
 
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">
-      <button className="px-14 py-7 bg-teal-900 text-slate-50 text-2xl rounded"
+      <button
+        className="px-14 py-7 bg-teal-900 text-slate-50 text-2xl rounded"
         onClick={() => createSession()}
       >
         Start a Session
@@ -26,7 +29,10 @@ export default function Player() {
       <button className="px-14 py-7 bg-fuchsia-900 text-slate-50 text-2xl rounded">
         Join a Session
       </button>
-      <button className="px-14 py-7 bg-red-900 text-slate-50 text-2xl rounded" onClick={() => destroySession()}>
+      <button
+        className="px-14 py-7 bg-red-900 text-slate-50 text-2xl rounded"
+        onClick={() => destroySession()}
+      >
         Delete a Session ⚠️
       </button>
     </main>

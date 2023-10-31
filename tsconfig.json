@@ -24,6 +24,14 @@
     },
     "types": ["bun-types"]
   },
-  "include": ["next-env.d.ts", "next-auth.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/profile/page.jsx", "src/app/api/auth/[...nextauth]/route.js"],
+  "include": [
+    "next-env.d.ts",
+    "next-auth.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/profile/page.jsx",
+    "src/app/api/auth/[...nextauth]/route.js"
+  ],
   "exclude": ["node_modules"]
 }

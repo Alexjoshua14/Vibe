@@ -1,7 +1,7 @@
-import { FC, Suspense } from 'react'
+import { FC, Suspense } from "react"
 
-import CurrentlyPlaying from '@/components/currentlyPlaying'
-import Search from '@/components/search'
+import CurrentlyPlaying from "@/components/currentlyPlaying"
+import Search from "@/components/search"
 
 interface pageProps {
   params: {
@@ -9,11 +9,10 @@ interface pageProps {
   }
 }
 
-
 /**
- * The player page, displays the currently playing song 
+ * The player page, displays the currently playing song
  * and allows the user to search for songs to add to the queue
- * 
+ *
  */
 export default function SharedQueue({ params }: pageProps) {
   // grab queue id from [...slug]
@@ -26,7 +25,7 @@ export default function SharedQueue({ params }: pageProps) {
   // if user doesn't have access, allow them to request access?
 
   // Grab currently playing and queue data from database
-  // 
+  //
 
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">

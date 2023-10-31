@@ -1,18 +1,18 @@
 {
   "extends": "next/core-web-vitals",
-  "plugins": ["react", "simple-import-sort"],
+  "plugins": ["react", "import", "simple-import-sort"],
   "rules": {
     "simple-import-sort/imports": "error"
   },
   "overrides": [
     {
       "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
-      "rules":{
+      "rules": {
         "simple-import-sort/imports": [
           "error",
           {
             "groups": [
-            // Packages `react` related packages come first.
+              // Packages `react` related packages come first.
               ["^react", "^@?\\w"],
               // Internal packages.
               ["^(@|components)(/.*|$)"],
@@ -24,8 +24,8 @@
               ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
               // Style imports.
               ["^.+\\.?(css)$"]
-          ]
-        }
+            ]
+          }
         ]
       }
     }

@@ -1,17 +1,24 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import NextAuth, { Account, Account as NextAuthAccoun, DefaultSession, NextAuthOptions, Session,TokenSet} from "next-auth";
-import type { Adapter } from "next-auth/adapters";
-import { JWT } from "next-auth/jwt";
-import SpotifyProvider from "next-auth/providers/spotify";
+import NextAuth, {
+  Account,
+  Account as NextAuthAccoun,
+  DefaultSession,
+  NextAuthOptions,
+  Session,
+  TokenSet,
+} from "next-auth"
+import type { Adapter } from "next-auth/adapters"
+import { JWT } from "next-auth/jwt"
+import SpotifyProvider from "next-auth/providers/spotify"
 
-import { spotifyScope, tokenURL } from "@/constants/spotify"; 
-import prisma from "@/lib/prisma";
-import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
+import { spotifyScope, tokenURL } from "@/constants/spotify"
+import prisma from "@/lib/prisma"
+import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper"
 
 /**
  * Attempt to refresh access token
  * If unable to refresh, return original token with error
- * 
+ *
  * @param token JWT token
  * @returns JWT token with refreshed access token
  * @throws Error if unable to refresh access token
@@ -19,21 +26,20 @@ import { tokenExpirationFromNow, tokenExpired } from "@/utilities/helper";
 async function refreshAccessToken(token: JWT) {
   try {
     const res = await fetch(tokenURL, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded"},
-      body: 
-       new URLSearchParams({
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
         client_id: process.env.SPOTIFY_CLIENT_ID!,
         client_secret: process.env.SPOTIFY_CLIENT_SECRET!,
         grant_type: "refresh_token",
         refresh_token: token.refreshToken!,
-       }),
-       method: "POST",
-    });
+      }),
+      method: "POST",
+    })
 
-    const refreshedTokens = await res.json();
+    const refreshedTokens = await res.json()
 
     if (!res.ok) {
-      throw refreshedTokens;
+      throw refreshedTokens
     }
 
     return {
@@ -42,9 +48,8 @@ async function refreshAccessToken(token: JWT) {
       accessTokenExpires: tokenExpirationFromNow(refreshedTokens.expires_in),
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
     }
-      
   } catch (error) {
-    console.log("Error refreshing access token: " + error);
+    console.log("Error refreshing access token: " + error)
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -55,7 +60,7 @@ async function refreshAccessToken(token: JWT) {
 /**
  * Attempt to refresh access token
  * If unable to refresh, set error field on session object
- * 
+ *
  * @param userId User's id
  * @param session Session object from Auth.js Session callback
  */
@@ -63,7 +68,7 @@ async function refreshDatabaseAccessToken(userId: string, session: Session) {
   // Grab user's spotify account information from database
   try {
     const spotify = await prisma.account.findFirst({
-      where: { userId: userId, provider: 'spotify' }
+      where: { userId: userId, provider: "spotify" },
     })
 
     if (!spotify?.refresh_token) {
@@ -72,16 +77,15 @@ async function refreshDatabaseAccessToken(userId: string, session: Session) {
 
     // Request a refreshed access token from Spotify
     const res = await fetch(tokenURL, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded"},
-      body: 
-       new URLSearchParams({
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
         client_id: process.env.SPOTIFY_CLIENT_ID!,
         client_secret: process.env.SPOTIFY_CLIENT_SECRET!,
         grant_type: "refresh_token",
         refresh_token: spotify?.refresh_token,
-       }),
-       method: "POST",
-    });
+      }),
+      method: "POST",
+    })
 
     // Parse response and check for error
     const tokens: TokenSet = await res.json()
@@ -94,17 +98,15 @@ async function refreshDatabaseAccessToken(userId: string, session: Session) {
       data: {
         access_token: tokens.access_token,
         expires_at: tokens.expires_at,
-        refresh_token: tokens.refresh_token
+        refresh_token: tokens.refresh_token,
       },
       where: {
         provider_providerAccountId: {
-          provider: 'spotify',
-          providerAccountId: spotify.providerAccountId
-        }
-        
-      }
+          provider: "spotify",
+          providerAccountId: spotify.providerAccountId,
+        },
+      },
     })
-
   } catch (err) {
     // On error, log to console and set error message on session object
     console.error(`Error trying to refresh accces token: ${err}`)
@@ -114,7 +116,7 @@ async function refreshDatabaseAccessToken(userId: string, session: Session) {
 
 /**
  * NextAuthOptions
- * 
+ *
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
@@ -129,7 +131,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // Called on JWT creation
     // Arguments: user, account, profile, and isNewUser are only passed on a new session
-    async jwt({ token, account }: {token: JWT, account: Account | null}) {
+    async jwt({ token, account }: { token: JWT; account: Account | null }) {
       if (account) {
         console.log("In JWT Callback")
         return {
@@ -141,10 +143,10 @@ export const authOptions: NextAuthOptions = {
       }
       // Return previous token if the access token has not expired yet
       else if (!tokenExpired(token.accessTokenExpires)) {
-        return token;
+        return token
       }
-      const refreshedToken = await refreshAccessToken(token);
-      return refreshedToken;
+      const refreshedToken = await refreshAccessToken(token)
+      return refreshedToken
     },
     // Called whenever a session is checked
     // Params:
@@ -152,12 +154,11 @@ export const authOptions: NextAuthOptions = {
     //    user is passed when using database persistence
     async session({ session, token, user }) {
       if (token) {
-        session.accessToken = token.accessToken;
+        session.accessToken = token.accessToken
         session.error = token.error
       } else if (user) {
-
         const spotify = await prisma.account.findFirst({
-          where: { userId: user.id, provider: 'spotify' }
+          where: { userId: user.id, provider: "spotify" },
         })
         if (tokenExpired(spotify?.expires_at ?? -1)) {
           refreshDatabaseAccessToken(user.id, session)
@@ -165,17 +166,17 @@ export const authOptions: NextAuthOptions = {
 
         const token = await prisma.account.findFirst({
           where: {
-            userId: user.id
+            userId: user.id,
           },
-        });
+        })
 
-        const accessToken = token?.access_token ?? undefined; 
+        const accessToken = token?.access_token ?? undefined
         session.accessToken = accessToken
         session.user.id = user.id
       }
-      
-      return session;
-    }
+
+      return session
+    },
   },
 }
 

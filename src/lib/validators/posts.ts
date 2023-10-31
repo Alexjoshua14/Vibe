@@ -1,7 +1,7 @@
-import { z } from 'zod'
+import { z } from "zod"
 
-import { SpotifyItemSchema } from './spotify'
-import { UserSchema } from './user'
+import { SpotifyItemSchema } from "./spotify"
+import { UserSchema } from "./user"
 
 export const PostDataSchema = z.object({
   id: z.number(),
@@ -10,7 +10,7 @@ export const PostDataSchema = z.object({
   user: UserSchema,
   createdAt: z.string(),
   updatedAt: z.optional(z.string()),
-  item: SpotifyItemSchema
+  item: SpotifyItemSchema,
 })
 
 export type PostData = z.infer<typeof PostDataSchema>

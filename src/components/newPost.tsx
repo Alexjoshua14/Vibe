@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useState } from "react"
 
@@ -11,8 +11,14 @@ export const NewPost = () => {
         <button className="rounded-full bg-green-600 px-6 py-1">Next</button>
       </div>
       <div className="flex flex-col gap-2 px-4 py-8">
-        <label htmlFor="post-song" className="sr-only">Post song</label>
-        <textarea id="post-song" name="post-song" rows={1} maxLength={27}
+        <label htmlFor="post-song" className="sr-only">
+          Post song
+        </label>
+        <textarea
+          id="post-song"
+          name="post-song"
+          rows={1}
+          maxLength={27}
           className="shadow-sm block w-full h-[40px] resize-none 
                     px-2 py-2 whitespace-nowrap
                   focus:ring-indigo-500 focus:border-indigo-500 
