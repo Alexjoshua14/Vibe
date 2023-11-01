@@ -1,5 +1,7 @@
 "use client"
 import React from "react"
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
 import {
   createSession,
@@ -26,9 +28,9 @@ export default function Player() {
       >
         Start a Session
       </button>
-      <button className="px-14 py-7 bg-fuchsia-900 text-slate-50 text-2xl rounded">
+      <Link href="/player/join" className="px-14 py-7 bg-fuchsia-900 text-slate-50 text-2xl rounded">
         Join a Session
-      </button>
+      </Link>
       <button
         className="px-14 py-7 bg-red-900 text-slate-50 text-2xl rounded"
         onClick={() => destroySession()}

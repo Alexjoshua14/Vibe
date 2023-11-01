@@ -3,6 +3,8 @@
 import Link from "next/link"
 import { signIn, signOut } from "next-auth/react"
 
+import { destroySession } from "@/lib/queue-session/session-management"
+
 /**
  * NextAuth authentication buttons
  *
@@ -33,4 +35,12 @@ export const PlayerButton = () => {
 
 export const ProfileButton = () => {
   return <Link href="/profile">Profile</Link>
+}
+
+export const EndSession = () => {
+  return (
+    <button onClick={() => destroySession} className="bg-red-950 text-stone-50 px-4 py-2 rounded glassmorphism-2-interactive">
+      End Session ⚠️
+    </button>
+  )
 }
