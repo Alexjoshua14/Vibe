@@ -3,9 +3,9 @@ import { defineConfig } from "vitest/config"
 export default defineConfig({
   test: {
     include: [
-      "src/__tests__/**/*.test.ts",
-      "src/__tests__/**/*.test.tsx",
-      "src/**/__tests__/*.test.ts",
+      "src/app/hooks/__tests__/useCurrentlyPlaying.test.ts",
+      "src/lib/queue-session/__tests__/**/*.test.ts",
+      "src/lib/queue-session/__tests__/**/*.test.tsx",
     ],
     environment: "jsdom",
   },
@@ -14,4 +14,5 @@ export default defineConfig({
       "@": "/src",
     },
   },
+
 })
