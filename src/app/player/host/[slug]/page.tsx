@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { EndSession } from "@/components/buttons"
 import CurrentlyPlaying from "@/components/currentlyPlaying"
+import HostPlayer from "@/components/hostPlayer"
 import Search from "@/components/search"
 import { getQueueSession } from "@/lib/queue-session/session-management"
 
@@ -34,6 +35,7 @@ export default async function SharedQueue({ params }: pageProps) {
   // if user has access, check if host or member
   // if user doesn't have access, allow them to request access?
 
+  /** TODO: Possibly move this check out to middleware */
   // Grab currently playing and queue data from database
   const currentlyPlaying = await getQueueSession(params.slug)
   const session = await getServerSession(authOptions)
@@ -41,7 +43,6 @@ export default async function SharedQueue({ params }: pageProps) {
     console.error("You are not the queue host!")
     redirect("/player")
   }
-
 
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">
@@ -53,7 +54,7 @@ export default async function SharedQueue({ params }: pageProps) {
             </p>
           </div>
           <Suspense fallback={<div>Loading stuff</div>}>
-            <CurrentlyPlaying />
+            <HostPlayer />
           </Suspense>
         </div>
         <div>
