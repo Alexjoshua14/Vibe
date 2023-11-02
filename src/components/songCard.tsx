@@ -9,6 +9,7 @@ import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
 import LinearProgress from "@mui/material/LinearProgress"
 import Typography from "@mui/material/Typography"
+import { Song } from "@prisma/client"
 import { motion } from "framer-motion"
 import Image from "next/image"
 
@@ -105,11 +106,9 @@ const SongInformation = ({
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${
-        variant === "main" && "items-center sm:items-start"
-      } ${variant != "modal" && "items-start"} ${
-        variant == "modal" && "items-center"
-      }`}
+      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
+        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
+        }`}
     >
       <div
         ref={titleRef}
@@ -180,6 +179,125 @@ export const SongCard = ({
         />
         <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
           <SongInformation item={song} variant={"main"} />
+          {progress_ms !== undefined && progress_ms !== null && (
+            <div role="progress" className="w-full">
+              <LinearProgress
+                role="progressbar"
+                variant="determinate"
+                value={progressToPercentage(progress_ms, song.duration_ms)}
+              />
+              <Typography
+                component="div"
+                variant="subtitle2"
+                className="text-[.65rem] text-tertiary text-right sm:text-left"
+              >
+                {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
+              </Typography>
+            </div>
+          )}
+        </CardContent>
+      </Box>
+    </Card>
+  )
+}
+
+/**
+ * Returns a SongInformation component that displays:
+ * - The name of the song (scrolling if it overflows)
+ * - If the song is explicit
+ * - The type of the song
+ * - The artists of the song (scrolling if it overflows)
+ *
+ * @param item SpotifyItem to display information for
+ * @param variant The variant of the SongInformation component
+ */
+const SongInformation2 = ({
+  song,
+  variant,
+}: {
+  song: Song
+  variant?: SongInformationVariant
+}) => {
+  const titleRef = useRef<HTMLDivElement>(null)
+  const artistRef = useRef<HTMLDivElement>(null)
+
+  const artists = "ARTIST HERE" ///song.artists.map((artist) => artist.name).join(", ")
+
+  return (
+    <div
+      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
+        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
+        }`}
+    >
+      <div
+        ref={titleRef}
+        className={`
+        ${variant == "secondary" || (variant == undefined && "text-md")}
+        ${variant == "main" || (variant == "modal" && "text-xl")} 
+        whitespace-nowrap overflow-x-hidden max-w-full text-primary
+        text-center sm:text-left
+        `}
+      >
+        <ScrollingText text={song.name} containerRef={titleRef} />
+      </div>
+      <div
+        className={`
+          flex gap-2 text-secondary items-center text-center sm:text-left
+          max-w-[90%] ${variant == "modal" && "max-w-[80%]"}
+          text-xs`}
+      >
+        {song.explicit && (
+          <span className="w-fit h-fit">
+            <BsFillExplicitFill />
+          </span>
+        )}
+        <div className={`flex gap-1 overflow-hidden`}>
+          {variant != "main" && (
+            <>
+              <p>{song.type.charAt(0).toUpperCase() + song.type.slice(1)}</p>
+              <p>•</p>
+            </>
+          )}
+          <div
+            ref={artistRef}
+            className={`overflow-hidden whitespace-nowrap max-w-full`}
+          >
+            <ScrollingText text={artists} containerRef={artistRef} />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Creates a feature card for a song with a progress bar
+ *
+ * @param song The song to create a card for
+ * @param progress The progress of the song
+ */
+export const SongCard2 = ({
+  song,
+  progress_ms,
+}: {
+  song: Song
+  progress_ms?: number
+}) => {
+  return (
+    <Card
+      sx={{ display: "flex" }}
+      className={`rounded w-[300px] sm:w-[400px] overflow-hidden h-[400px] sm:h-[140px]
+                 glassmorphism-white glassmorphism-2`}
+    >
+      <Box className="flex flex-col sm:flex-row center w-full overflow-hidden">
+        {/* <CardMedia
+          component="img"
+          className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
+          image={song.album.images[0].url}
+          alt={song.album.name}
+        /> */}
+        <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
+          <SongInformation2 song={song} variant={"main"} />
           {progress_ms !== undefined && progress_ms !== null && (
             <div role="progress" className="w-full">
               <LinearProgress
@@ -389,3 +507,5 @@ export const AddToQueueModal = ({
     </Modal>
   )
 }
+
+
