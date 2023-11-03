@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef } from "react"
 import { BsFillExplicitFill } from "react-icons/bs"
 import { Modal } from "@mui/material"
 import Box from "@mui/material/Box"
@@ -10,7 +10,6 @@ import CardMedia from "@mui/material/CardMedia"
 import LinearProgress from "@mui/material/LinearProgress"
 import Typography from "@mui/material/Typography"
 import { Song } from "@prisma/client"
-import { motion } from "framer-motion"
 import Image from "next/image"
 
 import { PostData } from "@/lib/validators/posts"
@@ -18,69 +17,9 @@ import { msToTime, progressToPercentage } from "@/utilities/helper"
 
 import { SongInformationVariant, SpotifyItem } from "../lib/validators/spotify"
 
-/**
- * Displays text in confined to it's container
- * and scrolls it if it overflows
- *
- * @param text string to be displayed
- * @param containerRef reference to the container element
- */
-const ScrollingText = ({
-  text,
-  containerRef,
-  ...props
-}: {
-  text: string
-  containerRef: React.RefObject<HTMLDivElement>
-}) => {
-  const [translation, setTranslation] = useState<number>(0)
-  const [duration, setDuration] = useState<number>(1)
-
-  useEffect(() => {
-    const handleResize = () => {
-      const containerWidth = containerRef.current?.offsetWidth
-      const textWidth = containerRef.current?.scrollWidth
-      if (containerWidth && textWidth) {
-        const overflow = textWidth > containerWidth
-
-        if (overflow) {
-          let distance = textWidth - containerWidth + 20
-          if (distance < 0) {
-            distance *= -1
-          } //Ensure distance is always positive
-          let duration = distance * 0.03
-          if (duration < 1.5) duration = 1.5
-
-          setDuration(duration)
-          setTranslation(-distance)
-        } else {
-          setTranslation(0)
-        }
-      }
-    }
-    handleResize()
-    // window.addEventListener('resize', handleResize);
-  }, [text, containerRef])
-
-  return (
-    <motion.p
-      whileInView={{ x: [0, translation, 0] }}
-      viewport={{ once: true }}
-      transition={{
-        ease: "linear",
-        delay: 2,
-        duration: duration,
-        times: [0, 0.7, 1],
-        repeat: Infinity,
-        repeatDelay: 4,
-      }}
-      className="max-w-full whitespace-nowrap"
-      {...props}
-    >
-      {text}
-    </motion.p>
-  )
-}
+import PostImage from "./Images/postImage"
+import ProfileImage from "./Images/profileImage"
+import ScrollingText from "./scrollingText"
 
 /**
  * Returns a SongInformation component that displays:
@@ -348,45 +287,6 @@ export const SearchResult = ({
       <div className="flex flex-col w-full p-4 max-w-[200px] sm:max-w-[300px]">
         <SongInformation item={item} />
       </div>
-    </div>
-  )
-}
-
-const PostImage = ({
-  imageUrl,
-  altText,
-  ...props
-}: {
-  imageUrl: string
-  altText: string
-  [key: string]: any
-}) => {
-  return (
-    <div className="relative h-1/2 aspect-square flex center rounded-br overflow-hidden">
-      <Image
-        src={imageUrl}
-        alt={altText}
-        // width={250}
-        // height={250}
-        fill={true}
-        {...props}
-      />
-    </div>
-  )
-}
-
-const ProfileImage = ({
-  imageUrl,
-  altText,
-  ...props
-}: {
-  imageUrl: string
-  altText: string
-  [key: string]: any
-}) => {
-  return (
-    <div className="aspect-square rounded-full flex center">
-      <Image src={imageUrl} alt={altText} width={50} height={50} {...props} />
     </div>
   )
 }
