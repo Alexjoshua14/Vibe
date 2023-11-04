@@ -14,13 +14,20 @@ interface playerProps {
 }
 
 const Player: FC<playerProps> = ({ }) => {
+  // If hosting, show should be set to true,
+  // If part of a queue, show should be set to true,
+  // If no queue connected in any way, show should be set to false
+
+  // Could use a reducer for this logic with context managed at a global level
+  // so that a button can be created in a page to start a queue or connect to one
+
+  const [show, setShow] = useState(true)
+
   const [hosting, setHosting] = useState(false)
   const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
 
   return (
-
-
-    <div className="h-16 w-[270px] absolute top-4 right-4">
+    <div className={`h-16 w-[270px] absolute top-4 right-4 ${show ? 'flex' : 'hidden'}`}>
       <motion.div
         className="absolute left-0 top-0 w-16 h-16 glassmorphism-3 rounded-s overflow-hidden"
         initial={{ x: 0, y: 0, rotate: 0, scale: 1, zIndex: 0 }}
@@ -33,16 +40,18 @@ const Player: FC<playerProps> = ({ }) => {
         }
       </motion.div>
       <motion.div
-        className="absolute  w-[192px] h-16 px-4 py-4 glassmorphism-3"
+        className="absolute  w-[192px] h-16 px-4 py-4 glassmorphism-3 flex flex-col"
         initial={{ x: 64, y: 0, rotate: 0, zIndex: 0, scale: 1, borderRadius: 0 }}
         whileHover={{ x: 50, y: -10, rotate: 10, zIndex: 1, scale: 1.2, borderRadius: 8 }}
         transition={{ duration: .4 }}
       >
-        <h1>
-          Malibu 1992
-        </h1>
+        <div className="flex-1 flex items-center">
+          <h1>
+            {currentlyPlaying?.song?.name}
+          </h1>
+        </div>
         <Progress
-          value={80}
+          value={progress.percentage}
         />
       </motion.div>
       <motion.div
