@@ -70,6 +70,10 @@
   @apply glassmorphism-2 hover:!bg-opacity-50;
 }
 
+.glassmorphism-3 {
+  @apply glassmorphism !bg-opacity-30;
+}
+
 .glassmorphism-white {
   @apply glassmorphism bg-zinc-200;
 }
