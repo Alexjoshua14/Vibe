@@ -15,25 +15,25 @@ const MusicLoader: FC<musicLoaderProps> = ({ }) => {
         className="bg-gradient-to-tr from-pink-900 to-pink-500 w-14 rounded-full"
       />
       <motion.div
-        initial={{ height: 310 }}
+        initial={{ height: 10 }}
         animate={{ height: 140 }}
         transition={{ duration: .75, ease: 'circOut', repeat: Infinity, repeatType: 'reverse', bounce: .2 }}
         className="bg-gradient-to-tr from-pink-900 to-pink-500 w-14 rounded-full"
       />
       <motion.div
-        initial={{ height: 145 }}
+        initial={{ height: 10 }}
         animate={{ height: 270 }}
         transition={{ duration: .75, ease: 'circOut', repeat: Infinity, repeatType: 'reverse', bounce: .2 }}
         className="bg-gradient-to-tr from-pink-900 to-pink-500 w-14 rounded-full"
       />
       <motion.div
-        initial={{ height: 210 }}
+        initial={{ height: 10 }}
         animate={{ height: 100 }}
         transition={{ duration: .75, ease: 'circOut', repeat: Infinity, repeatType: 'reverse', bounce: .2 }}
         className="bg-gradient-to-tr from-pink-900 to-pink-500 w-14 rounded-full"
       />
       <motion.div
-        initial={{ height: 80 }}
+        initial={{ height: 10 }}
         animate={{ height: 210 }}
         transition={{ duration: .75, ease: 'circOut', repeat: Infinity, repeatType: 'reverse', bounce: .2 }}
         className="bg-gradient-to-tr from-pink-900 to-pink-500 w-14 rounded-full"
