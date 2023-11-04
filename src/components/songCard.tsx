@@ -9,7 +9,7 @@ import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
 import LinearProgress from "@mui/material/LinearProgress"
 import Typography from "@mui/material/Typography"
-import { Song } from "@prisma/client"
+import { Album, Song } from "@prisma/client"
 import Image from "next/image"
 
 import { PostData } from "@/lib/validators/posts"
@@ -218,9 +218,11 @@ const SongInformation2 = ({
 export const SongCard2 = ({
   song,
   progress_ms,
+  imageURL
 }: {
   song: Song
   progress_ms?: number
+  imageURL: string
 }) => {
   return (
     <Card
@@ -229,12 +231,18 @@ export const SongCard2 = ({
                  glassmorphism-white glassmorphism-2`}
     >
       <Box className="flex flex-col sm:flex-row center w-full overflow-hidden">
-        {/* <CardMedia
-          component="img"
-          className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
-          image={song.album.images[0].url}
-          alt={song.album.name}
-        /> */}
+        {imageURL !== ""
+          ? (
+            <CardMedia
+              component="img"
+              className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
+              image={imageURL}
+              alt={song.name}
+            />
+          )
+          : (
+            <div className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square bg-gradient-to-tr from-teal-950 to-teal-500 glassmorphism" />
+          )}
         <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
           <SongInformation2 song={song} variant={"main"} />
           {progress_ms !== undefined && progress_ms !== null && (

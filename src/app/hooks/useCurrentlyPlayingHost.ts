@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
 
 import { getCurrentlyPlayingDB,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
+import { getSongImage } from "@/lib/prisma/song"
 import { CurrentlyPlaying } from "@/lib/validators/spotify"
 import { progressToPercentage } from "@/utilities/helper"
 import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
@@ -15,6 +16,7 @@ export const useCurrentlyPlaying = () => {
     percentage: number
   }>({ time: 0, percentage: 0 })
   const [song_completed, setSongCompleted] = useState<boolean>(false)
+  const [imageURL, setImage] = useState("")
 
   /**
    * Gets the currently playing song and sets the currently playing state
@@ -83,5 +85,16 @@ export const useCurrentlyPlaying = () => {
     }
   }, [currentlyPlaying, song_completed])
 
-  return { currentlyPlaying, progress }
+  useEffect(() => {
+    const fetchNewImage = async () => {
+      let url = currentlyPlaying?.song?.albumId ?
+        await getSongImage(currentlyPlaying.song.albumId).then((img) => img ? img.url : "")
+        : ""
+      
+      setImage(url)
+    }
+    fetchNewImage()
+  }, [currentlyPlaying?.song?.albumId])
+
+  return { currentlyPlaying, progress, imageURL }
 }

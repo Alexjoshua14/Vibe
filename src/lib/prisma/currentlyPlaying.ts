@@ -82,9 +82,16 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
               href: currentlyPlaying.item.album.href,
               name: currentlyPlaying.item.album.name,
               uri: currentlyPlaying.item.album.uri,
+              images: {
+                create: {
+                  height: currentlyPlaying.item.album.images[0].height,
+                  width: currentlyPlaying.item.album.images[0].width,
+                  url: currentlyPlaying.item.album.images[0].url
+                }
+              }
             }
           }
-        }
+        } 
       })
 
       cp = await prisma.currentlyPlaying.update({

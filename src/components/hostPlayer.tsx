@@ -3,16 +3,21 @@
 import { FC } from "react"
 
 import { useCurrentlyPlaying } from "@/app/hooks/useCurrentlyPlayingHost"
+import { getSongImage } from "@/lib/prisma/song"
 
 import { SongCard2 } from "./songCard"
 
 interface hostPlayerProps { }
 
 const HostPlayer: FC<hostPlayerProps> = ({ }) => {
-  const { currentlyPlaying, progress } = useCurrentlyPlaying()
+  const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
+  const image =
+    currentlyPlaying?.song?.albumId
+      ? getSongImage(currentlyPlaying?.song?.albumId)
+      : { url: "" }
 
   if (currentlyPlaying?.song) {
-    return <SongCard2 song={currentlyPlaying.song} progress_ms={progress.time} />
+    return <SongCard2 song={currentlyPlaying.song} progress_ms={progress.time} imageURL={imageURL} />
   } else if (currentlyPlaying == undefined) {
     return <div className="text-pink-700">Loading stuff!</div>
   } else {
