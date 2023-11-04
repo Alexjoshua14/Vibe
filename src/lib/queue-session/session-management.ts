@@ -112,6 +112,7 @@ export async function createSession() {
     }
   } catch (err) {
     console.error(err)
+    return false
   }
 
   // Send user to delegated page
@@ -182,18 +183,21 @@ export async function destroySession() {
         },
       })
 
-    let promismArray = await Promise.all([
+    let promiseArray = await Promise.all([
       userPromise,
       currentlyPlayingPromise,
       queuePromise,
       suggestedPromise,
     ])
-    console.log("Promise Array: \n" + JSON.stringify(promismArray))
+    console.log("Promise Array: \n" + JSON.stringify(promiseArray))
+    return true
   } catch (err) {
     console.error(err)
+    return false
   }
 }
 
+// TODO: Speed this call up, currently seems to have a noticeable delay
 export async function listAllSessions() {
   // Get user information
   const session = await getServerSession(authOptions)
