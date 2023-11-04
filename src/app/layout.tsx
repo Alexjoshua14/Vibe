@@ -5,6 +5,7 @@ import { Inter } from "next/font/google"
 import Providers from "@/components/Providers"
 
 import { BottomNav } from "../components/bottomNav"
+import Player from "../components/player"
 
 import "./globals.css"
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           <div className="flex-1 flex pb-[5rem]">
             <Providers>{children}</Providers>
           </div>
+          <Player />
           <BottomNav />
         </div>
       </body>
