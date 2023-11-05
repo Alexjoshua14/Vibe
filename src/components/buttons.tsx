@@ -4,6 +4,8 @@ import Link from "next/link"
 import { signIn, signOut } from "next-auth/react"
 
 import { destroySession } from "@/lib/queue-session/session-management"
+import { cn } from "@/lib/utils"
+
 
 /**
  * NextAuth authentication buttons
@@ -41,6 +43,17 @@ export const EndSession = () => {
   return (
     <button onClick={() => destroySession} className="bg-red-950 text-stone-50 px-4 py-2 rounded glassmorphism-2-interactive">
       End Session ⚠️
+    </button>
+  )
+}
+
+export const CallbackButton = ({ callback, text, className }: { callback: () => void, text: string, className?: string }) => {
+  return (
+    <button
+      className={cn(`px-14 py-7 bg-teal-900 text-slate-50 text-2xl rounded`, className)}
+      onClick={callback}
+    >
+      {text}
     </button>
   )
 }
