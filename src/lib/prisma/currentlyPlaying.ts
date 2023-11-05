@@ -20,7 +20,11 @@ export async function getCurrentlyPlayingDB(includeQueue?: boolean, includeSugge
         userId: session.user.id
       },
       include: {
-        song: true,
+        song: {
+          include: {
+            artists: true
+          }
+        },
         queue: includeQueue,
         suggested: includeSuggested,
         members: includeMembers, 
@@ -48,27 +52,29 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
         userId: session.user.id
       },
       include: {
-        song: true,
+        song: {
+          include: {
+            artists: true
+          }
+        },
         queue: includeQueue,
         suggested: includeSuggested,
         members: includeMembers, 
       }
     })
 
+    let artists
+
     if (cp?.song?.uri !== currentlyPlaying.item.uri) {
-      // const artistsPromises = currentlyPlaying.item.artists.map((artist) => (
-      //   prisma.artist.create({
-      //     data: {
-      //       name: artist.name,
-      //       href: artist.href,
-      //       uri: artist.uri,
-      //     }
-      //   })
-      // ))
+      artists = currentlyPlaying.item.artists.map((artist) => (
+        {
+          name: artist.name,
+          href: artist.href,
+          uri: artist.uri,
+        }
+      ))
 
-      // const artists = await Promise.all(artistsPromises)
-
-      const song = await prisma.song.create({
+      let song = await prisma.song.create({
         data: {
           name: currentlyPlaying.item.name,
           duration_ms: currentlyPlaying.item.duration_ms,
@@ -77,6 +83,11 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
           type: currentlyPlaying.item.type,
           explicit: currentlyPlaying.item.explicit,
           popularity: currentlyPlaying.item.popularity,
+          artists: {
+            create: {
+              ...artists[0],
+            }
+          },
           album: {
             create: {
               href: currentlyPlaying.item.album.href,
@@ -104,7 +115,11 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
           songId: song.id
         },
         include: {
-          song: true,
+          song: {
+          include: {
+            artists: true
+          }
+        },
           queue: includeQueue,
           suggested: includeSuggested,
           members: includeMembers, 
@@ -120,7 +135,11 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
           progress_ms: currentlyPlaying.progress_ms,
         },
         include: {
-          song: true,
+          song: {
+          include: {
+            artists: true
+          }
+        },
           queue: includeQueue,
           suggested: includeSuggested,
           members: includeMembers, 
