@@ -1,11 +1,15 @@
 'use client'
 
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
+import { useDispatch, useSelector } from 'react-redux'
+import { Song } from '@prisma/client'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 
 import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlayingHost'
+import { Context, Status } from '@/lib/validators/context'
+import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
 
 import { Progress } from './ui/progress'
 import ScrollingText from './scrollingText'
@@ -15,6 +19,9 @@ interface playerProps {
 }
 
 const Player: FC<playerProps> = ({ }) => {
+  const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
+  const status = useSelector((state: Context) => state.status)
+
   const containerRef = useRef(null)
 
   // If hosting, show should be set to true,
@@ -24,13 +31,10 @@ const Player: FC<playerProps> = ({ }) => {
   // Could use a reducer for this logic with context managed at a global level
   // so that a button can be created in a page to start a queue or connect to one
 
-  const [show, setShow] = useState(true)
 
-  const [hosting, setHosting] = useState(false)
-  const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
 
   return (
-    <div className={`h-16 w-[270px] fixed top-4 right-4 ${show ? 'flex' : 'hidden'}`}>
+    <div className={`h-16 w-[270px] fixed top-4 right-4 ${currentlyPlaying?.song ? 'flex' : 'hidden'}`}>
       <motion.div
         className="absolute left-0 top-0 w-16 h-16 glassmorphism-3 rounded-s overflow-hidden"
         initial={{ x: 0, y: 0, rotate: 0, scale: 1, zIndex: 0 }}
