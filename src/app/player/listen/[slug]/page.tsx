@@ -40,9 +40,9 @@ export default async function SharedQueue({ params }: pageProps) {
               {`Session controlled by: ${user?.name}`}
             </p>
           </div>
-          {/* <Suspense fallback={<div>Loading stuff</div>}>
+          <Suspense fallback={<div>Loading stuff</div>}>
             <CurrentlyPlaying />
-          </Suspense> */}
+          </Suspense>
         </div>
       </div>
       <Search />

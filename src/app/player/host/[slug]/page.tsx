@@ -61,7 +61,9 @@ export default async function SharedQueue({ params }: pageProps) {
           <EndSession />
         </div>
       </div>
-      <Search />
+      <Suspense>
+        <Search />
+      </Suspense>
     </main>
   )
 }
