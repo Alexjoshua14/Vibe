@@ -27,7 +27,7 @@ const Player: FC<playerProps> = ({ }) => {
   const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
 
   return (
-    <div className={`h-16 w-[270px] absolute top-4 right-4 ${show ? 'flex' : 'hidden'}`}>
+    <div className={`h-16 w-[270px] fixed top-4 right-4 ${show ? 'flex' : 'hidden'}`}>
       <motion.div
         className="absolute left-0 top-0 w-16 h-16 glassmorphism-3 rounded-s overflow-hidden"
         initial={{ x: 0, y: 0, rotate: 0, scale: 1, zIndex: 0 }}
@@ -40,15 +40,33 @@ const Player: FC<playerProps> = ({ }) => {
         }
       </motion.div>
       <motion.div
-        className="absolute  w-[192px] h-16 px-4 py-4 glassmorphism-3 flex flex-col"
+        className="absolute w-[192px] h-16 px-4 py-[6px] glassmorphism-3 flex flex-col justify-between"
         initial={{ x: 64, y: 0, rotate: 0, zIndex: 0, scale: 1, borderRadius: 0 }}
         whileHover={{ x: 50, y: -10, rotate: 10, zIndex: 1, scale: 1.2, borderRadius: 8 }}
         transition={{ duration: .4 }}
       >
-        <div className="flex-1 flex items-center">
-          <h1>
-            {currentlyPlaying?.song?.name}
-          </h1>
+        <div className="h-auto flex justify-center flex-col">
+          {currentlyPlaying ? (
+            <>
+
+              <h1 className="leading-tight text-base">
+                {currentlyPlaying?.song?.name}
+              </h1>
+
+
+
+              <p className="text-xs text-secondary leading-tight">
+                {currentlyPlaying?.song?.artists.map((artist) => artist.name).join(", ")}
+              </p>
+
+
+            </>
+          ) : (
+            <>
+              <div className="h-[1em] my-[.125em] w-[34%] !bg-[#27282C] glassmorphism rounded" />
+              <div className="h-[.75em] my-[.125em] w-[67%] !bg-[#494A4E] glassmorphism rounded" />
+            </>
+          )}
         </div>
         <Progress
           value={progress.percentage}
