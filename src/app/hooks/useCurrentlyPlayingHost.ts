@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Artist, CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
 
 import { getCurrentlyPlayingDB,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
 import { getSongImage } from "@/lib/prisma/song"
+import { Context } from "@/lib/validators/context"
 import { CurrentlyPlaying } from "@/lib/validators/spotify"
+import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
 import { progressToPercentage } from "@/utilities/helper"
 import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
 
+
 export const useCurrentlyPlaying = () => {
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<Awaited<ReturnType<typeof getCurrentlyPlayingDB>> | null | undefined>(undefined)
+  // const [currentlyPlaying, setCurrentlyPlaying] = useState<Awaited<ReturnType<typeof getCurrentlyPlayingDB>> | null | undefined>(undefined)
   const [progress, setProgress] = useState<{
     time: number
     percentage: number
   }>({ time: 0, percentage: 0 })
   const [song_completed, setSongCompleted] = useState<boolean>(false)
   const [imageURL, setImage] = useState("")
+
+  const dispatch = useDispatch()
+  const currentlyPlaying = useSelector((state: Context) => state.currentlyPlaying)
+  const status = useSelector((state: Context) => state.status)
 
   /**
    * Gets the currently playing song and sets the currently playing state
@@ -36,6 +44,14 @@ export const useCurrentlyPlaying = () => {
       if (cp) {
         dbcp = await updateCurrentlyPlayingDB(cp, true, true, true)
         setCurrentlyPlaying(dbcp)
+
+        let payload = null
+        if (dbcp) {
+          payload = { ...dbcp, timestamp: dbcp.timestamp.toISOString(), updatedAt: dbcp.updatedAt.toISOString(), queue: { ...dbcp.queue, updatedAt: dbcp.queue.updatedAt.toISOString() }, suggested: { ...dbcp?.suggested, updatedAt: dbcp?.suggested.updatedAt.toISOString() } }
+        } 
+        
+        dispatch(setCurrentlyPlaying(payload))
+          
         setSongCompleted(false)
       } else {
         console.log("No song playing")
@@ -50,7 +66,7 @@ export const useCurrentlyPlaying = () => {
     return () => {
       clearInterval(intervalID)
     }
-  }, [song_completed])
+  }, [song_completed, dispatch])
 
   /**
    * Constantly updates the progress of the currently playing song every second
@@ -63,7 +79,7 @@ export const useCurrentlyPlaying = () => {
   useEffect(() => {
     const progressInterval = setInterval(() => {
       if (currentlyPlaying && song_completed == false) {
-        let progress_ms = currentlyPlaying.progress_ms + (Date.now() - currentlyPlaying.updatedAt.getTime())
+        let progress_ms = currentlyPlaying.progress_ms + (currentlyPlaying.updatedAt !== undefined ? Date.now() - (new Date(currentlyPlaying.updatedAt)).getTime() : 0)
         if (currentlyPlaying.song && progress_ms > currentlyPlaying.song.duration_ms) {
           progress_ms = currentlyPlaying.song.duration_ms
           setSongCompleted(true)
