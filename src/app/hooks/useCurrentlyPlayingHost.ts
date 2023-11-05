@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
+import { Artist, CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
 
 import { getCurrentlyPlayingDB,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
 import { getSongImage } from "@/lib/prisma/song"
@@ -8,9 +8,7 @@ import { progressToPercentage } from "@/utilities/helper"
 import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
 
 export const useCurrentlyPlaying = () => {
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<
-    DBCurrentlyPlaying & { song: Song | null } | null | undefined
-  >(undefined)
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<Awaited<ReturnType<typeof getCurrentlyPlayingDB>> | null | undefined>(undefined)
   const [progress, setProgress] = useState<{
     time: number
     percentage: number
