@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useRef, useState } from 'react'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
@@ -8,12 +8,15 @@ import Image from 'next/image'
 import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlayingHost'
 
 import { Progress } from './ui/progress'
+import ScrollingText from './scrollingText'
 
 interface playerProps {
 
 }
 
 const Player: FC<playerProps> = ({ }) => {
+  const containerRef = useRef(null)
+
   // If hosting, show should be set to true,
   // If part of a queue, show should be set to true,
   // If no queue connected in any way, show should be set to false
@@ -45,21 +48,11 @@ const Player: FC<playerProps> = ({ }) => {
         whileHover={{ x: 50, y: -10, rotate: 10, zIndex: 1, scale: 1.2, borderRadius: 8 }}
         transition={{ duration: .4 }}
       >
-        <div className="h-auto flex justify-center flex-col">
-          {currentlyPlaying ? (
+        <div className="h-auto flex justify-center flex-col overflow-hidden" ref={containerRef}>
+          {currentlyPlaying?.song ? (
             <>
-
-              <h1 className="leading-tight text-base">
-                {currentlyPlaying?.song?.name}
-              </h1>
-
-
-
-              <p className="text-xs text-secondary leading-tight">
-                {currentlyPlaying?.song?.artists.map((artist) => artist.name).join(", ")}
-              </p>
-
-
+              <ScrollingText text={currentlyPlaying.song.name} containerRef={containerRef} className="leading-tight" />
+              <ScrollingText text={currentlyPlaying.song.artists.map((artist) => artist.name).join(", ")} containerRef={containerRef} className="text-xs text-secondary leading-tight" />
             </>
           ) : (
             <>
