@@ -1,9 +1,11 @@
 'use client'
 
 import { FC, useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { HTMLMotionProps, motion } from 'framer-motion'
 
-interface scrollingTextProps {
+import { cn } from '@/lib/utils'
+
+interface scrollingTextProps extends HTMLMotionProps<"p"> {
   text: string
   containerRef: React.RefObject<HTMLDivElement>
 }
@@ -15,7 +17,7 @@ interface scrollingTextProps {
  * @param text string to be displayed
  * @param containerRef reference to the container element
  */
-const ScrollingText: FC<scrollingTextProps> = ({ text, containerRef, ...props }) => {
+const ScrollingText: FC<scrollingTextProps> = ({ text, containerRef, className, ...props }) => {
   const [translation, setTranslation] = useState<number>(0)
   const [duration, setDuration] = useState<number>(1)
 
@@ -57,7 +59,7 @@ const ScrollingText: FC<scrollingTextProps> = ({ text, containerRef, ...props })
         repeat: Infinity,
         repeatDelay: 4,
       }}
-      className="max-w-full whitespace-nowrap"
+      className={cn("max-w-full whitespace-nowrap", className)}
       {...props}
     >
       {text}
