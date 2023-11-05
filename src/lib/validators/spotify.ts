@@ -56,13 +56,15 @@ export const SpotifyItemSchema = z.object({
   name: z.string(),
   artists: z.array(SpotifyArtistSchema),
   album: SpotifyAlbumSchema,
+  albumId: z.optional(z.number()),
   duration_ms: z.number(),
   href: z.string(),
   uri: z.string(),
   type: z.string(),
-  popularity: z.number(),
   explicit: z.boolean(),
+  popularity: z.number(),
   avilable_markets: z.array(z.string()).optional(),
+  updatedAt: z.optional(z.number())
 })
 
 export type SpotifyItem = z.infer<typeof SpotifyItemSchema>
@@ -87,9 +89,11 @@ export const SpotifyItemBriefSchema = z.object({
 export type SpotifyItemBrief = z.infer<typeof SpotifyItemBriefSchema>
 
 export const CurrentlyPlayingSchema = z.object({
-  timestamp: z.number(),
+  timestamp: z.optional(z.number()),
+  updatedAt: z.optional(z.number()),
   progress_ms: z.number(),
-  item: SpotifyItemSchema,
+  song: z.optional(SpotifyItemSchema),
+  item: z.optional(SpotifyItemSchema),
   currently_playing_type: z.string(),
   is_playing: z.boolean(),
 })
