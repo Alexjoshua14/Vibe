@@ -145,7 +145,7 @@ export const useCurrentlyPlaying = () => {
 
     if (status !== 'IDLE')
       fetchNewImage()
-  }, [currentlyPlaying?.song?.albumId, status])
+  }, [currentlyPlaying?.song, status])
 
   return { currentlyPlaying, progress, imageURL }
 }

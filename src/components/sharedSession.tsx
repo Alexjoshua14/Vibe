@@ -7,6 +7,7 @@ import { getUser } from '@/lib/prisma/user'
 import { Context } from '@/lib/validators/context'
 
 import CurrentlyPlaying from './currentlyPlaying'
+import Search from './search'
 import { LeaveSession } from './sessionButtons'
 
 interface sharedSessionProps {
@@ -30,7 +31,10 @@ const SharedSession: FC<sharedSessionProps> = ({ }) => {
   return (
     <div>
       <h1>Member</h1>
-      <CurrentlyPlaying />
+      <div className="h-[400px] flex flex-col items-center justify-center">
+        <CurrentlyPlaying />
+      </div>
+      <Search />
       <LeaveSession />
     </div>
   )

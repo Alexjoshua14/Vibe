@@ -25,7 +25,7 @@ export const CreateSession: FC<createSessionProps> = ({ }) => {
 
     if (res) {
       dispatch(setStatus('HOST'))
-      router.push(`/player/${res}`)
+      // router.push(`/player/${res}`)
     } else {
       console.error("Error creating sessions")
     }
@@ -60,7 +60,6 @@ export const TEMPORARYGRAB: FC = ({ }) => {
 
   const handleGrab = async () => {
     dispatch(setStatus('HOST'))
-    router.push(`/player/hosting`)
   }
 
   return <CallbackButton callback={() => handleGrab()} text="Grab a Session" />
