@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation"
 
 import { CallbackButton, JoinSession } from "@/components/buttons"
 import { CreateSession, DestroySession, TEMPORARYGRAB } from "@/components/sessionButtons"
+import SessionDivider from "@/components/sessionDivider"
+import SetupSession from "@/components/setupSession"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getUserDeep } from "@/lib/prisma/user"
 import {
@@ -21,6 +23,7 @@ import {
  */
 export default async function Player() {
 
+
   let availableSessions = await listAllSessions()
   let userPromises = availableSessions.map(async (session) => {
     const user = await getUserDeep(session.userId)
@@ -36,27 +39,7 @@ export default async function Player() {
 
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around">
-      <Tabs defaultValue="join" className="flex flex-col items-center">
-        <TabsList>
-          <TabsTrigger value="create">Create Session</TabsTrigger>
-          <TabsTrigger value="join">Join Session</TabsTrigger>
-        </TabsList>
-        <TabsContent value="create">
-          <div className="h-[300px] w-[400px] flex flex-col items-center justify-center gap-4">
-            <DestroySession />
-            <CreateSession />
-            <TEMPORARYGRAB />
-          </div>
-        </TabsContent>
-        <TabsContent value="join">
-          <div className="h-[300px] w-[400px] flex flex-col items-center justify-center gap-4">
-            {availableSessions.map((session, index) => (
-              <JoinSession key={session.id} sessionId={session.id} text={`Join ${users[index]?.name ?? 'unknown'}'s session!`} />
-            ))}
-          </div>
-        </TabsContent>
-
-      </Tabs>
+      <SessionDivider availableSessions={availableSessions} users={users} />
     </main>
   )
 }

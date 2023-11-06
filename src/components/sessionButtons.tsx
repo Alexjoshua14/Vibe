@@ -1,10 +1,12 @@
 'use client'
 
 import { FC } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 
 import { createSession, destroySession } from '@/lib/queue-session/session-management'
+import { Context } from '@/lib/validators/context'
+import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
 import { setStatus } from '@/redux/reducers/status'
 
 import { CallbackButton } from './buttons'
@@ -62,4 +64,23 @@ export const TEMPORARYGRAB: FC = ({ }) => {
   }
 
   return <CallbackButton callback={() => handleGrab()} text="Grab a Session" />
+}
+
+export const LeaveSession = () => {
+  const dispatch = useDispatch()
+  const status = useSelector((state: Context) => state.status)
+
+  const handleLeave = () => {
+    if (status === 'MEMBER') {
+      // Should remove user from members list in database but this is fine for now
+      dispatch(setStatus('IDLE'))
+      dispatch(setCurrentlyPlaying(null))
+    } else if (status === 'HOST') {
+      // Should confirm with user first and actually clean up database but this is fine for now
+      dispatch(setStatus('IDLE'))
+      dispatch(setCurrentlyPlaying(null))
+    }
+  }
+
+  return <CallbackButton callback={() => handleLeave()} text="Leave Session" />
 }
