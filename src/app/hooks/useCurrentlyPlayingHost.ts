@@ -31,7 +31,7 @@ export const useCurrentlyPlaying = () => {
    * Clears the interval on component unmount
    */
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataHost = async () => {
       let dbcp = await getCurrentlyPlayingDB(true, true, true)
 
       if (dbcp == null) {
@@ -43,7 +43,6 @@ export const useCurrentlyPlaying = () => {
 
       if (cp) {
         dbcp = await updateCurrentlyPlayingDB(cp, true, true, true)
-        setCurrentlyPlaying(dbcp)
 
         let payload = null
         if (dbcp) {
@@ -58,15 +57,19 @@ export const useCurrentlyPlaying = () => {
       }
     }
 
-    fetchData()
+    let intervalID: NodeJS.Timer
+
+    if (status === 'HOST') {
+      fetchDataHost()
 
     // Fetch currently playing song every 15 seconds
-    const intervalID = setInterval(fetchData, 10000)
+    intervalID = setInterval(fetchDataHost, 10000)
+    }
 
     return () => {
       clearInterval(intervalID)
     }
-  }, [song_completed, dispatch])
+  }, [song_completed, dispatch, status])
 
   /**
    * Constantly updates the progress of the currently playing song every second
@@ -77,7 +80,7 @@ export const useCurrentlyPlaying = () => {
    * @see https://github.com/spotify/web-api/issues/1073
    */
   useEffect(() => {
-    const progressInterval = setInterval(() => {
+    const updateProgress = () => {
       if (currentlyPlaying && song_completed == false) {
         let progress_ms = currentlyPlaying.progress_ms + (currentlyPlaying.updatedAt !== undefined ? Date.now() - (new Date(currentlyPlaying.updatedAt)).getTime() : 0)
         if (currentlyPlaying.song && progress_ms > currentlyPlaying.song.duration_ms) {
@@ -92,12 +95,17 @@ export const useCurrentlyPlaying = () => {
           : 0
         setProgress({ time: progress_ms, percentage: progressPercentage })
       }
-    }, 1000)
+    }
+
+    let progressInterval: NodeJS.Timer
+    
+    if (status !== 'IDLE' && !song_completed)
+      progressInterval = setInterval(updateProgress, 1000)
 
     return () => {
       clearInterval(progressInterval)
     }
-  }, [currentlyPlaying, song_completed])
+  }, [currentlyPlaying, song_completed, status])
 
   useEffect(() => {
     const fetchNewImage = async () => {
@@ -107,8 +115,10 @@ export const useCurrentlyPlaying = () => {
       
       setImage(url)
     }
-    fetchNewImage()
-  }, [currentlyPlaying?.song?.albumId])
+
+    if (status !== 'IDLE')
+      fetchNewImage()
+  }, [currentlyPlaying?.song?.albumId, status])
 
   return { currentlyPlaying, progress, imageURL }
 }

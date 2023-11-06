@@ -7,7 +7,7 @@ import { Song } from '@prisma/client'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 
-import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlayingHost'
+import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlaying'
 import { Context, Status } from '@/lib/validators/context'
 import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
 

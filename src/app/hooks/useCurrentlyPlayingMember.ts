@@ -11,7 +11,7 @@ import { progressToPercentage } from "@/utilities/helper"
 import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
 
 
-export const useCurrentlyPlaying = () => {
+export const useCurrentlyPlaying = (cpId: string) => {
   // const [currentlyPlaying, setCurrentlyPlaying] = useState<Awaited<ReturnType<typeof getCurrentlyPlayingDB>> | null | undefined>(undefined)
   const [progress, setProgress] = useState<{
     time: number
@@ -31,34 +31,8 @@ export const useCurrentlyPlaying = () => {
    * Clears the interval on component unmount
    */
   useEffect(() => {
-    const fetchDataHost = async () => {
-      let dbcp = await getCurrentlyPlayingDB(true, true, true)
-
-      if (dbcp == null) {
-        console.log("Database doesn't seem to have a currently playing object..")
-        return
-      }
-
-      const cp: CurrentlyPlaying | null = await getClientCurrentlyPlaying()
-
-      if (cp) {
-        dbcp = await updateCurrentlyPlayingDB(cp, true, true, true)
-
-        let payload = null
-        if (dbcp) {
-          payload = { ...dbcp, timestamp: dbcp.timestamp.toISOString(), updatedAt: dbcp.updatedAt.toISOString(), queue: { ...dbcp.queue, updatedAt: dbcp.queue.updatedAt.toISOString() }, suggested: { ...dbcp?.suggested, updatedAt: dbcp?.suggested.updatedAt.toISOString() } }
-        } 
-        
-        dispatch(setCurrentlyPlaying(payload))
-          
-        setSongCompleted(false)
-      } else {
-        console.log("No song playing")
-      }
-    }
-
     const fetchDataMember = async () => {
-      let dbcp = await getCurrentlyPlayingDBMember(currentlyPlaying?.id, true, true, true)
+      let dbcp = await getCurrentlyPlayingDBMember(cpId, true, true, true)
 
       if (dbcp == null) {
         console.log("Database doesn't seem to have a currently playing object..")
@@ -86,17 +60,12 @@ export const useCurrentlyPlaying = () => {
 
       // Fetch currently playing song every 15 seconds
       intervalID = setInterval(fetchDataMember, 10000)
-    } else if (status === 'HOST') {
-      fetchDataHost()
-
-    // Fetch currently playing song every 15 seconds
-    intervalID = setInterval(fetchDataHost, 10000)
     }
 
     return () => {
       clearInterval(intervalID)
     }
-  }, [song_completed, dispatch, status, currentlyPlaying?.id])
+  }, [song_completed, dispatch, cpId, status])
 
   /**
    * Constantly updates the progress of the currently playing song every second

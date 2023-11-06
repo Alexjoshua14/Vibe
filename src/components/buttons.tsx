@@ -1,10 +1,14 @@
 "use client"
 
+import { FC, HTMLAttributes } from "react"
+import { useDispatch } from "react-redux"
 import Link from "next/link"
 import { signIn, signOut } from "next-auth/react"
 
 import { destroySession } from "@/lib/queue-session/session-management"
 import { cn } from "@/lib/utils"
+import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
+import { setStatus } from "@/redux/reducers/status"
 
 
 /**
@@ -52,6 +56,29 @@ export const CallbackButton = ({ callback, text, className }: { callback: () => 
     <button
       className={cn(`px-14 py-7 bg-teal-900 text-slate-50 text-2xl rounded`, className)}
       onClick={callback}
+    >
+      {text}
+    </button>
+  )
+}
+
+interface JoinSessionProps extends HTMLAttributes<HTMLButtonElement> {
+  sessionId: string,
+  text: string
+}
+
+export const JoinSession: FC<JoinSessionProps> = ({ sessionId, text, className }) => {
+  const dispatch = useDispatch()
+
+  const handleJoin = () => {
+    dispatch(setCurrentlyPlaying({ id: sessionId }))
+    dispatch(setStatus('MEMBER'))
+  }
+
+  return (
+    <button
+      onClick={handleJoin}
+      className={cn("glassmorphism-2-interactive px-4 py-2 rounded !bg-tertiary", className)}
     >
       {text}
     </button>

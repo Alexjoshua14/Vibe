@@ -47,12 +47,7 @@ export default async function SharedQueue({ params }: pageProps) {
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">
       <div className="flex flex-col">
-        <div className="flex gap-4 h-[400px] sm:h-[140px]">
-          <div>
-            <p>
-
-            </p>
-          </div>
+        <div className="flex gap-4 h-[400px] sm:h-[140px] items-center">
           <Suspense fallback={<div>Loading stuff</div>}>
             <HostPlayer />
           </Suspense>

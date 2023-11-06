@@ -39,6 +39,41 @@ export async function getCurrentlyPlayingDB(includeQueue?: boolean, includeSugge
   return null 
 }
 
+export async function getCurrentlyPlayingDBMember(cpId: string | undefined, includeQueue?: boolean, includeSuggested?: boolean, includeMembers?: boolean) {
+  if (cpId === undefined)
+    return null;
+  
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session) {
+      throw new Error("No session detected..")
+    }
+
+    const cp = await prisma.currentlyPlaying.findFirst({
+      where: {
+        id: cpId 
+      },
+      include: {
+        song: {
+          include: {
+            artists: true
+          }
+        },
+        queue: includeQueue,
+        suggested: includeSuggested,
+        members: includeMembers, 
+      }
+    })
+
+    return cp ?? null
+  } catch (err) {
+    console.error(err)
+  }
+
+  return null 
+}
+
 export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlaying, includeQueue?: boolean, includeSuggested?: boolean, includeMembers?: boolean) {
   try {
     const session = await getServerSession(authOptions)
@@ -65,7 +100,7 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
 
     let artists
 
-    if (cp?.song?.uri !== currentlyPlaying.item.uri) {
+    if (currentlyPlaying.item && cp?.song?.uri !== currentlyPlaying.item.uri) {
       artists = currentlyPlaying.item.artists.map((artist) => (
         {
           name: artist.name,
