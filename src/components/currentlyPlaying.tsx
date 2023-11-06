@@ -8,6 +8,7 @@ import Image from "next/image"
 import { useCurrentlyPlaying } from "@/app/hooks/useCurrentlyPlaying"
 import { Progress } from "@/components/ui/progress"
 import { Context } from "@/lib/validators/context"
+import { msToTime } from "@/utilities/helper"
 
 import ScrollingText from "./scrollingText"
 import { SongCard } from "./songCard"
@@ -57,9 +58,13 @@ const CurrentlyPlaying: FC<currentlyPlayingProps> = ({ }) => {
               </>
             )}
           </div>
-          <Progress
-            value={progress.percentage}
-          />
+          <div className="grid grid-cols-[1fr_5fr_1fr] items-center gap-2 text-xs text-tertiary">
+            <p>{msToTime(progress.time ?? 0)}</p>
+            <Progress
+              value={progress.percentage}
+            />
+            <p>{msToTime(currentlyPlaying?.song?.duration_ms ?? currentlyPlaying?.item?.duration_ms ?? 0)}</p>
+          </div>
         </div>
       </div>
     )
