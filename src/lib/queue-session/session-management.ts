@@ -112,6 +112,7 @@ export async function createSession() {
     }
   } catch (err) {
     console.error(err)
+    return false
   }
 
   // Send user to delegated page
@@ -182,14 +183,45 @@ export async function destroySession() {
         },
       })
 
-    let promismArray = await Promise.all([
+    let promiseArray = await Promise.all([
       userPromise,
       currentlyPlayingPromise,
       queuePromise,
       suggestedPromise,
     ])
-    console.log("Promise Array: \n" + JSON.stringify(promismArray))
+    console.log("Promise Array: \n" + JSON.stringify(promiseArray))
+    return true
   } catch (err) {
     console.error(err)
+    return false
   }
+}
+
+// TODO: Speed this call up, currently seems to have a noticeable delay
+export async function listAllSessions() {
+  // Get user information
+  const session = await getServerSession(authOptions)
+  console.log(session?.user.id)
+  if (!session?.user.id) {
+    throw new Error("No user id found")
+  }
+
+  // TODO: Limit this function so that only certain sessions are available
+  // to be shown to users based on friends and/or proximity
+
+  const availableSessions = await prisma.currentlyPlaying.findMany()
+
+  return availableSessions
+}
+
+export async function getQueueSession(sessionId: string) {
+  const queueSession = await prisma.currentlyPlaying.findFirst({
+    where: {
+      id: sessionId
+    }
+  })
+
+  /** TODO: Validate that the user is allowed access to this specific queue session */
+
+  return queueSession
 }

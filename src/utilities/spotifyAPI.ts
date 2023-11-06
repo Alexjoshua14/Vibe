@@ -94,19 +94,11 @@ export async function getClientCurrentlyPlaying() {
         session.accessToken,
       )
       if (currentlyPlayingData) {
-        // console.log(
-        //   `Current time: ` +
-        //   Date.now().toString() +
-        //   `\nResponse Timestamp: ` +
-        //   currentlyPlayingData.timestamp +
-        //   `\nDifference: ` +
-        //   (Date.now() - currentlyPlayingData.timestamp)
-        // );
-
         return mapToCurrentlyPlaying(currentlyPlayingData)
       }
       return currentlyPlayingData
     } catch (error) {
+      console.error(error)
       return null
     }
   } else {

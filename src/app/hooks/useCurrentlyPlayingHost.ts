@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Artist, CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
 
-import { getCurrentlyPlayingDB,getCurrentlyPlayingDBMember,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
+import { getCurrentlyPlayingDB,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
 import { getSongImage } from "@/lib/prisma/song"
 import { Context } from "@/lib/validators/context"
 import { CurrentlyPlaying } from "@/lib/validators/spotify"
@@ -57,36 +57,9 @@ export const useCurrentlyPlaying = () => {
       }
     }
 
-    const fetchDataMember = async () => {
-      let dbcp = await getCurrentlyPlayingDBMember(currentlyPlaying?.id, true, true, true)
-
-      if (dbcp == null) {
-        console.log("Database doesn't seem to have a currently playing object..")
-        return
-      }
-
-      if (dbcp) {
-        let payload = null
-        if (dbcp) {
-          payload = { ...dbcp, timestamp: dbcp.timestamp.toISOString(), updatedAt: dbcp.updatedAt.toISOString(), queue: { ...dbcp.queue, updatedAt: dbcp.queue.updatedAt.toISOString() }, suggested: { ...dbcp?.suggested, updatedAt: dbcp?.suggested.updatedAt.toISOString() } }
-        } 
-        
-        dispatch(setCurrentlyPlaying(payload))
-          
-        setSongCompleted(false)
-      } else {
-        console.log("No song playing")
-      }
-    }
-
     let intervalID: NodeJS.Timer
 
-    if (status === 'MEMBER') {
-      fetchDataMember()
-
-      // Fetch currently playing song every 15 seconds
-      intervalID = setInterval(fetchDataMember, 10000)
-    } else if (status === 'HOST') {
+    if (status === 'HOST') {
       fetchDataHost()
 
     // Fetch currently playing song every 15 seconds
@@ -96,7 +69,7 @@ export const useCurrentlyPlaying = () => {
     return () => {
       clearInterval(intervalID)
     }
-  }, [song_completed, dispatch, status, currentlyPlaying?.id])
+  }, [song_completed, dispatch, status])
 
   /**
    * Constantly updates the progress of the currently playing song every second

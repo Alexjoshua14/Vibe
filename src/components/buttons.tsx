@@ -1,7 +1,15 @@
 "use client"
 
+import { FC, HTMLAttributes } from "react"
+import { useDispatch } from "react-redux"
 import Link from "next/link"
 import { signIn, signOut } from "next-auth/react"
+
+import { destroySession } from "@/lib/queue-session/session-management"
+import { cn } from "@/lib/utils"
+import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
+import { setStatus } from "@/redux/reducers/status"
+
 
 /**
  * NextAuth authentication buttons
@@ -33,4 +41,46 @@ export const PlayerButton = () => {
 
 export const ProfileButton = () => {
   return <Link href="/profile">Profile</Link>
+}
+
+export const EndSession = () => {
+  return (
+    <button onClick={() => destroySession} className="bg-red-950 text-stone-50 px-4 py-2 rounded glassmorphism-2-interactive">
+      End Session ⚠️
+    </button>
+  )
+}
+
+export const CallbackButton = ({ callback, text, className }: { callback: () => void, text: string, className?: string }) => {
+  return (
+    <button
+      className={cn(`px-14 py-7 bg-teal-900 text-slate-50 text-2xl rounded`, className)}
+      onClick={callback}
+    >
+      {text}
+    </button>
+  )
+}
+
+interface JoinSessionProps extends HTMLAttributes<HTMLButtonElement> {
+  sessionId: string,
+  text: string
+}
+
+export const JoinSession: FC<JoinSessionProps> = ({ sessionId, text, className }) => {
+  const dispatch = useDispatch()
+
+  const handleJoin = () => {
+    dispatch(setCurrentlyPlaying({ id: sessionId }))
+    dispatch(setStatus('MEMBER'))
+  }
+
+  return (
+    <button
+      onClick={handleJoin}
+      className={cn("glassmorphism-2-interactive px-4 py-2 rounded !bg-tertiary", className)}
+    >
+      {text}
+    </button>
+  )
 }

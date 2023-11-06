@@ -5,6 +5,7 @@ import { Inter } from "next/font/google"
 import Providers from "@/components/Providers"
 
 import { BottomNav } from "../components/bottomNav"
+import Player from "../components/player"
 
 import "./globals.css"
 
@@ -24,14 +25,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="overscroll-none">
-      <body className={`inter.className z-10 bg-primary text-primary`}>
-        <div className={`flex flex-col min-h-screen p-2 z-20`}>
-          <div className="flex-1 flex pb-[5rem]">
-            <Providers>{children}</Providers>
+      <Providers>
+        <body className={`inter.className z-10 bg-primary text-primary`}>
+          <div className={`flex flex-col min-h-screen p-2 z-20`}>
+            <div className="flex-1 flex pb-[5rem]">
+              {children}
+            </div>
+            <Player />
+            <BottomNav />
           </div>
-          <BottomNav />
-        </div>
-      </body>
+        </body>
+      </Providers>
     </html>
   )
 }

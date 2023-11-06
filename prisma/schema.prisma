@@ -135,6 +135,7 @@ model CurrentlyPlaying {
   progress_ms Int      @default(0)
   is_playing  Boolean  @default(false)
   timestamp   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 
   queueId String @unique
   queue   Queue  @relation(fields: [queueId], references: [id])
@@ -148,6 +149,7 @@ model Queue {
   songs            Song[]
   currentlyPlaying CurrentlyPlaying? @relation()
   user             User?             @relation()
+  updatedAt        DateTime          @default(now()) @updatedAt
 }
 
 model Suggested {
@@ -155,4 +157,5 @@ model Suggested {
   songs            Song[]
   currentlyPlaying CurrentlyPlaying? @relation()
   user             User?             @relation()
+  updatedAt        DateTime          @default(now()) @updatedAt
 }

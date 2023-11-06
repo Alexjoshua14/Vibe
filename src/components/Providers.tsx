@@ -4,7 +4,7 @@ import { FC } from "react"
 import { Provider } from "react-redux"
 import { SessionProvider } from "next-auth/react"
 
-import store from "./store"
+import store from "@/redux/store"
 
 interface ProvidersProps {
   children: React.ReactNode

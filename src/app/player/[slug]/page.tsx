@@ -1,7 +1,10 @@
 import { FC, Suspense } from "react"
+import { User } from "@prisma/client"
 
 import CurrentlyPlaying from "@/components/currentlyPlaying"
 import Search from "@/components/search"
+import { getUser } from "@/lib/prisma/user"
+import { getQueueSession } from "@/lib/queue-session/session-management"
 
 interface pageProps {
   params: {
@@ -14,7 +17,7 @@ interface pageProps {
  * and allows the user to search for songs to add to the queue
  *
  */
-export default function SharedQueue({ params }: pageProps) {
+export default async function SharedQueue({ params }: pageProps) {
   // grab queue id from [...slug]
 
   // If user isn't even logged in send them home
@@ -23,9 +26,6 @@ export default function SharedQueue({ params }: pageProps) {
   // Check if user should have access
   // if user has access, check if host or member
   // if user doesn't have access, allow them to request access?
-
-  // Grab currently playing and queue data from database
-  //
 
   return (
     <main className="flex-1 p-4 flex flex-col items-center justify-around overflow-hidden">

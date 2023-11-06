@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef } from "react"
 import { BsFillExplicitFill } from "react-icons/bs"
 import { Modal } from "@mui/material"
 import Box from "@mui/material/Box"
@@ -9,7 +9,7 @@ import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
 import LinearProgress from "@mui/material/LinearProgress"
 import Typography from "@mui/material/Typography"
-import { motion } from "framer-motion"
+import { Album, Song } from "@prisma/client"
 import Image from "next/image"
 
 import { PostData } from "@/lib/validators/posts"
@@ -17,69 +17,9 @@ import { msToTime, progressToPercentage } from "@/utilities/helper"
 
 import { SongInformationVariant, SpotifyItem } from "../lib/validators/spotify"
 
-/**
- * Displays text in confined to it's container
- * and scrolls it if it overflows
- *
- * @param text string to be displayed
- * @param containerRef reference to the container element
- */
-const ScrollingText = ({
-  text,
-  containerRef,
-  ...props
-}: {
-  text: string
-  containerRef: React.RefObject<HTMLDivElement>
-}) => {
-  const [translation, setTranslation] = useState<number>(0)
-  const [duration, setDuration] = useState<number>(1)
-
-  useEffect(() => {
-    const handleResize = () => {
-      const containerWidth = containerRef.current?.offsetWidth
-      const textWidth = containerRef.current?.scrollWidth
-      if (containerWidth && textWidth) {
-        const overflow = textWidth > containerWidth
-
-        if (overflow) {
-          let distance = textWidth - containerWidth + 20
-          if (distance < 0) {
-            distance *= -1
-          } //Ensure distance is always positive
-          let duration = distance * 0.03
-          if (duration < 1.5) duration = 1.5
-
-          setDuration(duration)
-          setTranslation(-distance)
-        } else {
-          setTranslation(0)
-        }
-      }
-    }
-    handleResize()
-    // window.addEventListener('resize', handleResize);
-  }, [text, containerRef])
-
-  return (
-    <motion.p
-      whileInView={{ x: [0, translation, 0] }}
-      viewport={{ once: true }}
-      transition={{
-        ease: "linear",
-        delay: 2,
-        duration: duration,
-        times: [0, 0.7, 1],
-        repeat: Infinity,
-        repeatDelay: 4,
-      }}
-      className="max-w-full whitespace-nowrap"
-      {...props}
-    >
-      {text}
-    </motion.p>
-  )
-}
+import PostImage from "./Images/postImage"
+import ProfileImage from "./Images/profileImage"
+import ScrollingText from "./scrollingText"
 
 /**
  * Returns a SongInformation component that displays:
@@ -105,11 +45,9 @@ const SongInformation = ({
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${
-        variant === "main" && "items-center sm:items-start"
-      } ${variant != "modal" && "items-start"} ${
-        variant == "modal" && "items-center"
-      }`}
+      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
+        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
+        }`}
     >
       <div
         ref={titleRef}
@@ -203,6 +141,133 @@ export const SongCard = ({
 }
 
 /**
+ * Returns a SongInformation component that displays:
+ * - The name of the song (scrolling if it overflows)
+ * - If the song is explicit
+ * - The type of the song
+ * - The artists of the song (scrolling if it overflows)
+ *
+ * @param item SpotifyItem to display information for
+ * @param variant The variant of the SongInformation component
+ */
+const SongInformation2 = ({
+  song,
+  variant,
+}: {
+  song: Song
+  variant?: SongInformationVariant
+}) => {
+  const titleRef = useRef<HTMLDivElement>(null)
+  const artistRef = useRef<HTMLDivElement>(null)
+
+  const artists = "ARTIST HERE" ///song.artists.map((artist) => artist.name).join(", ")
+
+  return (
+    <div
+      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
+        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
+        }`}
+    >
+      <div
+        ref={titleRef}
+        className={`
+        ${variant == "secondary" || (variant == undefined && "text-md")}
+        ${variant == "main" || (variant == "modal" && "text-xl")} 
+        whitespace-nowrap overflow-x-hidden max-w-full text-primary
+        text-center sm:text-left
+        `}
+      >
+        <ScrollingText text={song.name} containerRef={titleRef} />
+      </div>
+      <div
+        className={`
+          flex gap-2 text-secondary items-center text-center sm:text-left
+          max-w-[90%] ${variant == "modal" && "max-w-[80%]"}
+          text-xs`}
+      >
+        {song.explicit && (
+          <span className="w-fit h-fit">
+            <BsFillExplicitFill />
+          </span>
+        )}
+        <div className={`flex gap-1 overflow-hidden`}>
+          {variant != "main" && (
+            <>
+              <p>{song.type.charAt(0).toUpperCase() + song.type.slice(1)}</p>
+              <p>•</p>
+            </>
+          )}
+          <div
+            ref={artistRef}
+            className={`overflow-hidden whitespace-nowrap max-w-full`}
+          >
+            <ScrollingText text={artists} containerRef={artistRef} />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Creates a feature card for a song with a progress bar
+ *
+ * @param song The song to create a card for
+ * @param progress The progress of the song
+ */
+export const SongCard2 = ({
+  song,
+  progress_ms,
+  imageURL
+}: {
+  song: Song
+  progress_ms?: number
+  imageURL: string
+}) => {
+  return (
+    <Card
+      sx={{ display: "flex" }}
+      className={`rounded w-[300px] sm:w-[400px] overflow-hidden h-[400px] sm:h-[140px]
+                 glassmorphism-white glassmorphism-2`}
+    >
+      <Box className="flex flex-col sm:flex-row center w-full overflow-hidden">
+        {imageURL !== ""
+          ? (
+            <CardMedia
+              component="img"
+              className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
+              image={imageURL}
+              alt={song.name}
+            />
+          )
+          : (
+            <div className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square bg-gradient-to-tr from-teal-950 to-teal-500 glassmorphism" />
+          )}
+        <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
+          <SongInformation2 song={song} variant={"main"} />
+          {progress_ms !== undefined && progress_ms !== null && (
+            <div role="progress" className="w-full">
+              <LinearProgress
+                role="progressbar"
+                variant="determinate"
+                value={progressToPercentage(progress_ms, song.duration_ms)}
+              />
+              <Typography
+                component="div"
+                variant="subtitle2"
+                className="text-[.65rem] text-tertiary text-right sm:text-left"
+              >
+                {msToTime(progress_ms)} / {msToTime(song.duration_ms)}
+              </Typography>
+            </div>
+          )}
+        </CardContent>
+      </Box>
+    </Card>
+  )
+}
+
+/**
  * Creates a simple card to display a Spotify Item's information
  *
  * @param item The item to create a search card for
@@ -230,45 +295,6 @@ export const SearchResult = ({
       <div className="flex flex-col w-full p-4 max-w-[200px] sm:max-w-[300px]">
         <SongInformation item={item} />
       </div>
-    </div>
-  )
-}
-
-const PostImage = ({
-  imageUrl,
-  altText,
-  ...props
-}: {
-  imageUrl: string
-  altText: string
-  [key: string]: any
-}) => {
-  return (
-    <div className="relative h-1/2 aspect-square flex center rounded-br overflow-hidden">
-      <Image
-        src={imageUrl}
-        alt={altText}
-        // width={250}
-        // height={250}
-        fill={true}
-        {...props}
-      />
-    </div>
-  )
-}
-
-const ProfileImage = ({
-  imageUrl,
-  altText,
-  ...props
-}: {
-  imageUrl: string
-  altText: string
-  [key: string]: any
-}) => {
-  return (
-    <div className="aspect-square rounded-full flex center">
-      <Image src={imageUrl} alt={altText} width={50} height={50} {...props} />
     </div>
   )
 }
@@ -389,3 +415,5 @@ export const AddToQueueModal = ({
     </Modal>
   )
 }
+
+
