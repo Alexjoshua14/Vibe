@@ -9,12 +9,13 @@ import { useSearch } from "@/app/hooks/useSearch"
 import { SpotifyItem } from "@/lib/validators/spotify"
 import { addToQueue, addToQueueClient } from "@/utilities/spotifyAPI"
 
+import { AddToQueueModal, SearchResult } from "../songCard"
+
 import { SearchField } from "./searchField"
-import { AddToQueueModal, SearchResult } from "./songCard"
 
-interface searchProps {}
+interface searchProps { }
 
-const Search: FC<searchProps> = ({}) => {
+const Search: FC<searchProps> = ({ }) => {
   /* Search Spotify for Tracks */
   const {
     searchResults,
