@@ -7,7 +7,7 @@ import { getUser } from '@/lib/prisma/user'
 import { Context } from '@/lib/validators/context'
 
 import CurrentlyPlaying from './currentlyPlaying'
-import Search from './search'
+import Search from './search/search'
 import { LeaveSession } from './sessionButtons'
 
 interface sharedSessionProps {
