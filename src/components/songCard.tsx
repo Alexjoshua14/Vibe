@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography"
 import { Album, Song } from "@prisma/client"
 import Image from "next/image"
 
+import { cn } from "@/lib/utils"
 import { PostData } from "@/lib/validators/posts"
 import { msToTime, progressToPercentage } from "@/utilities/helper"
 
@@ -274,14 +275,16 @@ export const SongCard2 = ({
  */
 export const SearchResult = ({
   item,
+  className,
   props,
 }: {
-  item: SpotifyItem
+  item: SpotifyItem,
+  className?: string,
   [key: string]: any
 }) => {
   return (
     <div
-      className={`rounded w-[300px] sm:w-[400px] pe-4 flex h-fit`}
+      className={cn(`rounded w-[300px] sm:w-[400px] pe-4 flex h-fit`, className)}
       {...props}
     >
       <div className="flex center">
