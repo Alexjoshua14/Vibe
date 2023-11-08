@@ -17,8 +17,8 @@ import { msToTime, progressToPercentage } from "@/utilities/helper"
 
 import { SongInformationVariant, SpotifyItem } from "../lib/validators/spotify"
 
-import PostImage from "./images/postImage"
-import ProfileImage from "./images/profileImage"
+import PostImage from "./Images/postImage"
+import ProfileImage from "./Images/profileImage"
 import ScrollingText from "./scrollingText"
 
 /**
