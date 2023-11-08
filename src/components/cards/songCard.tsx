@@ -19,10 +19,10 @@ interface SongCardProps extends HTMLAttributes<HTMLDivElement> {
 const SongCard: FC<SongCardProps> = ({ image, songName, artists, className, ...props }) => {
   return (
     <div
-      className={cn("flex items-center gap-4 h-[140px] aspect-[5/2] glassmorphism rounded", className)}
+      className={cn("flex items-center gap-4 h-[140px] aspect-[5/2] bg-tertiary glassmorphism-2 rounded", className)}
       {...props}
     >
-      <div className="relative h-full aspect-square bg-pink-200  rounded overflow-clip glassmorphism">
+      <div className="relative h-full aspect-square rounded overflow-clip glassmorphism">
         <Image
           src={image.url}
           alt={image.alt}
@@ -36,7 +36,7 @@ const SongCard: FC<SongCardProps> = ({ image, songName, artists, className, ...p
           <p className="text-primary text-lg h-[1.75rem]">
             {songName}
           </p>
-          <p className="text-secondary h-[1.5rem]">
+          <p className="text-tertiary text-sm h-[1.5rem] font-light">
             {artists}
           </p>
         </div>
