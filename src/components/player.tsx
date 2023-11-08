@@ -34,7 +34,7 @@ const Player: FC<playerProps> = ({ }) => {
   // so that a button can be created in a page to start a queue or connect to one
 
   return (
-    <div className={`h-16 w-[270px] fixed top-4 right-4 ${currentlyPlaying?.song && !path.startsWith('/player') ? 'flex' : 'hidden'}`}>
+    <div className={`h-16 w-[270px] fixed top-4 right-4 ${currentlyPlaying?.song ? 'flex' : 'hidden'}`}>
       <motion.div
         className="absolute left-0 top-0 w-16 h-16 glassmorphism-3 rounded-s overflow-hidden"
         initial={{ x: 0, y: 0, rotate: 0, scale: 1, zIndex: 0 }}
@@ -81,4 +81,9 @@ const Player: FC<playerProps> = ({ }) => {
   )
 }
 
-export default Player
+export default function PlayerWrapper({ ...props }) {
+  const path = usePathname()
+
+  if (!path.startsWith('/player'))
+    return <Player />
+}
