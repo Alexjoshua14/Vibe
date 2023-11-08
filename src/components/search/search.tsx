@@ -85,7 +85,7 @@ const Search: FC<searchProps> = ({ }) => {
   }
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col gap-4 border-2 border-yellow-700">
       <div className="flex justify-center items-center p-4 gap-2">
         <SearchField
           id="search-music"
@@ -105,7 +105,7 @@ const Search: FC<searchProps> = ({ }) => {
       </div>
       {searchResults.length > 0 && (
         <div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 items-center">
             {searchResults.slice(offset, offset + limit).map((item, index) => (
               <motion.button
                 key={item.id}
@@ -118,7 +118,7 @@ const Search: FC<searchProps> = ({ }) => {
                   transition: { duration: 0.4, delay: index * 0.2 },
                 }}
                 aria-label={`Add ${item.name} by ${item.artists[0].name} to queue`}
-                className={`rounded glassmorphism-white-secondary glassmorphism-0-interactive overflow-hidden cursor-pointer`}
+                className={`rounded glassmorphism-white-secondary glassmorphism-0-interactive overflow-hidden cursor-pointer w-fit h-fit`}
               >
                 <SearchResult item={item} />
               </motion.button>
