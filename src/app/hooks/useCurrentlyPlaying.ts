@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Artist, CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
 
@@ -24,6 +24,9 @@ export const useCurrentlyPlaying = () => {
   const currentlyPlaying = useSelector((state: Context) => state.currentlyPlaying)
   const status = useSelector((state: Context) => state.status)
 
+  const DataIntervalId = useRef<NodeJS.Timer | null>(null);
+  const ProgressIntervalId = useRef<NodeJS.Timer | null>(null);
+
   /**
    * Gets the currently playing song and sets the currently playing state
    * Currently playing is updated every 10 seconds
@@ -31,72 +34,64 @@ export const useCurrentlyPlaying = () => {
    * Clears the interval on component unmount
    */
   useEffect(() => {
-    const fetchDataHost = async () => {
-      let dbcp = await getCurrentlyPlayingDB(true, true, true)
+    const fetchData = async () => {
+      let dbcp = 
+        status === 'HOST' 
+          ? await getCurrentlyPlayingDB(true, true, true) 
+          : status === 'MEMBER' 
+            ? await getCurrentlyPlayingDBMember(currentlyPlaying?.id, true, true, true) 
+              : null
 
       if (dbcp == null) {
         console.log("Database doesn't seem to have a currently playing object..")
         return
       }
 
-      const cp: CurrentlyPlaying | null = await getClientCurrentlyPlaying()
+      let cp: CurrentlyPlaying | null = null
+      let payload = null
+
+      if (status === 'HOST')
+        cp = await getClientCurrentlyPlaying()
 
       if (cp) {
         dbcp = await updateCurrentlyPlayingDB(cp, true, true, true)
-
-        let payload = null
-        if (dbcp) {
-          payload = { ...dbcp, timestamp: dbcp.timestamp.toISOString(), updatedAt: dbcp.updatedAt.toISOString(), queue: { ...dbcp.queue, updatedAt: dbcp.queue.updatedAt.toISOString() }, suggested: { ...dbcp?.suggested, updatedAt: dbcp?.suggested.updatedAt.toISOString() } }
-        } 
-        
-        dispatch(setCurrentlyPlaying(payload))
-          
-        setSongCompleted(false)
-      } else {
+      } else if (!dbcp) {
         console.log("No song playing")
-      }
-    }
-
-    const fetchDataMember = async () => {
-      let dbcp = await getCurrentlyPlayingDBMember(currentlyPlaying?.id, true, true, true)
-
-      if (dbcp == null) {
-        console.log("Database doesn't seem to have a currently playing object..")
-        return
       }
 
       if (dbcp) {
-        let payload = null
-        if (dbcp) {
-          payload = { ...dbcp, timestamp: dbcp.timestamp.toISOString(), updatedAt: dbcp.updatedAt.toISOString(), queue: { ...dbcp.queue, updatedAt: dbcp.queue.updatedAt.toISOString() }, suggested: { ...dbcp?.suggested, updatedAt: dbcp?.suggested.updatedAt.toISOString() } }
-        } 
-        
-        dispatch(setCurrentlyPlaying(payload))
-          
-        setSongCompleted(false)
-      } else {
-        console.log("No song playing")
-      }
+        payload = 
+          { 
+            ...dbcp, 
+            timestamp: dbcp.timestamp.toISOString(), 
+            updatedAt: dbcp.updatedAt.toISOString(), 
+            queue: { ...dbcp.queue, updatedAt: dbcp.queue.updatedAt.toISOString() }, 
+            suggested: { ...dbcp?.suggested, updatedAt: dbcp?.suggested.updatedAt.toISOString() } 
+          }
+      } 
+
+      dispatch(setCurrentlyPlaying(payload))
+      // setSongCompleted(false)
     }
 
-    let intervalID: NodeJS.Timer
+    if (DataIntervalId.current != null) {
+      clearInterval(DataIntervalId.current)
+      DataIntervalId.current = null
+    }
 
-    if (status === 'MEMBER') {
-      fetchDataMember()
-
-      // Fetch currently playing song every 15 seconds
-      intervalID = setInterval(fetchDataMember, 10000)
-    } else if (status === 'HOST') {
-      fetchDataHost()
-
-    // Fetch currently playing song every 15 seconds
-    intervalID = setInterval(fetchDataHost, 10000)
+    if (status === 'HOST' || status === 'MEMBER') {
+      fetchData()
+      // Fetch currently playing song every 10 seconds
+      DataIntervalId.current = setInterval(fetchData, 10000)
     }
 
     return () => {
-      clearInterval(intervalID)
+      if (DataIntervalId.current) {
+        clearInterval(DataIntervalId.current)
+        DataIntervalId.current = null
+      }
     }
-  }, [song_completed, dispatch, status, currentlyPlaying?.id])
+  }, [dispatch, status, currentlyPlaying?.id])
 
   /**
    * Constantly updates the progress of the currently playing song every second
@@ -123,14 +118,15 @@ export const useCurrentlyPlaying = () => {
         setProgress({ time: progress_ms, percentage: progressPercentage })
       }
     }
-
-    let progressInterval: NodeJS.Timer
     
     if (status !== 'IDLE' && !song_completed)
-      progressInterval = setInterval(updateProgress, 1000)
+      ProgressIntervalId.current = setInterval(updateProgress, 1000)
 
     return () => {
-      clearInterval(progressInterval)
+      if (ProgressIntervalId.current) {
+        clearInterval(ProgressIntervalId.current)
+        ProgressIntervalId.current = null
+      }
     }
   }, [currentlyPlaying, song_completed, status])
 
@@ -145,7 +141,7 @@ export const useCurrentlyPlaying = () => {
 
     if (status !== 'IDLE')
       fetchNewImage()
-  }, [currentlyPlaying?.song, status])
+  }, [currentlyPlaying?.song?.albumId, status])
 
   return { currentlyPlaying, progress, imageURL }
 }
