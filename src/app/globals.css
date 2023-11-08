@@ -116,3 +116,8 @@
 .list {
   @apply flex-1 flex flex-col gap-4 center w-full;
 }
+
+.carousel-container::after {
+  @apply rounded absolute top-0 right-0 bottom-0 w-1/5 pointer-events-none bg-gradient-to-r from-transparent to-[#FAFBFF];
+  content: "";
+}
