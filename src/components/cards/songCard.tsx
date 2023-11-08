@@ -2,9 +2,6 @@ import { FC, HTMLAttributes } from 'react'
 import Image from 'next/image'
 
 import { cn } from '@/lib/utils'
-import { msToTime } from '@/utilities/helper'
-
-import { Progress } from '../ui/progress'
 
 interface SongCardProps extends HTMLAttributes<HTMLDivElement> {
   image: {
