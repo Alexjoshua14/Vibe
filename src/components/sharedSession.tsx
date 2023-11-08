@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 
 import { getUser } from '@/lib/prisma/user'
@@ -18,7 +18,7 @@ interface sharedSessionProps {
 const SharedSession: FC<sharedSessionProps> = ({ }) => {
   const currentlyPlaying = useSelector((state: Context) => state.currentlyPlaying)
   const status = useSelector((state: Context) => state.status)
-  const host = currentlyPlaying?.userId ? getUser(currentlyPlaying.userId).then((user) => user) : null
+  // const host = currentlyPlaying?.userId ? getUser(currentlyPlaying.userId).then((user) => user) : null
 
   if (status === 'HOST') {
     return (
@@ -47,7 +47,9 @@ const SharedSession: FC<sharedSessionProps> = ({ }) => {
       <div className="h-[400px] flex flex-col items-center justify-center">
         <CurrentlyPlaying />
       </div>
-      <Search />
+      <Suspense>
+        <Search />
+      </Suspense>
       <LeaveSession />
     </div>
   )
