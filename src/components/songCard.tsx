@@ -399,7 +399,7 @@ export const AddToQueueModal = ({
         </div>
         <div className="p-4 flex center gap-2 sm:gap-4">
           <button
-            onClick={addToQueue()}
+            onClick={addToQueue}
             className="px-3 py-1 bg-green-500 bg-opacity-60 rounded-lg"
           >
             Add to Queue
