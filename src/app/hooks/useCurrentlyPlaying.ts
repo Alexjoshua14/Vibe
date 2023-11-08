@@ -13,6 +13,7 @@ import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
 
 export const useCurrentlyPlaying = () => {
   // const [currentlyPlaying, setCurrentlyPlaying] = useState<Awaited<ReturnType<typeof getCurrentlyPlayingDB>> | null | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
   const [progress, setProgress] = useState<{
     time: number
     percentage: number
@@ -35,6 +36,7 @@ export const useCurrentlyPlaying = () => {
    */
   useEffect(() => {
     const fetchData = async () => {
+      console.log("Running Fetch Data")
       let dbcp = 
         status === 'HOST' 
           ? await getCurrentlyPlayingDB(true, true, true) 
@@ -143,5 +145,15 @@ export const useCurrentlyPlaying = () => {
       fetchNewImage()
   }, [currentlyPlaying?.song?.albumId, status])
 
-  return { currentlyPlaying, progress, imageURL }
+
+  useEffect(() => {
+    if (currentlyPlaying && progress && imageURL) {
+      setLoading(false)
+    } else {
+      setLoading(true)
+    }
+  }, [currentlyPlaying, imageURL, progress])
+
+
+  return { currentlyPlaying, progress, imageURL, loading }
 }
