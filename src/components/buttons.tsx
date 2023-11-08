@@ -54,8 +54,8 @@ export const EndSession = () => {
 export const CallbackButton = ({ callback, text, className }: { callback: () => void, text: string, className?: string }) => {
   return (
     <button
-      className={cn(`px-14 py-7 bg-teal-900 text-slate-50 text-2xl rounded`, className)}
-      onClick={callback}
+      className={cn(`px-4 py-2 bg-teal-900 text-slate-50 text-lg rounded`, className)}
+      onClick={() => callback()}
     >
       {text}
     </button>
