@@ -7,7 +7,7 @@ import { CreateSession, DestroySession, TEMPORARYGRAB } from './sessionButtons'
 
 export interface setupSessionProps {
   availableSessions: CurrentlyPlaying[],
-  users: User[]
+  users: (User | null)[]
 }
 
 const SetupSession: FC<setupSessionProps> = ({ availableSessions, users }) => {
@@ -26,9 +26,13 @@ const SetupSession: FC<setupSessionProps> = ({ availableSessions, users }) => {
       </TabsContent>
       <TabsContent value="join">
         <div className="h-[300px] w-[400px] flex flex-col items-center justify-center gap-4">
-          {availableSessions.map((session, index) => (
-            <JoinSession key={session.id} sessionId={session.id} text={`Join ${users.filter((u) => u.id === session.userId)[0].name ?? 'unknown'}'s session!`} />
-          ))}
+          {availableSessions.length > 0 ? availableSessions.map((session, index) => (
+            <JoinSession key={session.id} sessionId={session.id} text={`Join ${users.filter((u) => u?.id === session.userId)[0]?.name ?? 'unknown'}'s session!`} />
+          )) : (
+            <p>
+              No sessions available at the moment..
+            </p>
+          )}
         </div>
       </TabsContent>
 
