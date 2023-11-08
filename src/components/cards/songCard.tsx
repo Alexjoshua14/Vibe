@@ -23,7 +23,8 @@ const SongCard: FC<SongCardProps> = ({ image, songName, artists, className, ...p
         <Image
           src={image.url}
           alt={image.alt}
-          fill
+          height={140}
+          width={140}
           quality={image.quality ?? 75}
           className='object-contain'
         />
