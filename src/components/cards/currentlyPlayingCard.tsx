@@ -29,7 +29,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
   }
 }
 
-
+// POSSIBLE TODO: Pull the dominant color from image and use it for background and/or progress indicator
 export const Card: FC<CardProps> = ({ image, songName, artists, duration, progress, className, ...props }) => {
   const songNameRef = useRef(null)
   const artistNameRef = useRef(null)
@@ -66,6 +66,7 @@ export const Card: FC<CardProps> = ({ image, songName, artists, duration, progre
               quality={image.quality ?? 75}
               className="object-fill"
               priority
+              id="currently-playing-image"
             />
           ) :
           (
