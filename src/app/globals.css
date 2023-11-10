@@ -46,6 +46,34 @@
   }
 }
 
+.glassmorphism-base {
+  @apply backdrop-blur-xl border-[1px] border-zinc-50 border-opacity-10 shadow-md;
+}
+
+.glassmorphism-primary {
+  @apply glassmorphism-base bg-opacity-20;
+}
+
+.glassmorphism-primary-interactive {
+  @apply glassmorphism-primary hover:bg-opacity-30;
+}
+
+.glassmorphism-secondary {
+  @apply glassmorphism-base bg-opacity-30;
+}
+
+.glassmorphism-secondary-interactive {
+  @apply glassmorphism-secondary hover:bg-opacity-40;
+}
+
+.glassmorphism-tertiary {
+  @apply glassmorphism-base bg-opacity-40;
+}
+
+.glassmorphism-tertiary-interactive {
+  @apply glassmorphism-tertiary hover:bg-opacity-50;
+}
+
 .glassmorphism {
   @apply bg-opacity-20 backdrop-blur-xl border-[1px] border-zinc-50 border-opacity-10 shadow-md;
 }
