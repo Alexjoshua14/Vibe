@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 
 import { SpotifyItem } from "@/lib/validators/spotify"
+import { setSearching } from "@/redux/reducers/search"
 import { sampleSearchResults } from "@/testData/searchData"
 import { searchSpotify } from "@/utilities/spotifyAPI"
 
@@ -13,6 +15,8 @@ export const useSearch = () => {
   const [searchFieldDisabled, setSearchFieldDisabled] = useState<boolean>(false)
   const [offset, setOffset] = useState<number>(0)
   const limit = 5
+
+  const dispatch = useDispatch()
 
   /**
    * Increments the offset by the limit if the offset + limit is less than the length of the search results
@@ -47,6 +51,7 @@ export const useSearch = () => {
     }
     const results = await searchSpotify(searchQuery)
     console.log(results)
+    dispatch(setSearching({ searching: true}))
     setSearchQuery("")
     setSearchFieldDisabled(false)
     setSearchResults(results)
@@ -54,6 +59,7 @@ export const useSearch = () => {
 
   const clearSearchResults = () => {
     setSearchResults([])
+    dispatch(setSearching({ searching: false}))
   }
 
   return {

@@ -2,7 +2,7 @@ import { FC, Suspense } from "react"
 import { User } from "@prisma/client"
 
 import CurrentlyPlaying from "@/components/currentlyPlaying"
-import Search from "@/components/search"
+import Search from "@/components/search/search"
 import { getUser } from "@/lib/prisma/user"
 import { getQueueSession } from "@/lib/queue-session/session-management"
 

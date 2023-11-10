@@ -96,7 +96,8 @@ export const CurrentlyPlayingSchema = z.object({
   item: z.optional(SpotifyItemSchema),
   currently_playing_type: z.string(),
   is_playing: z.boolean(),
-  id: z.optional(z.string())
+  id: z.optional(z.string()),
+  userId: z.optional(z.string()),
 })
 
 export type CurrentlyPlaying = z.infer<typeof CurrentlyPlayingSchema>

@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
 import Providers from "@/components/Providers"
+import { Toaster } from "@/components/ui/toaster"
 
 import { BottomNav } from "../components/bottomNav"
 import Player from "../components/player"
@@ -31,6 +32,7 @@ export default function RootLayout({
             <div className="flex-1 flex pb-[5rem]">
               {children}
             </div>
+            <Toaster />
             <Player />
             <BottomNav />
           </div>

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Song } from '@prisma/client'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlaying'
 import { Context, Status } from '@/lib/validators/context'
@@ -21,6 +22,7 @@ interface playerProps {
 const Player: FC<playerProps> = ({ }) => {
   const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
   const status = useSelector((state: Context) => state.status)
+  const path = usePathname()
 
   const containerRef = useRef(null)
 
@@ -30,8 +32,6 @@ const Player: FC<playerProps> = ({ }) => {
 
   // Could use a reducer for this logic with context managed at a global level
   // so that a button can be created in a page to start a queue or connect to one
-
-
 
   return (
     <div className={`h-16 w-[270px] fixed top-4 right-4 ${currentlyPlaying?.song ? 'flex' : 'hidden'}`}>
@@ -81,4 +81,9 @@ const Player: FC<playerProps> = ({ }) => {
   )
 }
 
-export default Player
+export default function PlayerWrapper({ ...props }) {
+  const path = usePathname()
+
+  if (!path.startsWith('/player'))
+    return <Player />
+}
