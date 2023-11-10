@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, use, useEffect, useRef, useState } from 'react'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { useDispatch, useSelector } from 'react-redux'
 import { Song } from '@prisma/client'
@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { useCurrentlyPlaying } from '@/app/hooks/useCurrentlyPlaying'
+import { useSessionManagement } from '@/app/hooks/useSessionManagement'
 import { Context, Status } from '@/lib/validators/context'
 import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
 
@@ -25,6 +26,8 @@ const Player: FC<playerProps> = ({ }) => {
   const path = usePathname()
 
   const containerRef = useRef(null)
+
+  useSessionManagement()
 
   // If hosting, show should be set to true,
   // If part of a queue, show should be set to true,

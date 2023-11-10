@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux"
 import Link from "next/link"
 import { signIn, signOut } from "next-auth/react"
 
+import { useSessionManagement } from "@/app/hooks/useSessionManagement"
 import { destroySession } from "@/lib/queue-session/session-management"
 import { cn } from "@/lib/utils"
 import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
@@ -64,20 +65,15 @@ export const CallbackButton = ({ callback, text, className }: { callback: () => 
 
 interface JoinSessionProps extends HTMLAttributes<HTMLButtonElement> {
   sessionId: string,
-  text: string
+  text: string,
+  handleJoinSession: (sessionId: string) => void
 }
 
-export const JoinSession: FC<JoinSessionProps> = ({ sessionId, text, className }) => {
-  const dispatch = useDispatch()
-
-  const handleJoin = () => {
-    dispatch(setCurrentlyPlaying({ id: sessionId }))
-    dispatch(setStatus('MEMBER'))
-  }
+export const JoinSession: FC<JoinSessionProps> = ({ sessionId, text, handleJoinSession, className }) => {
 
   return (
     <button
-      onClick={handleJoin}
+      onClick={() => handleJoinSession(sessionId)}
       className={cn("glassmorphism-2-interactive px-4 py-2 rounded !bg-tertiary", className)}
     >
       {text}

@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Artist, CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
 
-import { getCurrentlyPlayingDB,getCurrentlyPlayingDBMember,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
+import { getCurrentlyPlayingDB,getCurrentlyPlayingDBMember,reconnect,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
 import { getSongImage } from "@/lib/prisma/song"
 import { Context } from "@/lib/validators/context"
 import { CurrentlyPlaying } from "@/lib/validators/spotify"
 import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
+import { setStatus } from "@/redux/reducers/status"
 import { progressToPercentage } from "@/utilities/helper"
 import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
 
@@ -76,6 +77,8 @@ export const useCurrentlyPlaying = () => {
       // setSongCompleted(false)
     }
 
+    
+
     if (DataIntervalId.current != null) {
       clearInterval(DataIntervalId.current)
       DataIntervalId.current = null
@@ -85,7 +88,7 @@ export const useCurrentlyPlaying = () => {
       fetchData()
       // Fetch currently playing song every 10 seconds
       DataIntervalId.current = setInterval(fetchData, 10000)
-    }
+    } 
 
     return () => {
       if (DataIntervalId.current) {

@@ -1,16 +1,35 @@
+import { use, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { addUserToSession, reconnect } from '@/lib/prisma/currentlyPlaying'
 import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
 import { setStatus } from '@/redux/reducers/status'
 
 import 'client-only'
 
-import { destroySession } from '../../lib/queue-session/session-management'
+import { destroySession, removeUserFromSession } from '../../lib/queue-session/session-management'
 import { Context } from '../../lib/validators/context'
 
 export function useSessionManagement() {
   const dispatch = useDispatch()
   const status = useSelector((state: Context) => state.status)
+
+  useEffect(() => {
+    const grabPreviousSession = async () => {
+      const {cpID, prevStatus} = await reconnect()
+      if (cpID) {
+        console.log("Found previous session: " + cpID + " with status: " + prevStatus)
+        dispatch(setCurrentlyPlaying({id: cpID}))
+        dispatch(setStatus(prevStatus))
+      } else {
+        console.log("No previous session found")
+      }
+    }
+
+    if ( status === 'IDLE')
+      grabPreviousSession()
+
+  }, [dispatch, status])
 
   const handleLeaveQueueSession = async () => {
     let res = true
@@ -23,6 +42,8 @@ export function useSessionManagement() {
     }
 
     if (res) {
+      // Disconnect user from session in database
+      const res = removeUserFromSession()
       dispatch(setStatus('IDLE'))
       dispatch(setCurrentlyPlaying(null))
     } else {
@@ -30,6 +51,15 @@ export function useSessionManagement() {
     }
   }
 
-  return { handleLeaveQueueSession }
+  const handleJoinSession = async (sessionId: string) => {
+   
+    const res = addUserToSession(sessionId)
+
+    dispatch(setCurrentlyPlaying({ id: sessionId }))
+    dispatch(setStatus('MEMBER'))
+  
+  }
+
+  return { handleJoinSession, handleLeaveQueueSession }
 
 }
