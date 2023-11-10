@@ -6,24 +6,44 @@ import SongCard from './cards/songCard'
 
 interface SongCarouselProps {
   header?: string
+  songs: {
+    name: string,
+    artists: string,
+    id: number,
+    image: {
+      url: string,
+      alt: string
+    }
+  }[],
+  interactive?: {
+    onApprove: (id: number, name: string) => void,
+    onReject: (id: number, name: string) => void,
+  }
 }
 
-const SongCarousel: FC<SongCarouselProps> = ({ header }) => {
+const SongCarousel: FC<SongCarouselProps> = ({ header, songs, interactive }) => {
+
   return (
     <div className='w-full h-fit ps-4 py-2'>
       {header &&
-        <h2 className='font-extralight text-2xl'>
-          {header}
-        </h2>
+        <div className="flex items-center whitespace-nowrap gap-2">
+          <h2 className='font-extralight text-2xl'>
+            {header}
+          </h2>
+          <p className="text-secondary text-xs">
+            {`[${songs.length}]`}
+          </p>
+        </div>
       }
       <div className="w-full relative ps-4 py-2 carousel-container">
         <div className="relative w-full h-fit flex items-center overflow-x-scroll overflow-y-visible no-scrollbar">
           <div role='carousel-track' className="w-fit min-w-full h-fit grid grid-rows-1 grid-flow-col gap-8">
-            <SongCard songName={postSampleData.item.name} image={{ url: postSampleData.item.album.images[0].url, alt: "" }} artists={postSampleData.item.artists.map((artist) => artist.name).join(", ")} />
-            <SongCard songName={postSampleData.item.name} image={{ url: postSampleData.item.album.images[0].url, alt: "" }} artists={postSampleData.item.artists.map((artist) => artist.name).join(", ")} />
-            <SongCard songName={postSampleData.item.name} image={{ url: postSampleData.item.album.images[0].url, alt: "" }} artists={postSampleData.item.artists.map((artist) => artist.name).join(", ")} />
-            <SongCard songName={postSampleData.item.name} image={{ url: postSampleData.item.album.images[0].url, alt: "" }} artists={postSampleData.item.artists.map((artist) => artist.name).join(", ")} />
-            <SongCard songName={postSampleData.item.name} image={{ url: postSampleData.item.album.images[0].url, alt: "" }} artists={postSampleData.item.artists.map((artist) => artist.name).join(", ")} />
+            {songs.map((song) => (
+              <SongCard key={song.id} songName={song.name}
+                image={song.image} artists={song.artists}
+                interactive={interactive && { onApprove: () => interactive.onApprove(song.id, song.name), onReject: () => interactive.onReject(song.id, song.name) }}
+              />
+            ))}
           </div>
         </div>
       </div>
