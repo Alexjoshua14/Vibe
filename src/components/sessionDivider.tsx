@@ -16,7 +16,8 @@ interface sessionDividerProps {
 const SessionDivider: FC<sessionDividerProps & setupSessionProps> = ({ availableSessions, users }) => {
   const status = useSelector((state: Context) => state.status)
 
-  if (status === 'IDLE') {
+  // Waits to return until the status is known
+  if (status === 'IDLE' || status === 'LOADING') {
     return <SetupSession availableSessions={availableSessions} users={users} />
   } else {
     return <SharedSession />
