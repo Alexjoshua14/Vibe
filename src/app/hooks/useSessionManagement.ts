@@ -17,16 +17,17 @@ export function useSessionManagement() {
   useEffect(() => {
     const grabPreviousSession = async () => {
       const {cpID, prevStatus} = await reconnect()
-      if (cpID) {
+      if (cpID !== null && cpID !== undefined && prevStatus !== null) {
         console.log("Found previous session: " + cpID + " with status: " + prevStatus)
         dispatch(setCurrentlyPlaying({id: cpID}))
         dispatch(setStatus(prevStatus))
       } else {
         console.log("No previous session found")
+        dispatch(setStatus('IDLE'))
       }
     }
 
-    if ( status === 'IDLE')
+    if ( status === 'LOADING')
       grabPreviousSession()
 
   }, [dispatch, status])
@@ -36,14 +37,14 @@ export function useSessionManagement() {
     if (status === 'HOST') {
       // Manage database components if user is the hsot
       res = await destroySession()
-    } else if (status === 'IDLE') {
-      console.warn("HandleLeaveSession function called by an IDLE use")
+    } else if (status === 'IDLE' || status === 'LOADING') {
+      console.warn(`HandleLeaveSession function called by an ${status} use`)
       return
     }
 
     if (res) {
       // Disconnect user from session in database
-      const res = removeUserFromSession()
+      res = await removeUserFromSession()
       dispatch(setStatus('IDLE'))
       dispatch(setCurrentlyPlaying(null))
     } else {
