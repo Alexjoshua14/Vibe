@@ -6,6 +6,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import {
   addToQueueURL,
   currentlyPlayingURL,
+  getTrackURL,
   playbackStateURL,
   searchURL,
   topTracksURL,
@@ -192,5 +193,22 @@ export async function addToQueueClient(uri: string) {
     return resStatus
   } else {
     throw new Error("No access token found")
+  }
+}
+
+export async function getSong(songId: string) {
+  const session = await getServerSession(authOptions)
+
+  if (!session)
+    throw new Error("No session found")
+
+  if (session.accessToken) {
+    const res = await fetch(`${getTrackURL}/${songId}`, {
+      headers: {
+        Authorization: `Bearer ${session.accessToken}`
+      }
+    })
+
+    console.log(res)
   }
 }

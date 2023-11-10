@@ -6,8 +6,9 @@ import { BsChevronLeft, BsChevronRight } from "react-icons/bs"
 import { motion } from "framer-motion"
 
 import { useSearch } from "@/app/hooks/useSearch"
+import { addSongToQueue } from "@/lib/queue-session/session-management"
 import { SpotifyItem } from "@/lib/validators/spotify"
-import { addToQueue, addToQueueClient } from "@/utilities/spotifyAPI"
+import { addToQueueClient } from "@/utilities/spotifyAPI"
 
 import { AddToQueueModal, SearchResult } from "../songCard"
 
@@ -53,7 +54,8 @@ const Search: FC<searchProps> = ({ }) => {
   const addToQueue = async () => {
     try {
       if (!selectedSong) throw new Error("No song selected")
-      const result = await addToQueueClient(selectedSong.uri)
+      const result = await addSongToQueue(selectedSong.id)
+      //const result = await addToQueueClient(selectedSong.uri)
       if (result) {
         handleModalClose("success")
       }
