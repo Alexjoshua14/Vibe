@@ -54,7 +54,7 @@ export const Card: FC<CardProps> = ({ image, songName, artists, duration, progre
     >
       <motion.div
         animate={{ height: searching ? '100px' : '66.667%', width: searching ? '100px' : '100%' }}
-        className="relative max-w-full aspect-square rounded overflow-clip glassmorphism"
+        className="relative max-w-full aspect-square rounded overflow-clip glassmorphism-primary"
       >
         {image?.url ?
           (
@@ -64,7 +64,7 @@ export const Card: FC<CardProps> = ({ image, songName, artists, duration, progre
               fill
               sizes="33vw"
               quality={image.quality ?? 75}
-              className="object-contain"
+              className="object-fill"
               priority
             />
           ) :
