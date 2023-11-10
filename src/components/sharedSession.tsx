@@ -80,7 +80,7 @@ const HostSession = () => {
         <CallbackButton text={`End Session`} callback={handleLeaveQueueSession} className="bg-red-800 glassmorphism !bg-opacity-75 hover:!bg-opacity-90 transition-colors" />
       </div>
       <div className="w-full h-full grid grid-cols-2 grid-rows-1 items-center">
-        <div className="h-full col-span-1 p-20 flex items-center justify-center">
+        <div className="h-full max-h-[70vh] col-span-1 p-4 flex items-center justify-center">
           <CurrentlyPlaying />
         </div>
         <div className="h-3/5 col-span-1 flex flex-col gap-8">
