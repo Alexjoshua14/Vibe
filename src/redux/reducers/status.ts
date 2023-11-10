@@ -5,7 +5,7 @@ import { Status } from "@/lib/validators/context"
 
 const statusSlice = createSlice({
   name: 'status',
-  initialState: 'IDLE',
+  initialState: 'LOADING',
   reducers: {
     setStatus: (state, action: PayloadAction<Status>) => {
       return action.payload

@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { CurrentlyPlayingSchema } from './spotify'
 
-export const StatusSchema = z.enum(['IDLE', 'HOST', 'MEMBER'])
+export const StatusSchema = z.enum(['LOADING', 'IDLE', 'MEMBER', 'HOST'])
 export type Status = z.infer<typeof StatusSchema>
 
 export const SearchSchema = z.object({
