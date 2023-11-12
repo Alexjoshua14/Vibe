@@ -66,11 +66,11 @@ model VerificationToken {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   title     String
   content   String?
   song      Song     @relation(fields: [songId], references: [id])
-  songId    Int
+  songId    String
   published Boolean  @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
@@ -79,14 +79,14 @@ model Post {
 }
 
 model Song {
-  id               Int                @id @default(autoincrement())
+  id               String             @id @default(cuid())
   name             String
   artists          Artist[]
-  album            Album              @relation(fields: [albumId], references: [id])
-  albumId          Int
+  album            Album              @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId          String
   duration_ms      Int
   href             String
-  uri              String
+  uri              String             @unique
   type             String
   explicit         Boolean
   popularity       Int
@@ -99,37 +99,37 @@ model Song {
 }
 
 model Artist {
-  id     Int     @id @default(autoincrement())
+  id     String  @id @default(cuid())
   name   String
   href   String
-  uri    String
+  uri    String  @unique
   songs  Song[]
   albums Album[]
 }
 
 model Album {
-  id      Int      @id @default(autoincrement())
+  id      String   @id @default(cuid())
   name    String
   href    String
-  uri     String
+  uri     String   @unique
   images  Image[]
   songs   Song[]
   artists Artist[]
 }
 
 model Image {
-  id      Int    @id @default(autoincrement())
+  id      String @id @default(cuid())
   url     String
   height  Int
   width   Int
-  albumId Int
+  albumId String
   album   Album  @relation(fields: [albumId], references: [id])
 }
 
 model CurrentlyPlaying {
   id          String   @id @default(cuid())
   userId      String   @unique
-  songId      Int?
+  songId      String?
   song        Song?    @relation(fields: [songId], references: [id])
   members     User[]
   progress_ms Int      @default(0)
@@ -138,10 +138,10 @@ model CurrentlyPlaying {
   updatedAt   DateTime @default(now()) @updatedAt
 
   queueId String @unique
-  queue   Queue  @relation(fields: [queueId], references: [id])
+  queue   Queue  @relation(fields: [queueId], references: [id], onDelete: Cascade)
 
   suggestedId String    @unique
-  suggested   Suggested @relation(fields: [suggestedId], references: [id])
+  suggested   Suggested @relation(fields: [suggestedId], references: [id], onDelete: Cascade)
 }
 
 model Queue {

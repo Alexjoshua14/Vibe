@@ -56,7 +56,7 @@ export const SpotifyItemSchema = z.object({
   name: z.string(),
   artists: z.array(SpotifyArtistSchema),
   album: SpotifyAlbumSchema,
-  albumId: z.optional(z.number()),
+  albumId: z.optional(z.string()),
   duration_ms: z.number(),
   href: z.string(),
   uri: z.string(),
@@ -64,7 +64,7 @@ export const SpotifyItemSchema = z.object({
   explicit: z.boolean(),
   popularity: z.number(),
   avilable_markets: z.array(z.string()).optional(),
-  updatedAt: z.optional(z.number())
+  updatedAt: z.optional(z.number()),
 })
 
 export type SpotifyItem = z.infer<typeof SpotifyItemSchema>
@@ -171,6 +171,33 @@ export const PlaybackStateResponseSchema = z.object({
   currently_playing_type: z.string(),
   item: SpotifyItemSchema,
 })
+
+export const TrackResponseSchema = z.object({
+  album: SpotifyAlbumSchema,
+  artists: z.array(SpotifyArtistSchema),
+  available_markets: z.array(z.string()),
+  disc_number: z.number(),
+  duration_ms: z.number(),
+  explicit: z.boolean(),
+  external_ids: z.object({
+    isrc: z.string(),
+  }),
+  external_urls: z.object({
+    spotify: z.string(),
+  }),
+  href: z.string(),
+  id: z.string(),
+  is_playable: z.boolean(),
+  is_local: z.boolean(),
+  name: z.string(),
+  popularity: z.number(),
+  preview_url: z.string(),
+  track_number: z.number(),
+  type: z.string(),
+  uri: z.string(),
+})
+
+export type TrackResponse = z.infer<typeof TrackResponseSchema>
 
 export type PlaybackStateResponse = z.infer<typeof PlaybackStateResponseSchema>
 

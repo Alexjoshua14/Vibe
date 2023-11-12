@@ -1,15 +1,24 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Artist, CurrentlyPlaying as DBCurrentlyPlaying, Song } from "@prisma/client"
+import {
+  Artist,
+  CurrentlyPlaying as DBCurrentlyPlaying,
+  Song,
+} from "@prisma/client"
 
-import { getCurrentlyPlayingDB,getCurrentlyPlayingDBMember,updateCurrentlyPlayingDB } from "@/lib/prisma/currentlyPlaying"
+import {
+  getCurrentlyPlayingDB,
+  getCurrentlyPlayingDBMember,
+  reconnect,
+  updateCurrentlyPlayingDB,
+} from "@/lib/prisma/currentlyPlaying"
 import { getSongImage } from "@/lib/prisma/song"
 import { Context } from "@/lib/validators/context"
 import { CurrentlyPlaying } from "@/lib/validators/spotify"
-import { setCurrentlyPlaying } from '@/redux/reducers/currentlyPlaying'
+import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
+import { setStatus } from "@/redux/reducers/status"
 import { progressToPercentage } from "@/utilities/helper"
 import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
-
 
 export const useCurrentlyPlaying = () => {
   // const [currentlyPlaying, setCurrentlyPlaying] = useState<Awaited<ReturnType<typeof getCurrentlyPlayingDB>> | null | undefined>(undefined)
@@ -22,11 +31,13 @@ export const useCurrentlyPlaying = () => {
   const [imageURL, setImage] = useState("")
 
   const dispatch = useDispatch()
-  const currentlyPlaying = useSelector((state: Context) => state.currentlyPlaying)
+  const currentlyPlaying = useSelector(
+    (state: Context) => state.currentlyPlaying,
+  )
   const status = useSelector((state: Context) => state.status)
 
-  const DataIntervalId = useRef<NodeJS.Timer | null>(null);
-  const ProgressIntervalId = useRef<NodeJS.Timer | null>(null);
+  const DataIntervalId = useRef<NodeJS.Timer | null>(null)
+  const ProgressIntervalId = useRef<NodeJS.Timer | null>(null)
 
   /**
    * Gets the currently playing song and sets the currently playing state
@@ -37,23 +48,29 @@ export const useCurrentlyPlaying = () => {
   useEffect(() => {
     const fetchData = async () => {
       console.log("Running Fetch Data")
-      let dbcp = 
-        status === 'HOST' 
-          ? await getCurrentlyPlayingDB(true, true, true) 
-          : status === 'MEMBER' 
-            ? await getCurrentlyPlayingDBMember(currentlyPlaying?.id, true, true, true) 
-              : null
+      let dbcp =
+        status === "HOST"
+          ? await getCurrentlyPlayingDB(true, true, true)
+          : status === "MEMBER"
+          ? await getCurrentlyPlayingDBMember(
+              currentlyPlaying?.id,
+              true,
+              true,
+              true,
+            )
+          : null
 
       if (dbcp == null) {
-        console.log("Database doesn't seem to have a currently playing object..")
+        console.log(
+          "Database doesn't seem to have a currently playing object..",
+        )
         return
       }
 
       let cp: CurrentlyPlaying | null = null
       let payload = null
 
-      if (status === 'HOST')
-        cp = await getClientCurrentlyPlaying()
+      if (status === "HOST") cp = await getClientCurrentlyPlaying()
 
       if (cp) {
         dbcp = await updateCurrentlyPlayingDB(cp, true, true, true)
@@ -62,15 +79,20 @@ export const useCurrentlyPlaying = () => {
       }
 
       if (dbcp) {
-        payload = 
-          { 
-            ...dbcp, 
-            timestamp: dbcp.timestamp.toISOString(), 
-            updatedAt: dbcp.updatedAt.toISOString(), 
-            queue: { ...dbcp.queue, updatedAt: dbcp.queue.updatedAt.toISOString() }, 
-            suggested: { ...dbcp?.suggested, updatedAt: dbcp?.suggested.updatedAt.toISOString() } 
-          }
-      } 
+        payload = {
+          ...dbcp,
+          timestamp: dbcp.timestamp.toISOString(),
+          updatedAt: dbcp.updatedAt.toISOString(),
+          queue: {
+            ...dbcp.queue,
+            updatedAt: dbcp.queue.updatedAt.toISOString(),
+          },
+          suggested: {
+            ...dbcp?.suggested,
+            updatedAt: dbcp?.suggested.updatedAt.toISOString(),
+          },
+        }
+      }
 
       dispatch(setCurrentlyPlaying(payload))
       // setSongCompleted(false)
@@ -81,7 +103,7 @@ export const useCurrentlyPlaying = () => {
       DataIntervalId.current = null
     }
 
-    if (status === 'HOST' || status === 'MEMBER') {
+    if (status === "HOST" || status === "MEMBER") {
       fetchData()
       // Fetch currently playing song every 10 seconds
       DataIntervalId.current = setInterval(fetchData, 10000)
@@ -106,22 +128,26 @@ export const useCurrentlyPlaying = () => {
   useEffect(() => {
     const updateProgress = () => {
       if (currentlyPlaying && song_completed == false) {
-        let progress_ms = currentlyPlaying.progress_ms + (currentlyPlaying.updatedAt !== undefined ? Date.now() - (new Date(currentlyPlaying.updatedAt)).getTime() : 0)
-        if (currentlyPlaying.song && progress_ms > currentlyPlaying.song.duration_ms) {
+        let progress_ms =
+          currentlyPlaying.progress_ms +
+          (currentlyPlaying.updatedAt !== undefined
+            ? Date.now() - new Date(currentlyPlaying.updatedAt).getTime()
+            : 0)
+        if (
+          currentlyPlaying.song &&
+          progress_ms > currentlyPlaying.song.duration_ms
+        ) {
           progress_ms = currentlyPlaying.song.duration_ms
           setSongCompleted(true)
         }
-        const progressPercentage = currentlyPlaying.song ? 
-          progressToPercentage(
-            progress_ms,
-            currentlyPlaying.song.duration_ms
-          ) 
+        const progressPercentage = currentlyPlaying.song
+          ? progressToPercentage(progress_ms, currentlyPlaying.song.duration_ms)
           : 0
         setProgress({ time: progress_ms, percentage: progressPercentage })
       }
     }
-    
-    if (status !== 'IDLE' && !song_completed)
+
+    if (status !== "IDLE" && !song_completed)
       ProgressIntervalId.current = setInterval(updateProgress, 1000)
 
     return () => {
@@ -134,17 +160,17 @@ export const useCurrentlyPlaying = () => {
 
   useEffect(() => {
     const fetchNewImage = async () => {
-      let url = currentlyPlaying?.song?.albumId ?
-        await getSongImage(currentlyPlaying.song.albumId).then((img) => img ? img.url : "")
+      let url = currentlyPlaying?.song?.albumId
+        ? await getSongImage(currentlyPlaying.song.albumId).then((img) =>
+            img ? img.url : "",
+          )
         : ""
-      
+
       setImage(url)
     }
 
-    if (status !== 'IDLE')
-      fetchNewImage()
+    if (status !== "IDLE") fetchNewImage()
   }, [currentlyPlaying?.song?.albumId, status])
-
 
   useEffect(() => {
     if (currentlyPlaying && progress && imageURL) {
@@ -153,7 +179,6 @@ export const useCurrentlyPlaying = () => {
       setLoading(true)
     }
   }, [currentlyPlaying, imageURL, progress])
-
 
   return { currentlyPlaying, progress, imageURL, loading }
 }

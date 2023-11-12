@@ -1,3 +1,4 @@
+import SongCard from "@/components/cards/songCard"
 import { Post } from "@/components/songCard"
 import { postSampleData } from "@/data/songs"
 
@@ -11,13 +12,44 @@ export default function Feed() {
 
   return (
     <div className="max-w-full">
-      <div className="list">
-        <Post post={postSampleData} />
-        <Post post={postSampleData} />
-        <Post post={postSampleData} />
-        <Post post={postSampleData} />
-        <Post post={postSampleData} />
-        <Post post={postSampleData} />
+      <div className="w-[600px] overflow-x-scroll">
+        <div className="flex flex-row gap-4 ">
+          <SongCard
+            songName={postSampleData.item.name}
+            image={{ url: postSampleData.item.album.images[0].url, alt: "" }}
+            artists={postSampleData.item.artists
+              .map((artist) => artist.name)
+              .join(", ")}
+          />
+          <SongCard
+            songName={postSampleData.item.name}
+            image={{ url: postSampleData.item.album.images[0].url, alt: "" }}
+            artists={postSampleData.item.artists
+              .map((artist) => artist.name)
+              .join(", ")}
+          />
+          <SongCard
+            songName={postSampleData.item.name}
+            image={{ url: postSampleData.item.album.images[0].url, alt: "" }}
+            artists={postSampleData.item.artists
+              .map((artist) => artist.name)
+              .join(", ")}
+          />
+          <SongCard
+            songName={postSampleData.item.name}
+            image={{ url: postSampleData.item.album.images[0].url, alt: "" }}
+            artists={postSampleData.item.artists
+              .map((artist) => artist.name)
+              .join(", ")}
+          />
+          <SongCard
+            songName={postSampleData.item.name}
+            image={{ url: postSampleData.item.album.images[0].url, alt: "" }}
+            artists={postSampleData.item.artists
+              .map((artist) => artist.name)
+              .join(", ")}
+          />
+        </div>
       </div>
     </div>
   )

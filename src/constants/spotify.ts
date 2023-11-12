@@ -33,3 +33,4 @@ export const shuffleURL = `${spotifyAPI}me/player/shuffle`
 export const repeatURL = `${spotifyAPI}me/player/repeat`
 export const addToQueueURL = `${spotifyAPI}me/player/queue?uri=`
 export const searchURL = `${spotifyAPI}search?q=`
+export const getTrackURL = `${spotifyAPI}tracks`

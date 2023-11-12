@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import Image from 'next/image'
+import { FC } from "react"
+import Image from "next/image"
 
 interface postImageProps {
   imageUrl: string
@@ -10,12 +10,7 @@ interface postImageProps {
 const PostImage: FC<postImageProps> = ({ imageUrl, altText, ...props }) => {
   return (
     <div className="relative h-1/2 aspect-square flex center rounded-br overflow-hidden">
-      <Image
-        src={imageUrl}
-        alt={altText}
-        fill={true}
-        {...props}
-      />
+      <Image src={imageUrl} alt={altText} fill={true} {...props} />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import {
   addToQueueURL,
   currentlyPlayingURL,
+  getTrackURL,
   playbackStateURL,
   searchURL,
   topTracksURL,
@@ -17,6 +18,8 @@ import {
   SpotifySearchResponse,
   SpotifyTopTracksResponse,
   SpotifyTopTracksResponseSchema,
+  TrackResponse,
+  TrackResponseSchema,
 } from "@/lib/validators/spotify"
 import { mapToCurrentlyPlaying, mapToSongs } from "@/utilities/helper"
 
@@ -193,4 +196,29 @@ export async function addToQueueClient(uri: string) {
   } else {
     throw new Error("No access token found")
   }
+}
+
+export async function getSong(songId: string) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) throw new Error("No session found")
+
+  if (!session.accessToken) throw new Error("No access token found")
+
+  const res = await fetch(`${getTrackURL}/${songId}`, {
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
+    },
+  })
+
+  console.log(res)
+
+  if (!res.ok) {
+    throw new Error("Failed to get song..\n" + res.statusText)
+  }
+
+  let songjson = await res.json()
+  let song = TrackResponseSchema.parse(songjson)
+
+  return song
 }

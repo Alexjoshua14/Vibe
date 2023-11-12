@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest"
 
-import { Context, createMockContext,MockContext } from "@/../context";
+import { Context, createMockContext, MockContext } from "@/../context"
 
-import { createSession } from "../session-management";
+import { createSession } from "../session-management"
 
 let mockCtx: MockContext
 let ctx: Context
@@ -13,12 +13,12 @@ beforeEach(() => {
 })
 
 // NOTE: Not an actual functional test at the moment..
-describe('', () => {
-  it('', async () => {
+describe("", () => {
+  it("", async () => {
     const user = {
-      id: '1',
-      name: 'Gordon',
-      email: 'Gordon@myspace.com',
+      id: "1",
+      name: "Gordon",
+      email: "Gordon@myspace.com",
       emailVerified: null,
       image: null,
       accounts: [],
@@ -29,11 +29,11 @@ describe('', () => {
       queueId: null,
       queue: null,
       suggestedId: null,
-      suggested: null
+      suggested: null,
     }
-    
+
     mockCtx.prisma.user.findFirst.mockResolvedValue(user)
-    
+
     await expect(createSession()).resolves.toEqual(user)
   })
 })

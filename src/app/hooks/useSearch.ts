@@ -51,7 +51,7 @@ export const useSearch = () => {
     }
     const results = await searchSpotify(searchQuery)
     console.log(results)
-    dispatch(setSearching({ searching: true}))
+    dispatch(setSearching({ searching: true }))
     setSearchQuery("")
     setSearchFieldDisabled(false)
     setSearchResults(results)
@@ -59,7 +59,7 @@ export const useSearch = () => {
 
   const clearSearchResults = () => {
     setSearchResults([])
-    dispatch(setSearching({ searching: false}))
+    dispatch(setSearching({ searching: false }))
   }
 
   return {
