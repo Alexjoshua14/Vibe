@@ -10,6 +10,7 @@ import {
   getCurrentlyPlayingDBMember,
 } from "../prisma/currentlyPlaying"
 import { addSongToSuggested } from "../prisma/suggested"
+import { SpotifyItem } from "../validators/spotify"
 
 export async function createSession() {
   // Set up database objects delegating this user as the host
@@ -231,7 +232,7 @@ export async function getQueueSession(sessionId: string) {
   return queueSession
 }
 
-export async function addSongToQueue(songId: string) {
+export async function addSongToQueue(song: SpotifyItem) {
   console.log("TESTING TESTING")
   // Grab the user who is trying to add a song
 
@@ -275,7 +276,7 @@ export async function addSongToQueue(songId: string) {
   ) {
     // User is a member so we can add the song to suggested
     console.log("Adding song to suggested")
-    const res = addSongToSuggested(cp.suggestedId, songId)
+    const res = addSongToSuggested(song)
   } else {
     console.log("User is not found in the currently Playing member list..")
     return false

@@ -3,11 +3,12 @@
 import { FC, Suspense, useCallback, useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { Album, Artist, Image, Song } from "@prisma/client"
+import { set } from "zod"
 
 import { useSessionManagement } from "@/app/hooks/useSessionManagement"
 import { postSampleData } from "@/data/songs"
 import { getUserQueued } from "@/lib/prisma/queue"
-import { acceptSuggestedSong, getSuggested, getUserSuggested } from "@/lib/prisma/suggested"
+import { acceptSuggestedSong, getSuggested, getUserSuggested, rejectSuggestedSong } from "@/lib/prisma/suggested"
 import { Context } from "@/lib/validators/context"
 
 import Search from "./search/search"
@@ -52,6 +53,8 @@ const HostSession = () => {
   const queuedTimerId = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
+    if (suggestedTimerId.current)
+      clearInterval(suggestedTimerId.current)
     const getSuggested = async () => {
       let res = await getUserSuggested()
       let suggestedContent =
@@ -73,6 +76,11 @@ const HostSession = () => {
     suggestedTimerId.current = setInterval(() => {
       getSuggested()
     }, 10000)
+
+    return () => {
+      if (suggestedTimerId.current)
+        clearInterval(suggestedTimerId.current)
+    }
   }, [])
 
   useEffect(() => {
@@ -116,19 +124,33 @@ const HostSession = () => {
 
   const handleApprove = useCallback(
     (id: string, name: string) => {
-      console.log("APPROVED: " + id)
-      acceptSuggestedSong(id)
-      toast({
-        title: "Added to queue",
-        description: `${name} has been added to the queue`,
-      })
-    },
-    [toast],
+      try {
+        acceptSuggestedSong(id) ?? { queue: null, suggested: null }
+
+        // Optimistic update
+        setQueue((prev) => [...prev, suggested.find((song) => song.id === id)!])
+        setSuggested((prev) => prev.filter((song) => song.id !== id))
+
+        console.log("APPROVED: " + id)
+        toast({
+          title: "Added to queue",
+          description: `${name} has been added to the queue`,
+        })
+
+      } catch (error) {
+
+      }
+    }, [toast, suggested]
   )
 
   const handleReject = useCallback(
     (id: string, name: string) => {
       console.log("REJECTED: " + id)
+      rejectSuggestedSong(id)
+
+      // Optimistic update
+      setSuggested((prev) => prev.filter((song) => song.id !== id))
+
       toast({
         title: "Removed from suggested",
         description: `${name} has been rejected`,
