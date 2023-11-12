@@ -157,13 +157,10 @@ export async function addSongToSuggested(song: SpotifyItem) {
   return true
 }
 
-export async function acceptSuggestedSong(
-  songId: string,
-) {
+export async function acceptSuggestedSong(songId: string) {
   // Add to actual spotify queue
   const user = await getServerSession(authOptions)
-  if (!user?.accessToken)
-    throw new Error("No access token found")
+  if (!user?.accessToken) throw new Error("No access token found")
 
   const ids = await prisma.user.findFirst({
     where: {
@@ -172,29 +169,26 @@ export async function acceptSuggestedSong(
     select: {
       queueId: true,
       suggestedId: true,
-    }
+    },
   })
 
-  if (ids === null || ids.queueId === null || ids.suggestedId === null) 
+  if (ids === null || ids.queueId === null || ids.suggestedId === null)
     throw new Error("No queue and/or suggested id found")
 
-  const { uri } = await prisma.song.findFirst({
+  const { uri } = (await prisma.song.findFirst({
     where: {
       id: songId,
     },
     select: {
-      uri: true
-    }
-  }) ?? { uri: null }
+      uri: true,
+    },
+  })) ?? { uri: null }
 
-  if (uri === null)
-    throw new Error("No song uri found")
-
+  if (uri === null) throw new Error("No song uri found")
 
   const res = await addToQueue(user?.accessToken, uri)
 
-  if (res === false) 
-    throw new Error("Song was not successfully added to queue")
+  if (res === false) throw new Error("Song was not successfully added to queue")
 
   const queue = await prisma.queue.update({
     where: {
@@ -248,28 +242,26 @@ export async function acceptSuggestedSong(
   return { queue, suggested }
 }
 
-export async function rejectSuggestedSong(
-  songId: string,
-) {
+export async function rejectSuggestedSong(songId: string) {
   const user = await getServerSession(authOptions)
-  if (!user?.user?.id)
-    throw new Error("No user id found")
+  if (!user?.user?.id) throw new Error("No user id found")
 
-  const suggestedId = await prisma.user.findFirst({
-    where: {
-      id: user.user.id,
-    },
-    select: {
-      suggestedId: true,
-    }
-  }).then((wrapped) => wrapped?.suggestedId ?? null)
+  const suggestedId = await prisma.user
+    .findFirst({
+      where: {
+        id: user.user.id,
+      },
+      select: {
+        suggestedId: true,
+      },
+    })
+    .then((wrapped) => wrapped?.suggestedId ?? null)
 
-  if (!suggestedId)
-    throw new Error("No suggested id found")
+  if (!suggestedId) throw new Error("No suggested id found")
 
   const suggested = await prisma.suggested.update({
     where: {
-      id: suggestedId
+      id: suggestedId,
     },
     data: {
       songs: {
@@ -287,9 +279,9 @@ export async function rejectSuggestedSong(
               images: true,
             },
           },
-        }
-      }
-    }
+        },
+      },
+    },
   })
 
   // TODO: Check if song was actually removed from suggested

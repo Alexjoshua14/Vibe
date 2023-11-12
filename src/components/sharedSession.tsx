@@ -8,7 +8,12 @@ import { set } from "zod"
 import { useSessionManagement } from "@/app/hooks/useSessionManagement"
 import { postSampleData } from "@/data/songs"
 import { getUserQueued } from "@/lib/prisma/queue"
-import { acceptSuggestedSong, getSuggested, getUserSuggested, rejectSuggestedSong } from "@/lib/prisma/suggested"
+import {
+  acceptSuggestedSong,
+  getSuggested,
+  getUserSuggested,
+  rejectSuggestedSong,
+} from "@/lib/prisma/suggested"
 import { Context } from "@/lib/validators/context"
 
 import Search from "./search/search"
@@ -18,9 +23,9 @@ import CurrentlyPlaying from "./currentlyPlaying"
 import { LeaveSession } from "./sessionButtons"
 import SongCarousel from "./songCarousel"
 
-interface sharedSessionProps { }
+interface sharedSessionProps {}
 
-const SharedSession: FC<sharedSessionProps> = ({ }) => {
+const SharedSession: FC<sharedSessionProps> = ({}) => {
   const currentlyPlaying = useSelector(
     (state: Context) => state.currentlyPlaying,
   )
@@ -53,8 +58,7 @@ const HostSession = () => {
   const queuedTimerId = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    if (suggestedTimerId.current)
-      clearInterval(suggestedTimerId.current)
+    if (suggestedTimerId.current) clearInterval(suggestedTimerId.current)
     const getSuggested = async () => {
       let res = await getUserSuggested()
       let suggestedContent =
@@ -78,8 +82,7 @@ const HostSession = () => {
     }, 10000)
 
     return () => {
-      if (suggestedTimerId.current)
-        clearInterval(suggestedTimerId.current)
+      if (suggestedTimerId.current) clearInterval(suggestedTimerId.current)
     }
   }, [])
 
@@ -136,11 +139,9 @@ const HostSession = () => {
           title: "Added to queue",
           description: `${name} has been added to the queue`,
         })
-
-      } catch (error) {
-
-      }
-    }, [toast, suggested]
+      } catch (error) {}
+    },
+    [toast, suggested],
   )
 
   const handleReject = useCallback(
