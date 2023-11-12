@@ -7,7 +7,7 @@ import { Album, Artist, Image, Song } from "@prisma/client"
 import { useSessionManagement } from "@/app/hooks/useSessionManagement"
 import { postSampleData } from "@/data/songs"
 import { getUserQueued } from "@/lib/prisma/queue"
-import { getSuggested, getUserSuggested } from "@/lib/prisma/suggested"
+import { acceptSuggestedSong, getSuggested, getUserSuggested } from "@/lib/prisma/suggested"
 import { Context } from "@/lib/validators/context"
 
 import Search from "./search/search"
@@ -17,9 +17,9 @@ import CurrentlyPlaying from "./currentlyPlaying"
 import { LeaveSession } from "./sessionButtons"
 import SongCarousel from "./songCarousel"
 
-interface sharedSessionProps {}
+interface sharedSessionProps { }
 
-const SharedSession: FC<sharedSessionProps> = ({}) => {
+const SharedSession: FC<sharedSessionProps> = ({ }) => {
   const currentlyPlaying = useSelector(
     (state: Context) => state.currentlyPlaying,
   )
@@ -117,6 +117,7 @@ const HostSession = () => {
   const handleApprove = useCallback(
     (id: string, name: string) => {
       console.log("APPROVED: " + id)
+      acceptSuggestedSong(id)
       toast({
         title: "Added to queue",
         description: `${name} has been added to the queue`,

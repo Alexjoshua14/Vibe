@@ -120,8 +120,12 @@ export async function updateCurrentlyPlayingDB(
         uri: artist.uri,
       }))
 
-      let song = await prisma.song.create({
-        data: {
+      let song = await prisma.song.upsert({
+        where: {
+          uri: currentlyPlaying.item.uri,
+        },
+        update: {},
+        create: {
           id: currentlyPlaying.item.id,
           name: currentlyPlaying.item.name,
           duration_ms: currentlyPlaying.item.duration_ms,
@@ -131,20 +135,30 @@ export async function updateCurrentlyPlayingDB(
           explicit: currentlyPlaying.item.explicit,
           popularity: currentlyPlaying.item.popularity,
           artists: {
-            create: {
-              ...artists[0],
+            connectOrCreate: {
+              where: {
+                uri: artists[0].uri,
+              },
+              create: {
+                ...artists[0],
+              },
             },
           },
           album: {
-            create: {
-              href: currentlyPlaying.item.album.href,
-              name: currentlyPlaying.item.album.name,
-              uri: currentlyPlaying.item.album.uri,
-              images: {
-                create: {
-                  height: currentlyPlaying.item.album.images[0].height,
-                  width: currentlyPlaying.item.album.images[0].width,
-                  url: currentlyPlaying.item.album.images[0].url,
+            connectOrCreate: {
+              where: {
+                uri: currentlyPlaying.item.album.uri,
+              },
+              create: {
+                href: currentlyPlaying.item.album.href,
+                name: currentlyPlaying.item.album.name,
+                uri: currentlyPlaying.item.album.uri,
+                images: {
+                  create: {
+                    height: currentlyPlaying.item.album.images[0].height,
+                    width: currentlyPlaying.item.album.images[0].width,
+                    url: currentlyPlaying.item.album.images[0].url,
+                  },
                 },
               },
             },
@@ -159,7 +173,11 @@ export async function updateCurrentlyPlayingDB(
         data: {
           is_playing: currentlyPlaying.is_playing,
           progress_ms: currentlyPlaying.progress_ms,
-          songId: song.id,
+          song: {
+            connect: {
+              id: song.id,
+            },
+          },
         },
         include: {
           song: {

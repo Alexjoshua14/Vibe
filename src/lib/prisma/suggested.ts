@@ -4,7 +4,7 @@ import { Album, Artist, Image, Song, Suggested } from "@prisma/client"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { getSong } from "@/utilities/spotifyAPI"
+import { addToQueue, getSong } from "@/utilities/spotifyAPI"
 
 import prisma from "../prisma"
 import { SpotifyItem } from "../validators/spotify"
@@ -54,6 +54,9 @@ export async function getUserSuggested() {
       })
       .then((suggestedWrapped) => suggestedWrapped?.suggested ?? null)
   }
+
+  console.log(JSON.stringify(suggested, null, 2))
+
   return suggested
 }
 
@@ -73,6 +76,8 @@ export async function addSongToSuggested(song: SpotifyItem) {
     })
     .then((wrapped) => wrapped?.currentlyPlaying?.suggestedId ?? null)
 
+  console.log("Suggested id was found to be: ", suggestedId)
+
   if (!suggestedId) return false
 
   const artistsPromises = song.artists.map((artist) => {
@@ -91,7 +96,7 @@ export async function addSongToSuggested(song: SpotifyItem) {
 
   const artists = await Promise.all(artistsPromises)
 
-  const albumPromise = await prisma.album.upsert({
+  const album = await prisma.album.upsert({
     where: {
       uri: song.album.uri,
     },
@@ -100,6 +105,13 @@ export async function addSongToSuggested(song: SpotifyItem) {
       name: song.album.name,
       href: song.album.href,
       uri: song.album.uri,
+      images: {
+        create: song.album.images.map((image) => ({
+          url: image.url,
+          width: image.width,
+          height: image.height,
+        })),
+      },
       artists: {
         connect: artists.map((artist) => ({ id: artist.id })),
       },
@@ -117,7 +129,7 @@ export async function addSongToSuggested(song: SpotifyItem) {
       type: song.type,
       album: {
         connect: {
-          id: albumPromise.id,
+          id: album.id,
         },
       },
       artists: {
@@ -125,6 +137,8 @@ export async function addSongToSuggested(song: SpotifyItem) {
       },
     },
   })
+
+  console.log("Song was created: ", songDB)
 
   const res = await prisma.suggested.update({
     where: {
@@ -138,16 +152,52 @@ export async function addSongToSuggested(song: SpotifyItem) {
       },
     },
   })
+
+  console.log("Song should be connected to suggested")
 }
 
 export async function acceptSuggestedSong(
-  suggestedId: string,
-  queueId: string,
   songId: string,
 ) {
+  // Add to actual spotify queue
+  const user = await getServerSession(authOptions)
+  if (!user?.accessToken)
+    throw new Error("No access token found")
+
+  const ids = await prisma.user.findFirst({
+    where: {
+      id: user?.user?.id,
+    },
+    select: {
+      queueId: true,
+      suggestedId: true,
+    }
+  })
+
+  if (ids === null || ids.queueId === null || ids.suggestedId === null) 
+    throw new Error("No queue and/or suggested id found")
+
+  const { uri } = await prisma.song.findFirst({
+    where: {
+      id: songId,
+    },
+    select: {
+      uri: true
+    }
+  }) ?? { uri: null }
+
+  if (uri === null)
+    throw new Error("No song uri found")
+
+
+  const res = await addToQueue(user?.accessToken, uri)
+
+  if (res === false) 
+    return false
+
   const queue = await prisma.queue.update({
     where: {
-      id: queueId,
+      id: ids.queueId,
     },
     data: {
       songs: {
@@ -171,7 +221,7 @@ export async function acceptSuggestedSong(
   // UNIT TEST CASE: Ensure that suggested song is removed from suggested
   const suggested = await prisma.suggested.update({
     where: {
-      id: suggestedId,
+      id: ids.suggestedId,
     },
     data: {
       songs: {

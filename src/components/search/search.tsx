@@ -54,6 +54,7 @@ const Search: FC<searchProps> = ({}) => {
    */
   const addToQueue = async () => {
     try {
+      console.log("Adding to suggested queue")
       if (!selectedSong) throw new Error("No song selected")
       const result = await addSongToSuggested(selectedSong)
       //const result = await addToQueueClient(selectedSong.uri)
