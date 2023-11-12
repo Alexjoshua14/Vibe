@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils"
 import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
 import { setStatus } from "@/redux/reducers/status"
 
-
 /**
  * NextAuth authentication buttons
  *
@@ -46,16 +45,30 @@ export const ProfileButton = () => {
 
 export const EndSession = () => {
   return (
-    <button onClick={() => destroySession} className="bg-red-950 text-stone-50 px-4 py-2 rounded glassmorphism-2-interactive">
+    <button
+      onClick={() => destroySession}
+      className="bg-red-950 text-stone-50 px-4 py-2 rounded glassmorphism-2-interactive"
+    >
       End Session ⚠️
     </button>
   )
 }
 
-export const CallbackButton = ({ callback, text, className }: { callback: () => void, text: string, className?: string }) => {
+export const CallbackButton = ({
+  callback,
+  text,
+  className,
+}: {
+  callback: () => void
+  text: string
+  className?: string
+}) => {
   return (
     <button
-      className={cn(`px-4 py-2 bg-teal-900 text-slate-50 text-lg rounded`, className)}
+      className={cn(
+        `px-4 py-2 bg-teal-900 text-slate-50 text-lg rounded`,
+        className,
+      )}
       onClick={() => callback()}
     >
       {text}
@@ -64,17 +77,24 @@ export const CallbackButton = ({ callback, text, className }: { callback: () => 
 }
 
 interface JoinSessionProps extends HTMLAttributes<HTMLButtonElement> {
-  sessionId: string,
-  text: string,
+  sessionId: string
+  text: string
   handleJoinSession: (sessionId: string) => void
 }
 
-export const JoinSession: FC<JoinSessionProps> = ({ sessionId, text, handleJoinSession, className }) => {
-
+export const JoinSession: FC<JoinSessionProps> = ({
+  sessionId,
+  text,
+  handleJoinSession,
+  className,
+}) => {
   return (
     <button
       onClick={() => handleJoinSession(sessionId)}
-      className={cn("glassmorphism-2-interactive px-4 py-2 rounded !bg-tertiary", className)}
+      className={cn(
+        "glassmorphism-2-interactive px-4 py-2 rounded !bg-tertiary",
+        className,
+      )}
     >
       {text}
     </button>

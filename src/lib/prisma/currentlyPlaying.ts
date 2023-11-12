@@ -7,7 +7,11 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import prisma from "../prisma"
 import { CurrentlyPlaying } from "../validators/spotify"
 
-export async function getCurrentlyPlayingDB(includeQueue?: boolean, includeSuggested?: boolean, includeMembers?: boolean) {
+export async function getCurrentlyPlayingDB(
+  includeQueue?: boolean,
+  includeSuggested?: boolean,
+  includeMembers?: boolean,
+) {
   try {
     const session = await getServerSession(authOptions)
 
@@ -17,18 +21,18 @@ export async function getCurrentlyPlayingDB(includeQueue?: boolean, includeSugge
 
     const cp = await prisma.currentlyPlaying.findFirst({
       where: {
-        userId: session.user.id
+        userId: session.user.id,
       },
       include: {
         song: {
           include: {
-            artists: true
-          }
+            artists: true,
+          },
         },
         queue: includeQueue,
         suggested: includeSuggested,
-        members: includeMembers, 
-      }
+        members: includeMembers,
+      },
     })
 
     return cp ?? null
@@ -36,13 +40,17 @@ export async function getCurrentlyPlayingDB(includeQueue?: boolean, includeSugge
     console.error(err)
   }
 
-  return null 
+  return null
 }
 
-export async function getCurrentlyPlayingDBMember(cpId: string | undefined, includeQueue?: boolean, includeSuggested?: boolean, includeMembers?: boolean) {
-  if (cpId === undefined)
-    return null;
-  
+export async function getCurrentlyPlayingDBMember(
+  cpId: string | undefined,
+  includeQueue?: boolean,
+  includeSuggested?: boolean,
+  includeMembers?: boolean,
+) {
+  if (cpId === undefined) return null
+
   try {
     const session = await getServerSession(authOptions)
 
@@ -52,18 +60,18 @@ export async function getCurrentlyPlayingDBMember(cpId: string | undefined, incl
 
     const cp = await prisma.currentlyPlaying.findFirst({
       where: {
-        id: cpId 
+        id: cpId,
       },
       include: {
         song: {
           include: {
-            artists: true
-          }
+            artists: true,
+          },
         },
         queue: includeQueue,
         suggested: includeSuggested,
-        members: includeMembers, 
-      }
+        members: includeMembers,
+      },
     })
 
     return cp ?? null
@@ -71,10 +79,15 @@ export async function getCurrentlyPlayingDBMember(cpId: string | undefined, incl
     console.error(err)
   }
 
-  return null 
+  return null
 }
 
-export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlaying, includeQueue?: boolean, includeSuggested?: boolean, includeMembers?: boolean) {
+export async function updateCurrentlyPlayingDB(
+  currentlyPlaying: CurrentlyPlaying,
+  includeQueue?: boolean,
+  includeSuggested?: boolean,
+  includeMembers?: boolean,
+) {
   try {
     const session = await getServerSession(authOptions)
 
@@ -84,33 +97,32 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
 
     let cp = await prisma.currentlyPlaying.findFirst({
       where: {
-        userId: session.user.id
+        userId: session.user.id,
       },
       include: {
         song: {
           include: {
-            artists: true
-          }
+            artists: true,
+          },
         },
         queue: includeQueue,
         suggested: includeSuggested,
-        members: includeMembers, 
-      }
+        members: includeMembers,
+      },
     })
 
     let artists
 
     if (currentlyPlaying.item && cp?.song?.uri !== currentlyPlaying.item.uri) {
-      artists = currentlyPlaying.item.artists.map((artist) => (
-        {
-          name: artist.name,
-          href: artist.href,
-          uri: artist.uri,
-        }
-      ))
+      artists = currentlyPlaying.item.artists.map((artist) => ({
+        name: artist.name,
+        href: artist.href,
+        uri: artist.uri,
+      }))
 
       let song = await prisma.song.create({
         data: {
+          id: currentlyPlaying.item.id,
           name: currentlyPlaying.item.name,
           duration_ms: currentlyPlaying.item.duration_ms,
           href: currentlyPlaying.item.href,
@@ -121,7 +133,7 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
           artists: {
             create: {
               ...artists[0],
-            }
+            },
           },
           album: {
             create: {
@@ -132,38 +144,38 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
                 create: {
                   height: currentlyPlaying.item.album.images[0].height,
                   width: currentlyPlaying.item.album.images[0].width,
-                  url: currentlyPlaying.item.album.images[0].url
-                }
-              }
-            }
-          }
-        } 
+                  url: currentlyPlaying.item.album.images[0].url,
+                },
+              },
+            },
+          },
+        },
       })
 
       cp = await prisma.currentlyPlaying.update({
         where: {
-        userId: session.user.id
+          userId: session.user.id,
         },
         data: {
           is_playing: currentlyPlaying.is_playing,
           progress_ms: currentlyPlaying.progress_ms,
-          songId: song.id
+          songId: song.id,
         },
         include: {
           song: {
-          include: {
-            artists: true
-          }
-        },
+            include: {
+              artists: true,
+            },
+          },
           queue: includeQueue,
           suggested: includeSuggested,
-          members: includeMembers, 
-        }
+          members: includeMembers,
+        },
       })
     } else {
       cp = await prisma.currentlyPlaying.update({
         where: {
-          userId: session.user.id
+          userId: session.user.id,
         },
         data: {
           is_playing: currentlyPlaying.is_playing,
@@ -171,19 +183,18 @@ export async function updateCurrentlyPlayingDB(currentlyPlaying: CurrentlyPlayin
         },
         include: {
           song: {
-          include: {
-            artists: true
-          }
-        },
+            include: {
+              artists: true,
+            },
+          },
           queue: includeQueue,
           suggested: includeSuggested,
-          members: includeMembers, 
-        }
+          members: includeMembers,
+        },
       })
     }
 
     return cp
-    
   } catch (err) {
     console.error(err)
   }
@@ -198,7 +209,10 @@ export async function addUserToSession(sessionId: string) {
     return false
   }
 
-  const cp = await prisma.currentlyPlaying.findFirst({ where: { id: sessionId }, select: { members: true }})
+  const cp = await prisma.currentlyPlaying.findFirst({
+    where: { id: sessionId },
+    select: { members: true },
+  })
 
   if (cp === null) {
     console.log("No session found with id matching the one provided..")
@@ -208,17 +222,16 @@ export async function addUserToSession(sessionId: string) {
   // Adds user to the currently playing database object's member array
   await prisma.currentlyPlaying.update({
     where: {
-      id: sessionId
+      id: sessionId,
     },
     data: {
       members: {
         connect: {
-          id: user.user.id
-        }
-      }
-    }
+          id: user.user.id,
+        },
+      },
+    },
   })
-    
 }
 
 /**
@@ -229,18 +242,21 @@ export async function reconnect() {
   const user = await getServerSession(authOptions)
   if (user === null) {
     console.log("No user found..")
-    return {cpID: null, prevStatus: 'IDLE'}
+    return { cpID: null, prevStatus: "IDLE" }
   }
 
-  const userDB = await prisma.user.findFirst({where: {id: user.user.id}, include: { currentlyPlaying: true }})
+  const userDB = await prisma.user.findFirst({
+    where: { id: user.user.id },
+    include: { currentlyPlaying: true },
+  })
 
   if (userDB?.currentlyPlaying === null) {
     console.log("No session found with id matching the one provided..")
-    return {cpID: null, prevStatus: null}
+    return { cpID: null, prevStatus: null }
   }
 
-  const prevStatus: 'HOST' | 'MEMBER' = userDB?.currentlyPlaying.userId === user.user.id ? 'HOST' : 'MEMBER'
+  const prevStatus: "HOST" | "MEMBER" =
+    userDB?.currentlyPlaying.userId === user.user.id ? "HOST" : "MEMBER"
 
-  return {cpID: userDB?.currentlyPlayingId, prevStatus}
-
+  return { cpID: userDB?.currentlyPlayingId, prevStatus }
 }

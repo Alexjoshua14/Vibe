@@ -18,6 +18,8 @@ import {
   SpotifySearchResponse,
   SpotifyTopTracksResponse,
   SpotifyTopTracksResponseSchema,
+  TrackResponse,
+  TrackResponseSchema,
 } from "@/lib/validators/spotify"
 import { mapToCurrentlyPlaying, mapToSongs } from "@/utilities/helper"
 
@@ -199,16 +201,24 @@ export async function addToQueueClient(uri: string) {
 export async function getSong(songId: string) {
   const session = await getServerSession(authOptions)
 
-  if (!session)
-    throw new Error("No session found")
+  if (!session) throw new Error("No session found")
 
-  if (session.accessToken) {
-    const res = await fetch(`${getTrackURL}/${songId}`, {
-      headers: {
-        Authorization: `Bearer ${session.accessToken}`
-      }
-    })
+  if (!session.accessToken) throw new Error("No access token found")
 
-    console.log(res)
+  const res = await fetch(`${getTrackURL}/${songId}`, {
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
+    },
+  })
+
+  console.log(res)
+
+  if (!res.ok) {
+    throw new Error("Failed to get song..\n" + res.statusText)
   }
+
+  let songjson = await res.json()
+  let song = TrackResponseSchema.parse(songjson)
+
+  return song
 }

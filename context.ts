@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { DeepMockProxy,mockDeep } from 'vitest-mock-extended'
-
+import { PrismaClient } from "@prisma/client"
+import { DeepMockProxy, mockDeep } from "vitest-mock-extended"
 
 export type Context = {
   prisma: PrismaClient
@@ -12,6 +11,6 @@ export type MockContext = {
 
 export const createMockContext = (): MockContext => {
   return {
-    prisma: mockDeep<PrismaClient>()
+    prisma: mockDeep<PrismaClient>(),
   }
 }

@@ -1,9 +1,8 @@
+import { z } from "zod"
 
-import { z } from 'zod'
+import { CurrentlyPlayingSchema } from "./spotify"
 
-import { CurrentlyPlayingSchema } from './spotify'
-
-export const StatusSchema = z.enum(['LOADING', 'IDLE', 'MEMBER', 'HOST'])
+export const StatusSchema = z.enum(["LOADING", "IDLE", "MEMBER", "HOST"])
 export type Status = z.infer<typeof StatusSchema>
 
 export const SearchSchema = z.object({

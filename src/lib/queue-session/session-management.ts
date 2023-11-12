@@ -5,7 +5,10 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 import prisma from "../prisma"
-import { getCurrentlyPlayingDB, getCurrentlyPlayingDBMember } from "../prisma/currentlyPlaying"
+import {
+  getCurrentlyPlayingDB,
+  getCurrentlyPlayingDBMember,
+} from "../prisma/currentlyPlaying"
 import { addSongToSuggested } from "../prisma/suggested"
 
 export async function createSession() {
@@ -219,8 +222,8 @@ export async function listAllSessions() {
 export async function getQueueSession(sessionId: string) {
   const queueSession = await prisma.currentlyPlaying.findFirst({
     where: {
-      id: sessionId
-    }
+      id: sessionId,
+    },
   })
 
   /** TODO: Validate that the user is allowed access to this specific queue session */
@@ -228,13 +231,13 @@ export async function getQueueSession(sessionId: string) {
   return queueSession
 }
 
-export async function addSongToQueue( songId: string) {
+export async function addSongToQueue(songId: string) {
   console.log("TESTING TESTING")
   // Grab the user who is trying to add a song
-  
+
   // Check if they are the host, a member, or not actually connected to the queue in any meaningful way
 
-  // If host, add song directly to spotify queue and perhaps also to db queue 
+  // If host, add song directly to spotify queue and perhaps also to db queue
 
   // If member, add song to currentlyPlaying's suggested songs list
 
@@ -244,7 +247,14 @@ export async function addSongToQueue( songId: string) {
     return false
   }
 
-  let user = await prisma.user.findFirst({ where: { id: userSession.user.id }, select: { currentlyPlaying: { include: { queue: true, suggested: true, members: true }}}})
+  let user = await prisma.user.findFirst({
+    where: { id: userSession.user.id },
+    select: {
+      currentlyPlaying: {
+        include: { queue: true, suggested: true, members: true },
+      },
+    },
+  })
   const cp = user?.currentlyPlaying
 
   if (cp === null || cp === undefined) {
@@ -256,17 +266,16 @@ export async function addSongToQueue( songId: string) {
     // User is the host so we can add the song directly to queues
     console.log("User identified as currently playing session host")
     // Add to spotify queue
-    
 
     // Add to database queue
-    
   }
 
-  if (cp.members.filter((member) => member.id === userSession.user.id).length > 0) {
+  if (
+    cp.members.filter((member) => member.id === userSession.user.id).length > 0
+  ) {
     // User is a member so we can add the song to suggested
     console.log("Adding song to suggested")
     const res = addSongToSuggested(cp.suggestedId, songId)
-
   } else {
     console.log("User is not found in the currently Playing member list..")
     return false
@@ -286,13 +295,12 @@ export async function removeUserFromSession() {
   // TODO: IMPLMEMENT CHECK TO MAKE SURE THIS WENT THROUGH
   const res = await prisma.user.update({
     where: {
-      id: user.user.id
+      id: user.user.id,
     },
     data: {
-      currentlyPlayingId: null
-    }
+      currentlyPlayingId: null,
+    },
   })
 
   return true
-
 }

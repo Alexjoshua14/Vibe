@@ -1,23 +1,24 @@
-'use client'
+"use client"
 
-import { FC } from 'react'
-import { useSelector } from 'react-redux'
+import { FC } from "react"
+import { useSelector } from "react-redux"
 
-import { Context } from '@/lib/validators/context'
+import { Context } from "@/lib/validators/context"
 
-import SetupSession from './setupSession'
-import { setupSessionProps } from './setupSession'
-import SharedSession from './sharedSession'
+import SetupSession from "./setupSession"
+import { setupSessionProps } from "./setupSession"
+import SharedSession from "./sharedSession"
 
-interface sessionDividerProps {
+interface sessionDividerProps {}
 
-}
-
-const SessionDivider: FC<sessionDividerProps & setupSessionProps> = ({ availableSessions, users }) => {
+const SessionDivider: FC<sessionDividerProps & setupSessionProps> = ({
+  availableSessions,
+  users,
+}) => {
   const status = useSelector((state: Context) => state.status)
 
   // Waits to return until the status is known
-  if (status === 'IDLE' || status === 'LOADING') {
+  if (status === "IDLE" || status === "LOADING") {
     return <SetupSession availableSessions={availableSessions} users={users} />
   } else {
     return <SharedSession />

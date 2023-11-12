@@ -1,16 +1,11 @@
+import { FC } from "react"
 
-import { FC } from 'react'
+import MusicLoader from "@/components/loading/musicLoader"
 
-import MusicLoader from '@/components/loading/musicLoader'
+interface loadingProps {}
 
-interface loadingProps {
-
-}
-
-const loading: FC<loadingProps> = ({ }) => {
-  return (
-    <MusicLoader />
-  )
+const loading: FC<loadingProps> = ({}) => {
+  return <MusicLoader />
 }
 
 export default loading

@@ -46,9 +46,11 @@ const SongInformation = ({
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
-        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
-        }`}
+      className={`flex flex-col w-full justify-between ${
+        variant === "main" && "items-center sm:items-start"
+      } ${variant != "modal" && "items-start"} ${
+        variant == "modal" && "items-center"
+      }`}
     >
       <div
         ref={titleRef}
@@ -165,9 +167,11 @@ const SongInformation2 = ({
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
-        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
-        }`}
+      className={`flex flex-col w-full justify-between ${
+        variant === "main" && "items-center sm:items-start"
+      } ${variant != "modal" && "items-start"} ${
+        variant == "modal" && "items-center"
+      }`}
     >
       <div
         ref={titleRef}
@@ -219,7 +223,7 @@ const SongInformation2 = ({
 export const SongCard2 = ({
   song,
   progress_ms,
-  imageURL
+  imageURL,
 }: {
   song: Song
   progress_ms?: number
@@ -232,18 +236,16 @@ export const SongCard2 = ({
                  glassmorphism-white glassmorphism-2`}
     >
       <Box className="flex flex-col sm:flex-row center w-full overflow-hidden">
-        {imageURL !== ""
-          ? (
-            <CardMedia
-              component="img"
-              className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
-              image={imageURL}
-              alt={song.name}
-            />
-          )
-          : (
-            <div className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square bg-gradient-to-tr from-teal-950 to-teal-500 glassmorphism" />
-          )}
+        {imageURL !== "" ? (
+          <CardMedia
+            component="img"
+            className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square"
+            image={imageURL}
+            alt={song.name}
+          />
+        ) : (
+          <div className="w-[300px] h-[300px] sm:w-[140px] sm:h-[140px] aspect-square bg-gradient-to-tr from-teal-950 to-teal-500 glassmorphism" />
+        )}
         <CardContent className="flex flex-col justify-between w-full sm:pe-4 overflow-hidden">
           <SongInformation2 song={song} variant={"main"} />
           {progress_ms !== undefined && progress_ms !== null && (
@@ -278,13 +280,16 @@ export const SearchResult = ({
   className,
   props,
 }: {
-  item: SpotifyItem,
-  className?: string,
+  item: SpotifyItem
+  className?: string
   [key: string]: any
 }) => {
   return (
     <div
-      className={cn(`rounded w-[300px] sm:w-[400px] pe-4 flex h-fit`, className)}
+      className={cn(
+        `rounded w-[300px] sm:w-[400px] pe-4 flex h-fit`,
+        className,
+      )}
       {...props}
     >
       <div className="flex center">
@@ -418,5 +423,3 @@ export const AddToQueueModal = ({
     </Modal>
   )
 }
-
-

@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { FC, useEffect, useState } from 'react'
-import { HTMLMotionProps, motion } from 'framer-motion'
+import { FC, useEffect, useState } from "react"
+import { HTMLMotionProps, motion } from "framer-motion"
 
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils"
 
 interface scrollingTextProps extends HTMLMotionProps<"p"> {
   text: string
@@ -17,7 +17,12 @@ interface scrollingTextProps extends HTMLMotionProps<"p"> {
  * @param text string to be displayed
  * @param containerRef reference to the container element
  */
-const ScrollingText: FC<scrollingTextProps> = ({ text, containerRef, className, ...props }) => {
+const ScrollingText: FC<scrollingTextProps> = ({
+  text,
+  containerRef,
+  className,
+  ...props
+}) => {
   const [translation, setTranslation] = useState<number>(0)
   const [duration, setDuration] = useState<number>(1)
 

@@ -3,7 +3,11 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 import { CallbackButton, JoinSession } from "@/components/buttons"
-import { CreateSession, DestroySession, TEMPORARYGRAB } from "@/components/sessionButtons"
+import {
+  CreateSession,
+  DestroySession,
+  TEMPORARYGRAB,
+} from "@/components/sessionButtons"
 import SessionDivider from "@/components/sessionDivider"
 import SetupSession from "@/components/setupSession"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -14,7 +18,6 @@ import {
   listAllSessions,
 } from "@/lib/queue-session/session-management"
 
-
 /**
  * Allows the user to either start a shared queue session or join one
  *
@@ -22,8 +25,6 @@ import {
  *  - Verify user is logged in
  */
 export default async function Player() {
-
-
   let availableSessions = await listAllSessions()
   let userPromises = availableSessions.map(async (session) => {
     const user = await getUserDeep(session.userId)
