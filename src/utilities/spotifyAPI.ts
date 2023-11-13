@@ -9,6 +9,7 @@ import {
   getTrackURL,
   playbackStateURL,
   searchURL,
+  spotifyAPI,
   topTracksURL,
 } from "@/constants/spotify"
 import {
@@ -21,7 +22,7 @@ import {
   TrackResponse,
   TrackResponseSchema,
 } from "@/lib/validators/spotify"
-import { mapToCurrentlyPlaying, mapToSongs } from "@/utilities/helper"
+import { getUserAccessToken, mapToCurrentlyPlaying, mapToSongs } from "@/utilities/helper"
 
 /**
  * Get the user's top tracks
@@ -199,15 +200,11 @@ export async function addToQueueClient(uri: string) {
 }
 
 export async function getSong(songId: string) {
-  const session = await getServerSession(authOptions)
-
-  if (!session) throw new Error("No session found")
-
-  if (!session.accessToken) throw new Error("No access token found")
+  const accessToken = await getUserAccessToken()
 
   const res = await fetch(`${getTrackURL}/${songId}`, {
     headers: {
-      Authorization: `Bearer ${session.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   })
 
@@ -221,4 +218,39 @@ export async function getSong(songId: string) {
   let song = TrackResponseSchema.parse(songjson)
 
   return song
+}
+
+
+export async function likeSong(songId: string) {
+  const accessToken = await getUserAccessToken()
+
+  // TODO: Think that this is currently beyond the scope requested
+  if (true)
+    return false
+
+  const res = await fetch(`${spotifyAPI}/me/tracks?ids=${songId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  return res.ok
+}
+
+export async function unlikeSong(songId: string) {
+  const accessToken = await getUserAccessToken()
+
+  // TODO: Think that this is currently beyond the scope requested
+  if (true)
+    return false
+
+  const res = await fetch(`${spotifyAPI}/me/tracks?ids=${songId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+  
+  return res.ok
 }

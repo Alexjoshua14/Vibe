@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { Context } from "@/lib/validators/context"
 import { setSearching } from "@/redux/reducers/search"
 import { msToTime } from "@/utilities/helper"
+import { likeSong, unlikeSong } from "@/utilities/spotifyAPI"
 
 import ScrollingText from "../scrollingText"
 import { Progress } from "../ui/progress"
@@ -22,6 +23,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
     quality?: number
   }
   songName: string
+  id: string
   artists: string
   duration: number
   progress: {
@@ -34,6 +36,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export const Card: FC<CardProps> = ({
   image,
   songName,
+  id,
   artists,
   duration,
   progress,
@@ -45,6 +48,16 @@ export const Card: FC<CardProps> = ({
   const { searching } = useSelector((state: Context) => state.search)
   const dispatch = useDispatch()
   const [liked, setLiked] = useState(false)
+
+  const handleLike = () => {
+    setLiked(true)
+    likeSong(id)
+  }
+
+  const handleUnlike = () => {
+    setLiked(false)
+    unlikeSong(id)
+  }
 
   return (
     <motion.div
@@ -118,7 +131,7 @@ export const Card: FC<CardProps> = ({
               {liked ?
                 <motion.button
                   key={`liked-${songName}`}
-                  onClick={() => setLiked(false)}
+                  onClick={handleUnlike}
                   animate={{
                     scale: [.2, 1.4, 1],
                     opacity: [.4, 1.4, 1],
@@ -133,7 +146,7 @@ export const Card: FC<CardProps> = ({
                 :
                 <motion.button
                   key={`unliked-${songName}`}
-                  onClick={() => setLiked(true)}
+                  onClick={handleLike}
                   className="z-10 absolute top-1/2 left-1/2"
                   animate={{
                     scale: 1,
