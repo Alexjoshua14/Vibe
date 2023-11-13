@@ -55,8 +55,6 @@ export async function getUserSuggested() {
       .then((suggestedWrapped) => suggestedWrapped?.suggested ?? null)
   }
 
-  console.log(JSON.stringify(suggested, null, 2))
-
   return suggested
 }
 

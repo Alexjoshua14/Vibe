@@ -23,9 +23,9 @@ import CurrentlyPlaying from "./currentlyPlaying"
 import { LeaveSession } from "./sessionButtons"
 import SongCarousel from "./songCarousel"
 
-interface sharedSessionProps {}
+interface sharedSessionProps { }
 
-const SharedSession: FC<sharedSessionProps> = ({}) => {
+const SharedSession: FC<sharedSessionProps> = ({ }) => {
   const currentlyPlaying = useSelector(
     (state: Context) => state.currentlyPlaying,
   )
@@ -37,7 +37,24 @@ const SharedSession: FC<sharedSessionProps> = ({}) => {
 
 const HostSession = () => {
   const { handleLeaveQueueSession } = useSessionManagement()
-  const [suggested, setSuggested] = useState<
+  // const [suggested, setSuggested] = useState<
+  //   {
+  //     name: string
+  //     artists: string
+  //     id: string
+  //     image: { url: string; alt: string }
+  //   }[]
+  // >([])
+  // const [queued, setQueue] = useState<
+  //   {
+  //     name: string
+  //     artists: string
+  //     id: string
+  //     image: { url: string; alt: string }
+  //   }[]
+  // >([])
+
+  const suggested = useRef<
     {
       name: string
       artists: string
@@ -45,7 +62,7 @@ const HostSession = () => {
       image: { url: string; alt: string }
     }[]
   >([])
-  const [queued, setQueue] = useState<
+  const queued = useRef<
     {
       name: string
       artists: string
@@ -53,6 +70,32 @@ const HostSession = () => {
       image: { url: string; alt: string }
     }[]
   >([])
+
+  const setSuggested = (update: typeof suggested.current) => {
+    // TODO: Optimize this 
+    const different =
+      update.length === suggested.current.length
+      &&
+      update.every((song) => suggested.current.includes(song))
+
+    if (different)
+      return
+
+    suggested.current = update
+  }
+
+  const setQueue = (update: typeof queued.current) => {
+    // TODO: Optimize this 
+    const different =
+      update.length === queued.current.length
+      &&
+      update.map((song) => song.id).every((id) => queued.current.map((song) => song.id).includes(id))
+
+    if (different)
+      return
+
+    queued.current = update
+  }
 
   const suggestedTimerId = useRef<NodeJS.Timeout | null>(null)
   const queuedTimerId = useRef<NodeJS.Timeout | null>(null)
@@ -111,15 +154,6 @@ const HostSession = () => {
     }, 10000)
   }, [])
 
-  const tempSong = {
-    name: postSampleData.item.name,
-    artists: postSampleData.item.artists
-      .map((artist) => artist.name)
-      .join(", "),
-    id: 0,
-    image: { url: postSampleData.item.album.images[0].url, alt: "" },
-  }
-
   // const queued = [{ ...tempSong, id: Math.random() }, { ...tempSong, id: Math.random() }, { ...tempSong, id: Math.random() }, { ...tempSong, id: Math.random() }, { ...tempSong, id: Math.random() }]
   // const host = currentlyPlaying?.userId ? getUser(currentlyPlaying.userId).then((user) => user) : null
 
@@ -131,18 +165,20 @@ const HostSession = () => {
         acceptSuggestedSong(id) ?? { queue: null, suggested: null }
 
         // Optimistic update
-        setQueue((prev) => [...prev, suggested.find((song) => song.id === id)!])
-        setSuggested((prev) => prev.filter((song) => song.id !== id))
+        const updatedQueue = [...queued.current, suggested.current.find((song) => song.id === id)!]
+        const updatedSuggested = suggested.current.filter((song) => song.id !== id)
+        setQueue(updatedQueue)
+        setSuggested(updatedSuggested)
+        // setQueue((prev) => [...prev, suggested.find((song) => song.id === id)!])
+        // setSuggested((prev) => prev.filter((song) => song.id !== id))
 
         console.log("APPROVED: " + id)
         toast({
           title: "Added to queue",
           description: `${name} has been added to the queue`,
         })
-      } catch (error) {}
-    },
-    [toast, suggested],
-  )
+      } catch (error) { }
+    }, [toast, suggested])
 
   const handleReject = useCallback(
     (id: string, name: string) => {
@@ -150,15 +186,19 @@ const HostSession = () => {
       rejectSuggestedSong(id)
 
       // Optimistic update
-      setSuggested((prev) => prev.filter((song) => song.id !== id))
+      const updatedSuggested = suggested.current.filter(
+        (song) => song.id !== id,
+      )
+
+      setSuggested(updatedSuggested)
+
+      // setSuggested((prev) => prev.filter((song) => song.id !== id))
 
       toast({
         title: "Removed from suggested",
         description: `${name} has been rejected`,
       })
-    },
-    [toast],
-  )
+    }, [toast])
 
   return (
     <div className="w-full h-full">
