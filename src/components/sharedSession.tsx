@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, Suspense, useCallback, useEffect, useRef, useState } from "react"
+import { FC, Suspense, use, useCallback, useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { Album, Artist, Image, Song } from "@prisma/client"
 import { set } from "zod"
@@ -17,6 +17,7 @@ import {
 import { Context } from "@/lib/validators/context"
 
 import Search from "./search/search"
+import { ToastAction } from "./ui/toast"
 import { useToast } from "./ui/use-toast"
 import { CallbackButton } from "./buttons"
 import CurrentlyPlaying from "./currentlyPlaying"
@@ -70,6 +71,8 @@ const HostSession = () => {
       image: { url: string; alt: string }
     }[]
   >([])
+
+  const rejectedTimerId = useRef<NodeJS.Timeout | null>(null)
 
   const setSuggested = (update: typeof suggested.current) => {
     // TODO: Optimize this 
@@ -182,8 +185,9 @@ const HostSession = () => {
 
   const handleReject = useCallback(
     (id: string, name: string) => {
-      console.log("REJECTED: " + id)
-      rejectSuggestedSong(id)
+      rejectedTimerId.current = setTimeout(() => {
+        rejectSuggestedSong(id)
+      }, 4000)
 
       // Optimistic update
       const updatedSuggested = suggested.current.filter(
@@ -192,11 +196,17 @@ const HostSession = () => {
 
       setSuggested(updatedSuggested)
 
-      // setSuggested((prev) => prev.filter((song) => song.id !== id))
+      const undo = () => {
+        if (rejectedTimerId.current)
+          clearTimeout(rejectedTimerId.current)
+      }
 
       toast({
         title: "Removed from suggested",
         description: `${name} has been rejected`,
+        action: (
+          <ToastAction altText={`Remove ${name} from queue`} onClick={undo}>Undo</ToastAction>
+        )
       })
     }, [toast])
 
