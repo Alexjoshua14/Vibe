@@ -1,8 +1,9 @@
 "use client"
 
 import React, { FC, HTMLAttributes, useRef, useState } from "react"
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io"
 import { useDispatch, useSelector } from "react-redux"
-import { easeInOut, motion } from "framer-motion"
+import { AnimatePresence, anticipate, easeInOut, motion } from "framer-motion"
 import Image from "next/image"
 
 import { cn } from "@/lib/utils"
@@ -43,6 +44,7 @@ export const Card: FC<CardProps> = ({
   const artistNameRef = useRef(null)
   const { searching } = useSelector((state: Context) => state.search)
   const dispatch = useDispatch()
+  const [liked, setLiked] = useState(false)
 
   return (
     <motion.div
@@ -54,11 +56,10 @@ export const Card: FC<CardProps> = ({
       className={cn(
         `flex flex-col items-center justify-center gap-4 
             max-h-[600px] min-w-[180px] w-full max-w-[400px]
-            ${
-              searching
-                ? "h-[100px] aspect-[5/2]"
-                : "min-h-[270px] aspect-[2/3]"
-            }`,
+            ${searching
+          ? "h-[100px] aspect-[5/2]"
+          : "min-h-[270px] aspect-[2/3]"
+        }`,
         className,
       )}
     >
@@ -93,25 +94,60 @@ export const Card: FC<CardProps> = ({
             <ScrollingText
               containerRef={songNameRef}
               text={songName}
-              className={`text-primary ${
-                searching ? "text-base" : "text-xl"
-              } leading-tight`}
+              className={`text-primary ${searching ? "text-base" : "text-xl"
+                } leading-tight`}
             />
           </div>
           <div ref={artistNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
               containerRef={artistNameRef}
               text={artists}
-              className={`text-secondary ${
-                searching ? "text-sm" : "text-lg"
-              } font-light leading-tight`}
+              className={`text-secondary ${searching ? "text-sm" : "text-lg"
+                } font-light leading-tight`}
             />
           </div>
         </div>
-        <div className="w-full flex items-center justify-between gap-2 text-tertiary text-xs">
-          <p>{msToTime(progress.time)}</p>
-          <Progress value={progress.percentage} />
-          <p>{msToTime(duration)}</p>
+        <div className="w-full flex items-center justify-between gap-4 text-tertiary text-xs">
+          <div className="flex-1 h-full flex items-center justify-between gap-2">
+            {!searching && <p>{msToTime(progress.time)}</p>}
+            <Progress value={progress.percentage} />
+            {!searching && <p>{msToTime(duration)}</p>}
+          </div>
+          <div className="relative w-8 min-h-[30px] h-full">
+            <AnimatePresence>
+              {liked ?
+                <motion.button
+                  key={`liked-${songName}`}
+                  onClick={() => setLiked(false)}
+                  animate={{
+                    scale: [.2, 1.4, 1],
+                    opacity: [.4, 1.4, 1],
+                    translate: ['-50% -50%'],
+                  }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ duration: .9, ease: 'easeInOut' }}
+                  className="z-20 absolute top-1/2 left-1/2"
+                >
+                  <IoIosHeart size={24} className="text-red-500" />
+                </motion.button>
+                :
+                <motion.button
+                  key={`unliked-${songName}`}
+                  onClick={() => setLiked(true)}
+                  className="z-10 absolute top-1/2 left-1/2"
+                  animate={{
+                    scale: 1,
+                    opacity: 1,
+                    translate: ['-50% -50%'],
+                  }}
+                  exit={{ scale: 4, opacity: 0 }}
+                  transition={{ duration: .4, ease: 'easeInOut' }}
+                >
+                  <IoIosHeartEmpty size={24} />
+                </motion.button>
+              }
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </motion.div>
