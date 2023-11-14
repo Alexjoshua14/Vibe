@@ -30,7 +30,7 @@ const CarouselIndicator: FC<CarouselIndicatorProps> = ({ items, keybase, indexIn
   }
 
   return (
-    <div className="h-8 py-2 flex items-center justify-center gap-[10px]">
+    <div className="h-4 py-2 flex items-center justify-center gap-[10px]">
       {items.current.map((_, index) => (
         <motion.button
           key={`${keybase}-${index}`}

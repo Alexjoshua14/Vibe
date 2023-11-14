@@ -61,18 +61,18 @@ const SongCarousel: FC<SongCarouselProps> = ({
   }, [songs])
 
   return (
-    <div className="w-full h-fit ps-4 py-2">
+    <div className="w-full min-h-fit h-full flex flex-col ps-2 sm:ps-4 pe-6 py-2 gap-3">
       {header && (
         <div className="flex items-center whitespace-nowrap gap-2">
-          <h2 className="font-extralight text-2xl">{header}</h2>
+          <h2 className="font-extralight text-lg sm:text-2xl">{header}</h2>
           <p className="text-secondary text-xs">{`[${songs.current.length}]`}</p>
         </div>
       )}
-      <div className="w-full h-[156px] relative ps-4 py-2 carousel-container">
-        <div className="relative w-full h-fit flex items-center overflow-x-scroll overflow-y-visible no-scrollbar">
+      <div className="flex-1 w-full relative ps-4 carousel-container">
+        <div className="relative w-full h-full flex items-center overflow-x-scroll overflow-y-visible no-scrollbar">
           <div
             role="carousel-track"
-            className="w-fit min-w-full h-fit grid grid-rows-1 grid-flow-col gap-8"
+            className="w-fit min-h-[90px] h-full grid grid-rows-1 grid-flow-col gap-8 py-1 pr-14"
           >
             {songs.current.map((song) => (
               <SongCard
