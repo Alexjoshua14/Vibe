@@ -1,3 +1,6 @@
+import { getServerSession } from "next-auth"
+
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import {
   CurrentlyPlaying,
   CurrentlyPlayingResponse,
@@ -122,4 +125,16 @@ export function progressToPercentage(time: number, duration: number): number {
   if (percentage < 0 || percentage > 1) percentage = time < duration ? 0 : 1
 
   return Math.floor(percentage * 100)
+}
+
+export async function getUserAccessToken() {
+  const session = await getServerSession(authOptions)
+
+  if (!session) 
+    throw new Error("No session found")
+
+  if (!session.accessToken) 
+    throw new Error("No access token found")
+
+  return session.accessToken
 }

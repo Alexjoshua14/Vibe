@@ -40,6 +40,11 @@ module.exports = {
         secondary: "#494A4E",
         tertiary: "#68696E",
       },
+      colors: {
+        'bg-primary': '#FAFBFF',
+        'bg-secondary': '#F0F1F7',
+        'bg-tertiary': '#C4C6CB',
+      },
       borderRadius: {
         none: "0",
         sm: "0.125rem",

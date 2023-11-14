@@ -5,6 +5,10 @@ import Image from "next/image"
 
 import { cn } from "@/lib/utils"
 
+import SongCardButton from "../buttons/songCardButtons"
+import ImageHolder from "../Images/imageHolder"
+import ScrollingText from "../scrollingText"
+
 interface SongCardProps extends HTMLAttributes<HTMLDivElement> {
   image: {
     url: string
@@ -19,47 +23,6 @@ interface SongCardProps extends HTMLAttributes<HTMLDivElement> {
   }
 }
 
-interface SongCardButtonProps extends HTMLAttributes<HTMLButtonElement> {
-  text?: string
-  icon?: {
-    icon: IconType
-    size: number
-  }
-  callback: () => void
-}
-
-const SongCardButton: FC<SongCardButtonProps> = ({
-  text,
-  icon,
-  className,
-  callback,
-}) => {
-  if (text)
-    return (
-      <button
-        className={cn(
-          "p-2 rounded-full glassmorphism-tertiary-interactive hover:scale-110 transition-all",
-          className,
-        )}
-        onClick={callback}
-      >
-        <p>{text}</p>
-      </button>
-    )
-  else if (icon)
-    return (
-      <button
-        className={cn(
-          "p-2 rounded-full glassmorphism-tertiary-interactive hover:scale-110 transition-all",
-          className,
-        )}
-        onClick={callback}
-      >
-        <icon.icon size={icon.size} />
-      </button>
-    )
-}
-
 const SongCard: FC<SongCardProps> = ({
   image,
   songName,
@@ -71,31 +34,20 @@ const SongCard: FC<SongCardProps> = ({
   return (
     <div
       className={cn(
-        "relative flex items-center gap-4 h-[140px] aspect-[5/2]",
+        "relative flex items-center h-[90px] sm:h-[140px] aspect-[5/2]",
         className,
       )}
       {...props}
     >
-      <div className="relative h-full aspect-square rounded overflow-clip glassmorphism-primary">
-        <Image
-          src={image.url}
-          alt={image.alt}
-          height={140}
-          width={140}
-          quality={image.quality ?? 75}
-          className="object-contain"
-        />
+      <div className="h-full aspect-square">
+        <ImageHolder src={image.url} alt={image.alt} />
       </div>
-      <div className="absolute flex flex-col w-2/3 px-4 py-2 gap-2 left-24 glassmorphism-tertiary rounded">
-        <div>
-          <p className="text-primary text-lg h-[1.75rem]">{songName}</p>
-          <p className="text-tertiary text-sm h-[1.5rem] font-light">
-            {artists}
-          </p>
-        </div>
+      <div className="absolute flex flex-col w-2/3 h-2/3 px-4 py-2 left-[25%] glassmorphism-tertiary rounded">
+        <ScrollingText text={songName} className={`text-primary text-lg`} />
+        <ScrollingText text={artists} className={`text-tertiary text-sm font-light`} />
       </div>
       {interactive && (
-        <div className="absolute right-8 bottom-4 w-24 h-10 flex justify-around items-center">
+        <div className="absolute right-0 sm:right-[15%] sm:bottom-0 w-10 sm:w-24 h-full sm:h-10 flex flex-col sm:flex-row justify-around items-center">
           <SongCardButton
             icon={{ icon: IoMdCheckmark, size: 20 }}
             callback={interactive.onApprove}

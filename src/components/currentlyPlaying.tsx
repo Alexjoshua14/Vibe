@@ -13,9 +13,9 @@ import { msToTime } from "@/utilities/helper"
 import { Card, SkeletonCard } from "./cards/currentlyPlayingCard"
 import ScrollingText from "./scrollingText"
 
-interface currentlyPlayingProps {}
+interface currentlyPlayingProps { }
 
-const CurrentlyPlaying: FC<currentlyPlayingProps> = ({}) => {
+const CurrentlyPlaying: FC<currentlyPlayingProps> = ({ }) => {
   const status = useSelector((state: Context) => state.status)
 
   const { currentlyPlaying, progress, imageURL, loading } =
@@ -39,6 +39,7 @@ const CurrentlyPlaying: FC<currentlyPlayingProps> = ({}) => {
         image={{ url: imageURL, alt: "", quality: 100 }}
         progress={progress}
         songName={currentlyPlaying.song.name}
+        id={currentlyPlaying.song.id}
         duration={currentlyPlaying.song.duration_ms}
         artists={currentlyPlaying.song.artists
           .map((artist) => artist.name)

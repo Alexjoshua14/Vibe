@@ -1,13 +1,13 @@
 "use client"
 
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { HTMLMotionProps, motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
-interface scrollingTextProps extends HTMLMotionProps<"p"> {
+export interface scrollingTextProps extends HTMLMotionProps<"p"> {
   text: string
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef?: React.RefObject<HTMLDivElement>
 }
 
 /**
@@ -19,12 +19,13 @@ interface scrollingTextProps extends HTMLMotionProps<"p"> {
  */
 const ScrollingText: FC<scrollingTextProps> = ({
   text,
-  containerRef,
+
   className,
   ...props
 }) => {
   const [translation, setTranslation] = useState<number>(0)
   const [duration, setDuration] = useState<number>(1)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -38,7 +39,7 @@ const ScrollingText: FC<scrollingTextProps> = ({
           if (distance < 0) {
             distance *= -1
           } //Ensure distance is always positive
-          let duration = distance * 0.03
+          let duration = distance * 0.04
           if (duration < 1.5) duration = 1.5
 
           setDuration(duration)
@@ -53,22 +54,24 @@ const ScrollingText: FC<scrollingTextProps> = ({
   }, [text, containerRef])
 
   return (
-    <motion.p
-      whileInView={{ x: [0, translation, 0] }}
-      viewport={{ once: true }}
-      transition={{
-        ease: "linear",
-        delay: 2,
-        duration: duration,
-        times: [0, 0.7, 1],
-        repeat: Infinity,
-        repeatDelay: 4,
-      }}
-      className={cn("max-w-full whitespace-nowrap", className)}
-      {...props}
-    >
-      {text}
-    </motion.p>
+    <div className="h-full w-full overflow-hidden" ref={containerRef}>
+      <motion.p
+        whileInView={{ x: [0, translation, translation, 0] }}
+        viewport={{ once: true }}
+        transition={{
+          ease: "linear",
+          delay: 2,
+          duration: duration,
+          times: [0, 0.5, .75, 1],
+          repeat: Infinity,
+          repeatDelay: 4,
+        }}
+        className={cn("whitespace-nowrap", className)}
+        {...props}
+      >
+        {text}
+      </motion.p>
+    </div>
   )
 }
 
