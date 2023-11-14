@@ -1,6 +1,14 @@
-'use client'
+"use client"
 
-import { FC, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  FC,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 
 import { postSampleData } from "@/data/songs"
 
@@ -9,15 +17,17 @@ import CarouselIndicator from "./carouselIndicator"
 
 interface SongCarouselProps {
   header?: string
-  songs: MutableRefObject<{
-    name: string
-    artists: string
-    id: string
-    image: {
-      url: string
-      alt: string
-    }
-  }[]>
+  songs: MutableRefObject<
+    {
+      name: string
+      artists: string
+      id: string
+      image: {
+        url: string
+        alt: string
+      }
+    }[]
+  >
   interactive?: {
     onApprove: (id: string, name: string) => void
     onReject: (id: string, name: string) => void
@@ -29,35 +39,38 @@ const SongCarousel: FC<SongCarouselProps> = ({
   songs,
   interactive,
 }) => {
-
   const indexInFocus = useRef(0)
-  const items = useRef(songs.current.map(song => song.name))
+  const items = useRef(songs.current.map((song) => song.name))
 
-  const goTo = useCallback((index: number) => {
-    const prev = indexInFocus.current
-    indexInFocus.current = index
-    if (index < 0 || index >= songs.current.length) {
-      console.warn(`Index ${index} is out of range`)
-      return
-    }
+  const goTo = useCallback(
+    (index: number) => {
+      const prev = indexInFocus.current
+      indexInFocus.current = index
+      if (index < 0 || index >= songs.current.length) {
+        console.warn(`Index ${index} is out of range`)
+        return
+      }
 
-    // scroll carousel track to selected song
-    const songCard = document.querySelector(`[id="${songs.current[index].id}"]`)
-    if (songCard) {
-      songCard.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'start'
-      })
-    } else {
-      console.warn("Song card not found..")
-      indexInFocus.current = prev
-    }
-
-  }, [songs])
+      // scroll carousel track to selected song
+      const songCard = document.querySelector(
+        `[id="${songs.current[index].id}"]`,
+      )
+      if (songCard) {
+        songCard.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "start",
+        })
+      } else {
+        console.warn("Song card not found..")
+        indexInFocus.current = prev
+      }
+    },
+    [songs],
+  )
 
   useEffect(() => {
-    items.current = songs.current.map(song => song.name)
+    items.current = songs.current.map((song) => song.name)
   }, [songs])
 
   return (
@@ -92,7 +105,12 @@ const SongCarousel: FC<SongCarouselProps> = ({
           </div>
         </div>
       </div>
-      <CarouselIndicator items={songs} indexInFocus={indexInFocus} setIndexInFocus={goTo} keybase={`${header}`} />
+      <CarouselIndicator
+        items={songs}
+        indexInFocus={indexInFocus}
+        setIndexInFocus={goTo}
+        keybase={`${header}`}
+      />
     </div>
   )
 }

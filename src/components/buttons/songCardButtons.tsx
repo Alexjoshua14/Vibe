@@ -1,7 +1,7 @@
-import { FC, HTMLAttributes } from 'react'
-import { IconType } from 'react-icons'
+import { FC, HTMLAttributes } from "react"
+import { IconType } from "react-icons"
 
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils"
 
 interface SongCardButtonProps extends HTMLAttributes<HTMLButtonElement> {
   text?: string

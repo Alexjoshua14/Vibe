@@ -27,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="overscroll-none">
       <Providers>
-        <body className={`inter.className z-10 bg-gradient-to-t from-bg-tertiary to-bg-primary text-primary`}>
+        <body
+          className={`inter.className z-10 bg-gradient-to-t from-bg-tertiary to-bg-primary text-primary`}
+        >
           <div className={`flex flex-col min-h-screen p-2 z-20`}>
             <div className="flex-1 flex pb-[5rem]">{children}</div>
             <Toaster />

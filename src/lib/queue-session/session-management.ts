@@ -5,10 +5,6 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 import prisma from "../prisma"
-import {
-  getCurrentlyPlayingDB,
-  getCurrentlyPlayingDBMember,
-} from "../prisma/currentlyPlaying"
 import { addSongToSuggested } from "../prisma/suggested"
 import { SpotifyItem } from "../validators/spotify"
 
@@ -120,8 +116,6 @@ export async function createSession() {
     console.error(err)
     return false
   }
-
-  // Send user to delegated page
 }
 
 /** This should destroy a session completely */
@@ -233,7 +227,6 @@ export async function getQueueSession(sessionId: string) {
 }
 
 export async function addSongToQueue(song: SpotifyItem) {
-  console.log("TESTING TESTING")
   // Grab the user who is trying to add a song
 
   // Check if they are the host, a member, or not actually connected to the queue in any meaningful way

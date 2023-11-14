@@ -130,11 +130,9 @@ export function progressToPercentage(time: number, duration: number): number {
 export async function getUserAccessToken() {
   const session = await getServerSession(authOptions)
 
-  if (!session) 
-    throw new Error("No session found")
+  if (!session) throw new Error("No session found")
 
-  if (!session.accessToken) 
-    throw new Error("No access token found")
+  if (!session.accessToken) throw new Error("No access token found")
 
   return session.accessToken
 }

@@ -2,7 +2,7 @@ export const useCurrentlyPlaying = () => {
   const currentlyPlaying = {
     id: "clomcpxxp000g2j2omgzp8hnr",
     userId: "clomc94yo00032j2oe0t3fqid",
-    songId: '22',
+    songId: "22",
     progress_ms: 40000,
     is_playing: false,
     timestamp: "2023-11-06T03:37:23.724Z",
@@ -10,9 +10,9 @@ export const useCurrentlyPlaying = () => {
     queueId: "clojeb814000gp4axqg3r3nsf",
     suggestedId: "clomchsj900072j2of933e5yq",
     song: {
-      id: '22',
+      id: "22",
       name: "Cosmic Freeway",
-      albumId: '22',
+      albumId: "22",
       duration_ms: 362666,
       href: "https://api.spotify.com/v1/tracks/3tUJq43sUSw2zasgNjRY7S",
       uri: "spotify:track:3tUJq43sUSw2zasgNjRY7S",

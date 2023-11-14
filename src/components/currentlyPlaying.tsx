@@ -13,9 +13,9 @@ import { msToTime } from "@/utilities/helper"
 import { Card, SkeletonCard } from "./cards/currentlyPlayingCard"
 import ScrollingText from "./scrollingText"
 
-interface currentlyPlayingProps { }
+interface currentlyPlayingProps {}
 
-const CurrentlyPlaying: FC<currentlyPlayingProps> = ({ }) => {
+const CurrentlyPlaying: FC<currentlyPlayingProps> = ({}) => {
   const status = useSelector((state: Context) => state.status)
 
   const { currentlyPlaying, progress, imageURL, loading } =

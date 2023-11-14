@@ -1,32 +1,34 @@
-'use client'
+"use client"
 
-import { FC, MutableRefObject, useState } from 'react'
-import { motion } from 'framer-motion'
+import { FC, MutableRefObject, useState } from "react"
+import { motion } from "framer-motion"
 
 interface CarouselIndicatorProps {
   // items should be any mapable object
-  items: MutableRefObject<any[]>,
-  keybase?: string,
-  indexInFocus: MutableRefObject<number>,
-  setIndexInFocus: (index: number) => void,
+  items: MutableRefObject<any[]>
+  keybase?: string
+  indexInFocus: MutableRefObject<number>
+  setIndexInFocus: (index: number) => void
 }
 
 // TODO: Doesn't reflect when the carousel is manually scrolled.. Migrate to using motion useScroll hook
-const CarouselIndicator: FC<CarouselIndicatorProps> = ({ items, keybase, indexInFocus, setIndexInFocus }) => {
+const CarouselIndicator: FC<CarouselIndicatorProps> = ({
+  items,
+  keybase,
+  indexInFocus,
+  setIndexInFocus,
+}) => {
   const [optimisticIndex, setOptimisticIndex] = useState(indexInFocus.current)
 
-
   const goTo = (index: number) => {
-    if (index === indexInFocus.current)
-      return
+    if (index === indexInFocus.current) return
 
     if (index >= 0 && index < items.current.length) {
       setOptimisticIndex(index)
       setIndexInFocus(index)
       if (indexInFocus.current !== index)
         setOptimisticIndex(indexInFocus.current)
-    } else
-      console.warn(`Index ${index} is out of range`)
+    } else console.warn(`Index ${index} is out of range`)
   }
 
   return (
@@ -38,10 +40,9 @@ const CarouselIndicator: FC<CarouselIndicatorProps> = ({ items, keybase, indexIn
           className={`bg-teal-700 glassmorphism rounded-full h-4`}
           initial={{ width: 16 }}
           animate={{ width: optimisticIndex === index ? 32 : 16 }}
-          transition={{ duration: .6, ease: 'easeInOut' }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
         />
       ))}
-
     </div>
   )
 }

@@ -22,7 +22,11 @@ import {
   TrackResponse,
   TrackResponseSchema,
 } from "@/lib/validators/spotify"
-import { getUserAccessToken, mapToCurrentlyPlaying, mapToSongs } from "@/utilities/helper"
+import {
+  getUserAccessToken,
+  mapToCurrentlyPlaying,
+  mapToSongs,
+} from "@/utilities/helper"
 
 /**
  * Get the user's top tracks
@@ -220,13 +224,11 @@ export async function getSong(songId: string) {
   return song
 }
 
-
 export async function likeSong(songId: string) {
   const accessToken = await getUserAccessToken()
 
   // TODO: Think that this is currently beyond the scope requested
-  if (true)
-    return false
+  if (true) return false
 
   const res = await fetch(`${spotifyAPI}/me/tracks?ids=${songId}`, {
     method: "PUT",
@@ -242,8 +244,7 @@ export async function unlikeSong(songId: string) {
   const accessToken = await getUserAccessToken()
 
   // TODO: Think that this is currently beyond the scope requested
-  if (true)
-    return false
+  if (true) return false
 
   const res = await fetch(`${spotifyAPI}/me/tracks?ids=${songId}`, {
     method: "DELETE",
@@ -251,6 +252,6 @@ export async function unlikeSong(songId: string) {
       Authorization: `Bearer ${accessToken}`,
     },
   })
-  
+
   return res.ok
 }

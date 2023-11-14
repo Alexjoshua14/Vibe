@@ -1,6 +1,14 @@
 "use client"
 
-import { FC, Suspense, use, useCallback, useEffect, useRef, useState } from "react"
+import {
+  FC,
+  Suspense,
+  use,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 import { useSelector } from "react-redux"
 import { Album, Artist, Image, Song } from "@prisma/client"
 import { set } from "zod"
@@ -24,9 +32,9 @@ import CurrentlyPlaying from "./currentlyPlaying"
 import { LeaveSession } from "./sessionButtons"
 import SongCarousel from "./songCarousel"
 
-interface sharedSessionProps { }
+interface sharedSessionProps {}
 
-const SharedSession: FC<sharedSessionProps> = ({ }) => {
+const SharedSession: FC<sharedSessionProps> = ({}) => {
   const currentlyPlaying = useSelector(
     (state: Context) => state.currentlyPlaying,
   )
@@ -59,27 +67,27 @@ const HostSession = () => {
   const rejectedTimerId = useRef<NodeJS.Timeout | null>(null)
 
   const setSuggested = (update: typeof suggested.current) => {
-    // TODO: Optimize this 
+    // TODO: Optimize this
     const different =
-      update.length === suggested.current.length
-      &&
-      update.map((song) => song.id).every((id) => suggested.current.map((song) => song.id).includes(id))
+      update.length === suggested.current.length &&
+      update
+        .map((song) => song.id)
+        .every((id) => suggested.current.map((song) => song.id).includes(id))
 
-    if (different)
-      return
+    if (different) return
 
     suggested.current = update
   }
 
   const setQueue = (update: typeof queued.current) => {
-    // TODO: Optimize this 
+    // TODO: Optimize this
     const different =
-      update.length === queued.current.length
-      &&
-      update.map((song) => song.id).every((id) => queued.current.map((song) => song.id).includes(id))
+      update.length === queued.current.length &&
+      update
+        .map((song) => song.id)
+        .every((id) => queued.current.map((song) => song.id).includes(id))
 
-    if (different)
-      return
+    if (different) return
 
     queued.current = update
   }
@@ -101,10 +109,8 @@ const HostSession = () => {
             alt: `${song.album.name} cover art`,
           },
         })) ?? null
-      if (suggestedContent)
-        setSuggested(suggestedContent)
-      else
-        setSuggested([])
+      if (suggestedContent) setSuggested(suggestedContent)
+      else setSuggested([])
     }
 
     getSuggested()
@@ -132,10 +138,8 @@ const HostSession = () => {
           },
         })) ?? null
 
-      if (queueContent)
-        setQueue(queueContent)
-      else
-        setQueue([])
+      if (queueContent) setQueue(queueContent)
+      else setQueue([])
     }
 
     getQueue()
@@ -156,8 +160,13 @@ const HostSession = () => {
         acceptSuggestedSong(id) ?? { queue: null, suggested: null }
 
         // Optimistic update
-        const updatedQueue = [...queued.current, suggested.current.find((song) => song.id === id)!]
-        const updatedSuggested = suggested.current.filter((song) => song.id !== id)
+        const updatedQueue = [
+          ...queued.current,
+          suggested.current.find((song) => song.id === id)!,
+        ]
+        const updatedSuggested = suggested.current.filter(
+          (song) => song.id !== id,
+        )
         setQueue(updatedQueue)
         setSuggested(updatedSuggested)
         // setQueue((prev) => [...prev, suggested.find((song) => song.id === id)!])
@@ -168,8 +177,10 @@ const HostSession = () => {
           title: "Added to queue",
           description: `${name} has been added to the queue`,
         })
-      } catch (error) { }
-    }, [toast, suggested])
+      } catch (error) {}
+    },
+    [toast, suggested],
+  )
 
   const handleReject = useCallback(
     (id: string, name: string) => {
@@ -185,18 +196,21 @@ const HostSession = () => {
       setSuggested(updatedSuggested)
 
       const undo = () => {
-        if (rejectedTimerId.current)
-          clearTimeout(rejectedTimerId.current)
+        if (rejectedTimerId.current) clearTimeout(rejectedTimerId.current)
       }
 
       toast({
         title: "Removed from suggested",
         description: `${name} has been rejected`,
         action: (
-          <ToastAction altText={`Remove ${name} from queue`} onClick={undo}>Undo</ToastAction>
-        )
+          <ToastAction altText={`Remove ${name} from queue`} onClick={undo}>
+            Undo
+          </ToastAction>
+        ),
       })
-    }, [toast])
+    },
+    [toast],
+  )
 
   return (
     <div className="w-full min-h-fit h-full flex flex-col">
