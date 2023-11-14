@@ -197,23 +197,6 @@ export async function destroySession() {
   }
 }
 
-// TODO: Speed this call up, currently seems to have a noticeable delay
-export async function listAllSessions() {
-  // Get user information
-  const session = await getServerSession(authOptions)
-  console.log(session?.user.id)
-  if (!session?.user.id) {
-    throw new Error("No user id found")
-  }
-
-  // TODO: Limit this function so that only certain sessions are available
-  // to be shown to users based on friends and/or proximity
-
-  const availableSessions = await prisma.currentlyPlaying.findMany()
-
-  return availableSessions
-}
-
 export async function getQueueSession(sessionId: string) {
   const queueSession = await prisma.currentlyPlaying.findFirst({
     where: {
