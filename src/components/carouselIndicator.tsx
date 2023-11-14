@@ -11,6 +11,7 @@ interface CarouselIndicatorProps {
   setIndexInFocus: (index: number) => void,
 }
 
+// TODO: Doesn't reflect when the carousel is manually scrolled.. Migrate to using motion useScroll hook
 const CarouselIndicator: FC<CarouselIndicatorProps> = ({ items, keybase, indexInFocus, setIndexInFocus }) => {
   const [optimisticIndex, setOptimisticIndex] = useState(indexInFocus.current)
 
