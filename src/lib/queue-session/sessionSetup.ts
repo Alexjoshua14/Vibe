@@ -5,13 +5,6 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import prisma from "@/lib/prisma"
 
-import { getUserDeep } from "../prisma/user"
-
-// Replaces lsitAllSessions() from 'session-maanagement.ts'
-async function fetchSessions() {
-  
-}
-
 export interface AvailableSession {
   id: string,
   hostName: string
