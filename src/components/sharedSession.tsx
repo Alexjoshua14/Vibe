@@ -38,22 +38,6 @@ const SharedSession: FC<sharedSessionProps> = ({ }) => {
 
 const HostSession = () => {
   const { handleLeaveQueueSession } = useSessionManagement()
-  // const [suggested, setSuggested] = useState<
-  //   {
-  //     name: string
-  //     artists: string
-  //     id: string
-  //     image: { url: string; alt: string }
-  //   }[]
-  // >([])
-  // const [queued, setQueue] = useState<
-  //   {
-  //     name: string
-  //     artists: string
-  //     id: string
-  //     image: { url: string; alt: string }
-  //   }[]
-  // >([])
 
   const suggested = useRef<
     {
@@ -79,7 +63,7 @@ const HostSession = () => {
     const different =
       update.length === suggested.current.length
       &&
-      update.every((song) => suggested.current.includes(song))
+      update.map((song) => song.id).every((id) => suggested.current.map((song) => song.id).includes(id))
 
     if (different)
       return
@@ -117,8 +101,10 @@ const HostSession = () => {
             alt: `${song.album.name} cover art`,
           },
         })) ?? null
-      if (suggestedContent) setSuggested(suggestedContent)
-      else setSuggested([])
+      if (suggestedContent)
+        setSuggested(suggestedContent)
+      else
+        setSuggested([])
     }
 
     getSuggested()
@@ -146,8 +132,10 @@ const HostSession = () => {
           },
         })) ?? null
 
-      if (queueContent) setQueue(queueContent)
-      else setQueue([])
+      if (queueContent)
+        setQueue(queueContent)
+      else
+        setQueue([])
     }
 
     getQueue()
@@ -211,19 +199,19 @@ const HostSession = () => {
     }, [toast])
 
   return (
-    <div className="w-full h-full">
-      <div className="h-14 flex flex-row gap-4 items-center px-4">
+    <div className="w-full min-h-fit h-full flex flex-col">
+      <div className="flex flex-row gap-4 items-center px-4 py-2">
         <CallbackButton
           text={`End Session`}
           callback={handleLeaveQueueSession}
           className="bg-red-800 glassmorphism !bg-opacity-75 hover:!bg-opacity-90 transition-colors"
         />
       </div>
-      <div className="w-full h-1/2 sm:h-full grid grid-cols-1 grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 items-center">
-        <div className="h-full max-h-[70vh] col-span-1 p-4 flex items-center justify-center border-2 border-pink-200">
+      <div className="w-full h-[80vh] sm:h-full flex flex-col sm:grid sm:grid-cols-2 sm:grid-rows-1 items-center">
+        <div className="min-h-[200px] h-1/2 sm:h-full max-h-[70vh] p-2 sm:p-4 flex items-center justify-center">
           <CurrentlyPlaying />
         </div>
-        <div className="h-3/5 col-span-1 flex flex-col gap-8">
+        <div className="min-h-[340px] h-1/2 sm:h-full w-full sm:p-4 flex flex-col justify-between gap-4">
           <div className="w-full h-1/2 flex items-center justify-end">
             <SongCarousel header="Queued" songs={queued} />
           </div>
@@ -256,9 +244,9 @@ const MemberSession = () => {
           <CurrentlyPlaying />
         </Suspense>
       </div>
-      <div className="w-full h-full flex flex-col items-center border-2 border-pink-700">
+      <div className="w-full h-full flex flex-col items-center">
         <Suspense>
-          <div className="w-full h-full border-2 border-teal-700">
+          <div className="w-full h-full">
             <Search />
           </div>
         </Suspense>

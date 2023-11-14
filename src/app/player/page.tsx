@@ -39,7 +39,7 @@ export default async function Player() {
   // a means for it to be updated regularly (this could be handled in specific page for queue using useEffect)
 
   return (
-    <main className="flex-1 p-4 flex flex-col items-center justify-around">
+    <main className="flex-1 max-w-full p-2 sm:p-4 flex flex-col items-center justify-around">
       <SessionDivider availableSessions={availableSessions} users={users} />
     </main>
   )
