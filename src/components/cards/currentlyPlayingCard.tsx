@@ -68,10 +68,10 @@ export const Card: FC<CardProps> = ({
       // transition={{ duration: 1, ease: easeInOut }}
       className={cn(
         `flex flex-col items-center justify-center gap-2 sm:gap-4 
-            max-h-full sm:max-h-[600px] min-w-[180px] w-full max-w-[400px] p-2
+            max-h-full min-w-[180px] w-full max-w-[400px] p-2
             ${searching
           ? "h-[100px] aspect-[5/2]"
-          : "min-h-[270px] aspect-[2/3]"
+          : "min-h-[200px] aspect-[2/3]"
         }`,
         className,
       )}
@@ -169,10 +169,10 @@ export const Card: FC<CardProps> = ({
 
 export const SkeletonCard = () => (
   <div
-    className={`flex flex-col items-center justify-center gap-4 
-        max-h-[600px] min-w-[180px] w-full max-w-[400px] min-h-[270px] aspect-[2/3]`}
+    className={`flex flex-col items-center justify-center gap-2 sm:gap-4 p-2
+        max-h-full min-w-[180px] w-full max-w-[400px] min-h-[200px] aspect-[2/3]`}
   >
-    <Skeleton className="max-w-full aspect-square rounded h-2/3 w-full" />
+    <Skeleton className="max-w-full max-h-full aspect-square rounded h-2/3" />
     <div className="flex flex-col items-center w-full gap-2 px-4">
       <div className="flex flex-col w-full items-center px-4 gap-1">
         <Skeleton className="w-3/5 h-5 rounded" />
