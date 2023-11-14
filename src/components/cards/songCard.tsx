@@ -44,7 +44,10 @@ const SongCard: FC<SongCardProps> = ({
       </div>
       <div className="absolute flex flex-col w-2/3 h-2/3 px-4 py-2 left-[25%] glassmorphism-tertiary rounded">
         <ScrollingText text={songName} className={`text-primary text-lg`} />
-        <ScrollingText text={artists} className={`text-tertiary text-sm font-light`} />
+        <ScrollingText
+          text={artists}
+          className={`text-tertiary text-sm font-light`}
+        />
       </div>
       {interactive && (
         <div className="absolute right-0 sm:right-[15%] sm:bottom-0 w-10 sm:w-24 h-full sm:h-10 flex flex-col sm:flex-row justify-around items-center">

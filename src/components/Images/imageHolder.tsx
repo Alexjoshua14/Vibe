@@ -1,10 +1,9 @@
-
-import { FC } from 'react'
-import Image, { ImageProps } from 'next/image'
+import { FC } from "react"
+import Image, { ImageProps } from "next/image"
 
 interface ImageHolderProps {
-  src: string,
-  alt: string,
+  src: string
+  alt: string
   imageProps?: ImageProps
 }
 

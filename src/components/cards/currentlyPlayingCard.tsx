@@ -69,10 +69,11 @@ export const Card: FC<CardProps> = ({
       className={cn(
         `flex flex-col items-center justify-center gap-2 sm:gap-4 
             max-h-full min-w-[180px] w-full max-w-[400px] p-2
-            ${searching
-          ? "h-[100px] aspect-[5/2]"
-          : "min-h-[200px] aspect-[2/3]"
-        }`,
+            ${
+              searching
+                ? "h-[100px] aspect-[5/2]"
+                : "min-h-[200px] aspect-[2/3]"
+            }`,
         className,
       )}
     >
@@ -100,50 +101,57 @@ export const Card: FC<CardProps> = ({
       </motion.div>
 
       <div
-        className={`flex flex-col w-full gap-1 sm:gap-2 ${searching ? "px-2" : "px-2 sm:px-4"}`}
+        className={`flex flex-col w-full gap-1 sm:gap-2 ${
+          searching ? "px-2" : "px-2 sm:px-4"
+        }`}
       >
         <div className={`max-w-full ${searching ? "px-0" : "px-4"}`}>
           <div ref={songNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
               containerRef={songNameRef}
               text={songName}
-              className={`text-primary ${searching ? "text-base" : "text-lg sm:text-xl"
-                } leading-tight`}
+              className={`text-primary ${
+                searching ? "text-base" : "text-lg sm:text-xl"
+              } leading-tight`}
             />
           </div>
           <div ref={artistNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
               containerRef={artistNameRef}
               text={artists}
-              className={`text-secondary ${searching ? "text-sm" : "text-sm sm:text-lg"
-                } font-light leading-tight`}
+              className={`text-secondary ${
+                searching ? "text-sm" : "text-sm sm:text-lg"
+              } font-light leading-tight`}
             />
           </div>
         </div>
-        <div className={`w-full grid grid-rows-1 ${searching ? "grid-cols-[3fr_1fr]" : "grid-cols-[2fr_4fr_1fr_1fr]"} items-center justify-between gap-2 text-tertiary text-xs`}>
-
+        <div
+          className={`w-full grid grid-rows-1 ${
+            searching ? "grid-cols-[3fr_1fr]" : "grid-cols-[2fr_4fr_1fr_1fr]"
+          } items-center justify-between gap-2 text-tertiary text-xs`}
+        >
           {!searching && <p className="text-end">{msToTime(progress.time)}</p>}
           <Progress value={progress.percentage} />
           {!searching && <p>{msToTime(duration)}</p>}
 
           <div className="relative w-8 max-w-full min-h-[30px] h-full">
             <AnimatePresence>
-              {liked ?
+              {liked ? (
                 <motion.button
                   key={`liked-${songName}`}
                   onClick={handleUnlike}
                   animate={{
-                    scale: [.2, 1.4, 1],
-                    opacity: [.4, 1.4, 1],
-                    translate: ['-50% -50%'],
+                    scale: [0.2, 1.4, 1],
+                    opacity: [0.4, 1.4, 1],
+                    translate: ["-50% -50%"],
                   }}
                   exit={{ scale: 0, opacity: 0 }}
-                  transition={{ duration: .9, ease: 'easeInOut' }}
+                  transition={{ duration: 0.9, ease: "easeInOut" }}
                   className="z-20 absolute top-1/2 left-1/2"
                 >
                   <IoIosHeart size={24} className="text-red-500" />
                 </motion.button>
-                :
+              ) : (
                 <motion.button
                   key={`unliked-${songName}`}
                   onClick={handleLike}
@@ -151,14 +159,14 @@ export const Card: FC<CardProps> = ({
                   animate={{
                     scale: 1,
                     opacity: 1,
-                    translate: ['-50% -50%'],
+                    translate: ["-50% -50%"],
                   }}
                   exit={{ scale: 4, opacity: 0 }}
-                  transition={{ duration: .4, ease: 'easeInOut' }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
                   <IoIosHeartEmpty size={24} />
                 </motion.button>
-              }
+              )}
             </AnimatePresence>
           </div>
         </div>

@@ -62,7 +62,7 @@ const ScrollingText: FC<scrollingTextProps> = ({
           ease: "linear",
           delay: 2,
           duration: duration,
-          times: [0, 0.5, .75, 1],
+          times: [0, 0.5, 0.75, 1],
           repeat: Infinity,
           repeatDelay: 4,
         }}
