@@ -5,7 +5,7 @@ import { HiOutlineDotsVertical } from "react-icons/hi"
 import { useSelector } from "react-redux"
 import Image from "next/image"
 
-import { useCurrentlyPlaying } from "@/app/hooks/useCurrentlyPlaying"
+import { useCurrentlyPlaying } from "@/app/hooks/useCurrentlyPlayingSample"
 import { Progress } from "@/components/ui/progress"
 import { Context } from "@/lib/validators/context"
 import { msToTime } from "@/utilities/helper"

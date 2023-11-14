@@ -67,8 +67,8 @@ export const Card: FC<CardProps> = ({
       }}
       // transition={{ duration: 1, ease: easeInOut }}
       className={cn(
-        `flex flex-col items-center justify-center gap-4 
-            max-h-[600px] min-w-[180px] w-full max-w-[400px]
+        `flex flex-col items-center justify-center gap-2 sm:gap-4 
+            max-h-full sm:max-h-[600px] min-w-[180px] w-full max-w-[400px] p-2
             ${searching
           ? "h-[100px] aspect-[5/2]"
           : "min-h-[270px] aspect-[2/3]"
@@ -78,10 +78,10 @@ export const Card: FC<CardProps> = ({
     >
       <motion.div
         animate={{
-          height: searching ? "100px" : "66.667%",
-          width: searching ? "100px" : "100%",
+          height: searching ? "100%" : "66.667%",
+          width: searching ? "100%" : "auto",
         }}
-        className="relative max-w-full aspect-square rounded overflow-clip glassmorphism-primary"
+        className="relative max-w-full max-h-full aspect-square rounded overflow-clip glassmorphism-primary"
       >
         {image?.url ? (
           <Image
@@ -90,7 +90,7 @@ export const Card: FC<CardProps> = ({
             fill
             sizes="33vw"
             quality={image.quality ?? 75}
-            className="object-fill"
+            className="object-cover"
             priority
             id="currently-playing-image"
           />
@@ -100,14 +100,14 @@ export const Card: FC<CardProps> = ({
       </motion.div>
 
       <div
-        className={`flex flex-col w-full gap-2 ${searching ? "px-2" : "px-4"}`}
+        className={`flex flex-col w-full gap-1 sm:gap-2 ${searching ? "px-2" : "px-2 sm:px-4"}`}
       >
         <div className={`max-w-full ${searching ? "px-0" : "px-4"}`}>
           <div ref={songNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
               containerRef={songNameRef}
               text={songName}
-              className={`text-primary ${searching ? "text-base" : "text-xl"
+              className={`text-primary ${searching ? "text-base" : "text-lg sm:text-xl"
                 } leading-tight`}
             />
           </div>
@@ -115,18 +115,18 @@ export const Card: FC<CardProps> = ({
             <ScrollingText
               containerRef={artistNameRef}
               text={artists}
-              className={`text-secondary ${searching ? "text-sm" : "text-lg"
+              className={`text-secondary ${searching ? "text-sm" : "text-sm sm:text-lg"
                 } font-light leading-tight`}
             />
           </div>
         </div>
-        <div className="w-full flex items-center justify-between gap-4 text-tertiary text-xs">
-          <div className="flex-1 h-full flex items-center justify-between gap-2">
-            {!searching && <p>{msToTime(progress.time)}</p>}
-            <Progress value={progress.percentage} />
-            {!searching && <p>{msToTime(duration)}</p>}
-          </div>
-          <div className="relative w-8 min-h-[30px] h-full">
+        <div className={`w-full grid grid-rows-1 ${searching ? "grid-cols-[3fr_1fr]" : "grid-cols-[2fr_4fr_1fr_1fr]"} items-center justify-between gap-2 text-tertiary text-xs`}>
+
+          {!searching && <p className="text-end">{msToTime(progress.time)}</p>}
+          <Progress value={progress.percentage} />
+          {!searching && <p>{msToTime(duration)}</p>}
+
+          <div className="relative w-8 max-w-full min-h-[30px] h-full">
             <AnimatePresence>
               {liked ?
                 <motion.button
