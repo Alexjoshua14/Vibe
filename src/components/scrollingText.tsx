@@ -14,7 +14,6 @@ export interface scrollingTextProps extends HTMLMotionProps<"p"> {
  * and scrolls it if it overflows
  *
  * @param text string to be displayed
- * @param containerRef reference to the container element
  */
 const ScrollingText: FC<scrollingTextProps> = ({
   text,

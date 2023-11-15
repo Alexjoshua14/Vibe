@@ -23,8 +23,6 @@ const Player: FC<playerProps> = ({}) => {
   const status = useSelector((state: Context) => state.status)
   const path = usePathname()
 
-  const containerRef = useRef(null)
-
   useSessionManagement()
 
   // If hosting, show should be set to true,
@@ -77,10 +75,7 @@ const Player: FC<playerProps> = ({}) => {
         }}
         transition={{ duration: 0.4 }}
       >
-        <div
-          className="h-auto flex justify-center flex-col overflow-hidden"
-          ref={containerRef}
-        >
+        <div className="h-auto flex justify-center flex-col overflow-hidden">
           {currentlyPlaying?.song ? (
             <>
               <ScrollingText
