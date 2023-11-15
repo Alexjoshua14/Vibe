@@ -92,7 +92,6 @@ export const Card: FC<CardProps> = ({
         <div className={`max-w-full ${searching ? "px-0" : "px-4"}`}>
           <div ref={songNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
-              containerRef={songNameRef}
               text={songName}
               className={`text-primary ${searching ? "text-base" : "text-lg sm:text-xl"
                 } leading-tight`}
@@ -100,7 +99,6 @@ export const Card: FC<CardProps> = ({
           </div>
           <div ref={artistNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
-              containerRef={artistNameRef}
               text={artists}
               className={`text-secondary ${searching ? "text-sm" : "text-sm sm:text-lg"
                 } font-light leading-tight`}

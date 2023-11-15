@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils"
 
 export interface scrollingTextProps extends HTMLMotionProps<"p"> {
   text: string
-  containerRef?: React.RefObject<HTMLDivElement>
 }
 
 /**
@@ -19,7 +18,6 @@ export interface scrollingTextProps extends HTMLMotionProps<"p"> {
  */
 const ScrollingText: FC<scrollingTextProps> = ({
   text,
-
   className,
   ...props
 }) => {
