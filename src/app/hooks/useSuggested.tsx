@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
@@ -7,7 +7,7 @@ import { acceptSuggestedSong, getUserSuggested, rejectSuggestedSong } from "@/li
 import { useQueue } from "./useQueue"
 
 export const useSuggested = () => {
-  const suggested = useRef<
+  const [suggested, setSuggested] = useState<
     {
       name: string
       artists: string
@@ -22,24 +22,12 @@ export const useSuggested = () => {
 
   const { queued, setQueue } = useQueue()
 
-  const setSuggested = (update: typeof suggested.current) => {
-    // TODO: Optimize this
-    const different =
-      update.length === suggested.current.length &&
-      update
-        .map((song) => song.id)
-        .every((id) => suggested.current.map((song) => song.id).includes(id))
-
-    if (different) return
-
-    suggested.current = update
-  }
-
-
-
   useEffect(() => {
-    if (suggestedTimerId.current) clearInterval(suggestedTimerId.current)
+    if (suggestedTimerId.current)
+      clearInterval(suggestedTimerId.current)
+
     const getSuggested = async () => {
+      console.log("Getting suggested")
       let res = await getUserSuggested()
       let suggestedContent =
         res?.songs.map((song) => ({
@@ -51,13 +39,13 @@ export const useSuggested = () => {
             alt: `${song.album.name} cover art`,
           },
         })) ?? null
-      if (suggestedContent) setSuggested(suggestedContent)
-      else setSuggested([])
+      setSuggested(suggestedContent ?? [])
     }
 
     getSuggested()
 
     suggestedTimerId.current = setInterval(() => {
+      console.log("Setting timer for suggested")
       getSuggested()
     }, 10000)
 
@@ -76,10 +64,10 @@ export const useSuggested = () => {
 
         // Optimistic update
         const updatedQueue = [
-          ...queued.current,
-          suggested.current.find((song) => song.id === id)!,
+          ...queued,
+          suggested.find((song) => song.id === id)!,
         ]
-        const updatedSuggested = suggested.current.filter(
+        const updatedSuggested = suggested.filter(
           (song) => song.id !== id,
         )
         setQueue(updatedQueue)
@@ -104,7 +92,7 @@ export const useSuggested = () => {
       }, 4000)
 
       // Optimistic update
-      const updatedSuggested = suggested.current.filter(
+      const updatedSuggested = suggested.filter(
         (song) => song.id !== id,
       )
 

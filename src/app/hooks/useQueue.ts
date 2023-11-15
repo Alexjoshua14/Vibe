@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { getUserQueued } from '@/lib/prisma/queue'
 
@@ -7,7 +7,7 @@ import 'client-only'
 
 
 export const useQueue = () => {
-    const queued = useRef<
+    const [queued, setQueue] = useState<
     {
       name: string
       artists: string
@@ -17,19 +17,6 @@ export const useQueue = () => {
   >([])
 
     const queuedTimerId = useRef<NodeJS.Timeout | null>(null)
-
-      const setQueue = (update: typeof queued.current) => {
-    // TODO: Optimize this
-    const different =
-      update.length === queued.current.length &&
-      update
-        .map((song) => song.id)
-        .every((id) => queued.current.map((song) => song.id).includes(id))
-
-    if (different) return
-
-    queued.current = update
-  }
 
 
   useEffect(() => {
@@ -46,8 +33,7 @@ export const useQueue = () => {
           },
         })) ?? null
 
-      if (queueContent) setQueue(queueContent)
-      else setQueue([])
+      setQueue(queueContent ?? [])
     }
 
     getQueue()

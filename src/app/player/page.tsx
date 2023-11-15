@@ -23,7 +23,6 @@ export default function Player() {
   if (status === "LOADING")
     return
 
-
   return (
     <main className="flex-1 max-w-full p-2 sm:p-4 flex flex-col items-center justify-around">
       {status === "IDLE"
