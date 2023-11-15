@@ -116,8 +116,12 @@ export async function addSongToSuggested(song: SpotifyItem) {
     },
   })
 
-  const songDB = await prisma.song.create({
-    data: {
+  const songDB = await prisma.song.upsert({
+    where: {
+      uri: song.uri,
+    },
+    update: {},
+    create: {
       duration_ms: song.duration_ms,
       explicit: song.explicit,
       href: song.href,

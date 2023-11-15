@@ -39,9 +39,6 @@ const SongInformation = ({
   item: SpotifyItem
   variant?: SongInformationVariant
 }) => {
-  const titleRef = useRef<HTMLDivElement>(null)
-  const artistRef = useRef<HTMLDivElement>(null)
-
   const artists = item.artists.map((artist) => artist.name).join(", ")
 
   return (
@@ -53,7 +50,6 @@ const SongInformation = ({
       }`}
     >
       <div
-        ref={titleRef}
         className={`
         ${variant == "secondary" || (variant == undefined && "text-md")}
         ${variant == "main" || (variant == "modal" && "text-xl")} 
@@ -61,7 +57,7 @@ const SongInformation = ({
         text-center sm:text-left
         `}
       >
-        <ScrollingText text={item.name} containerRef={titleRef} />
+        <ScrollingText text={item.name} />
       </div>
       <div
         className={`
@@ -81,11 +77,8 @@ const SongInformation = ({
               <p>•</p>
             </>
           )}
-          <div
-            ref={artistRef}
-            className={`overflow-hidden whitespace-nowrap max-w-full`}
-          >
-            <ScrollingText text={artists} containerRef={artistRef} />
+          <div className={`overflow-hidden whitespace-nowrap max-w-full`}>
+            <ScrollingText text={artists} />
           </div>
         </div>
       </div>
@@ -182,7 +175,7 @@ const SongInformation2 = ({
         text-center sm:text-left
         `}
       >
-        <ScrollingText text={song.name} containerRef={titleRef} />
+        <ScrollingText text={song.name} />
       </div>
       <div
         className={`
@@ -206,7 +199,7 @@ const SongInformation2 = ({
             ref={artistRef}
             className={`overflow-hidden whitespace-nowrap max-w-full`}
           >
-            <ScrollingText text={artists} containerRef={artistRef} />
+            <ScrollingText text={artists} />
           </div>
         </div>
       </div>

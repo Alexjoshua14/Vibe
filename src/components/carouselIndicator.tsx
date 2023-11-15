@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 
 interface CarouselIndicatorProps {
   // items should be any mapable object
-  items: MutableRefObject<any[]>
+  items: any[]
   keybase?: string
   indexInFocus: MutableRefObject<number>
   setIndexInFocus: (index: number) => void
@@ -23,7 +23,7 @@ const CarouselIndicator: FC<CarouselIndicatorProps> = ({
   const goTo = (index: number) => {
     if (index === indexInFocus.current) return
 
-    if (index >= 0 && index < items.current.length) {
+    if (index >= 0 && index < items.length) {
       setOptimisticIndex(index)
       setIndexInFocus(index)
       if (indexInFocus.current !== index)
@@ -33,7 +33,7 @@ const CarouselIndicator: FC<CarouselIndicatorProps> = ({
 
   return (
     <div className="h-4 py-2 flex items-center justify-center gap-[10px]">
-      {items.current.map((_, index) => (
+      {items.map((_, index) => (
         <motion.button
           key={`${keybase}-${index}`}
           onClick={() => goTo(index)}

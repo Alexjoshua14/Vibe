@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils"
 
 export interface scrollingTextProps extends HTMLMotionProps<"p"> {
   text: string
-  containerRef?: React.RefObject<HTMLDivElement>
 }
 
 /**
@@ -15,11 +14,9 @@ export interface scrollingTextProps extends HTMLMotionProps<"p"> {
  * and scrolls it if it overflows
  *
  * @param text string to be displayed
- * @param containerRef reference to the container element
  */
 const ScrollingText: FC<scrollingTextProps> = ({
   text,
-
   className,
   ...props
 }) => {

@@ -17,17 +17,15 @@ import CarouselIndicator from "./carouselIndicator"
 
 interface SongCarouselProps {
   header?: string
-  songs: MutableRefObject<
-    {
-      name: string
-      artists: string
-      id: string
-      image: {
-        url: string
-        alt: string
-      }
-    }[]
-  >
+  songs: {
+    name: string
+    artists: string
+    id: string
+    image: {
+      url: string
+      alt: string
+    }
+  }[]
   interactive?: {
     onApprove: (id: string, name: string) => void
     onReject: (id: string, name: string) => void
@@ -40,21 +38,19 @@ const SongCarousel: FC<SongCarouselProps> = ({
   interactive,
 }) => {
   const indexInFocus = useRef(0)
-  const items = useRef(songs.current.map((song) => song.name))
+  const items = useRef(songs.map((song) => song.name))
 
   const goTo = useCallback(
     (index: number) => {
       const prev = indexInFocus.current
       indexInFocus.current = index
-      if (index < 0 || index >= songs.current.length) {
+      if (index < 0 || index >= songs.length) {
         console.warn(`Index ${index} is out of range`)
         return
       }
 
       // scroll carousel track to selected song
-      const songCard = document.querySelector(
-        `[id="${songs.current[index].id}"]`,
-      )
+      const songCard = document.querySelector(`[id="${songs[index].id}"]`)
       if (songCard) {
         songCard.scrollIntoView({
           behavior: "smooth",
@@ -70,7 +66,7 @@ const SongCarousel: FC<SongCarouselProps> = ({
   )
 
   useEffect(() => {
-    items.current = songs.current.map((song) => song.name)
+    items.current = songs.map((song) => song.name)
   }, [songs])
 
   return (
@@ -78,7 +74,7 @@ const SongCarousel: FC<SongCarouselProps> = ({
       {header && (
         <div className="flex items-center whitespace-nowrap gap-2">
           <h2 className="font-extralight text-lg sm:text-2xl">{header}</h2>
-          <p className="text-secondary text-xs">{`[${songs.current.length}]`}</p>
+          <p className="text-secondary text-xs">{`[${songs.length}]`}</p>
         </div>
       )}
       <div className="flex-1 w-full relative ps-4 carousel-container">
@@ -87,7 +83,7 @@ const SongCarousel: FC<SongCarouselProps> = ({
             role="carousel-track"
             className="w-fit min-h-[90px] h-full grid grid-rows-1 grid-flow-col gap-8 py-1 pr-14"
           >
-            {songs.current.map((song) => (
+            {songs.map((song) => (
               <SongCard
                 key={song.id}
                 id={song.id}
