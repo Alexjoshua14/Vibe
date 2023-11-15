@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import React from "react"
 import { useSelector } from "react-redux"
@@ -20,22 +20,11 @@ export default function Player() {
   useSessionManagement()
 
   // Waits to return until the status is known
-  if (status === "LOADING")
-    return
+  if (status === "LOADING") return
 
   return (
     <main className="flex-1 max-w-full p-2 sm:p-4 flex flex-col items-center justify-around">
-      {status === "IDLE"
-        ? (
-          <SetupSession />
-        ) : (
-          <SharedSession />
-        )}
+      {status === "IDLE" ? <SetupSession /> : <SharedSession />}
     </main>
   )
 }
-
-
-
-
-

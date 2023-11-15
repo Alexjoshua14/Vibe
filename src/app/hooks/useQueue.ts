@@ -1,13 +1,11 @@
+import { useEffect, useRef, useState } from "react"
 
-import { useEffect, useRef, useState } from 'react'
+import { getUserQueued } from "@/lib/prisma/queue"
 
-import { getUserQueued } from '@/lib/prisma/queue'
-
-import 'client-only'
-
+import "client-only"
 
 export const useQueue = () => {
-    const [queued, setQueue] = useState<
+  const [queued, setQueue] = useState<
     {
       name: string
       artists: string
@@ -16,8 +14,7 @@ export const useQueue = () => {
     }[]
   >([])
 
-    const queuedTimerId = useRef<NodeJS.Timeout | null>(null)
-
+  const queuedTimerId = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const getQueue = async () => {

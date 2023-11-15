@@ -39,14 +39,15 @@ const SongInformation = ({
   item: SpotifyItem
   variant?: SongInformationVariant
 }) => {
-
   const artists = item.artists.map((artist) => artist.name).join(", ")
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
-        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
-        }`}
+      className={`flex flex-col w-full justify-between ${
+        variant === "main" && "items-center sm:items-start"
+      } ${variant != "modal" && "items-start"} ${
+        variant == "modal" && "items-center"
+      }`}
     >
       <div
         className={`
@@ -76,9 +77,7 @@ const SongInformation = ({
               <p>•</p>
             </>
           )}
-          <div
-            className={`overflow-hidden whitespace-nowrap max-w-full`}
-          >
+          <div className={`overflow-hidden whitespace-nowrap max-w-full`}>
             <ScrollingText text={artists} />
           </div>
         </div>
@@ -161,9 +160,11 @@ const SongInformation2 = ({
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
-        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
-        }`}
+      className={`flex flex-col w-full justify-between ${
+        variant === "main" && "items-center sm:items-start"
+      } ${variant != "modal" && "items-start"} ${
+        variant == "modal" && "items-center"
+      }`}
     >
       <div
         ref={titleRef}

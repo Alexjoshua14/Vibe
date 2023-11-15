@@ -2,7 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
-import { acceptSuggestedSong, getUserSuggested, rejectSuggestedSong } from "@/lib/prisma/suggested"
+import {
+  acceptSuggestedSong,
+  getUserSuggested,
+  rejectSuggestedSong,
+} from "@/lib/prisma/suggested"
 
 import { useQueue } from "./useQueue"
 
@@ -16,15 +20,13 @@ export const useSuggested = () => {
     }[]
   >([])
 
-
   const suggestedTimerId = useRef<NodeJS.Timeout | null>(null)
   const rejectedTimerId = useRef<NodeJS.Timeout | null>(null)
 
   const { queued, setQueue } = useQueue()
 
   useEffect(() => {
-    if (suggestedTimerId.current)
-      clearInterval(suggestedTimerId.current)
+    if (suggestedTimerId.current) clearInterval(suggestedTimerId.current)
 
     const getSuggested = async () => {
       console.log("Getting suggested")
@@ -54,7 +56,6 @@ export const useSuggested = () => {
     }
   }, [])
 
-
   const { toast } = useToast()
 
   const handleApprove = useCallback(
@@ -67,9 +68,7 @@ export const useSuggested = () => {
           ...queued,
           suggested.find((song) => song.id === id)!,
         ]
-        const updatedSuggested = suggested.filter(
-          (song) => song.id !== id,
-        )
+        const updatedSuggested = suggested.filter((song) => song.id !== id)
         setQueue(updatedQueue)
         setSuggested(updatedSuggested)
         // setQueue((prev) => [...prev, suggested.find((song) => song.id === id)!])
@@ -80,7 +79,7 @@ export const useSuggested = () => {
           title: "Added to queue",
           description: `${name} has been added to the queue`,
         })
-      } catch (error) { }
+      } catch (error) {}
     },
     [toast, suggested, queued, setQueue],
   )
@@ -92,9 +91,7 @@ export const useSuggested = () => {
       }, 4000)
 
       // Optimistic update
-      const updatedSuggested = suggested.filter(
-        (song) => song.id !== id,
-      )
+      const updatedSuggested = suggested.filter((song) => song.id !== id)
 
       setSuggested(updatedSuggested)
 
@@ -114,7 +111,6 @@ export const useSuggested = () => {
     },
     [toast, suggested],
   )
-
 
   return { suggested, queued, handleApprove, handleReject }
 }

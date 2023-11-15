@@ -1,20 +1,16 @@
-import { FC } from 'react'
-import Link from 'next/link'
+import { FC } from "react"
+import Link from "next/link"
 
-interface BugProps {
+interface BugProps {}
 
-}
-
-const Bug: FC<BugProps> = ({ }) => {
+const Bug: FC<BugProps> = ({}) => {
   return (
     <div className="min-w-[280px] flex flex-col items-center justify-center gap-8 text-center">
       <div className="flex flex-col items-center justify-center gap-2">
         <h1 className="text-3xl font-light">
           {`You found a Bug in our system 🐞`}
         </h1>
-        <h2 className="text-xl">
-          {`Please refresh the page and try again`}
-        </h2>
+        <h2 className="text-xl">{`Please refresh the page and try again`}</h2>
       </div>
       <div>
         <p>

@@ -55,10 +55,11 @@ export const Card: FC<CardProps> = ({
       className={cn(
         `flex flex-col items-center justify-center gap-2 sm:gap-4 
             max-h-full min-w-[180px] w-full max-w-[400px] p-2
-            ${searching
-          ? "h-[100px] aspect-[5/2]"
-          : "min-h-[200px] aspect-[2/3]"
-        }`,
+            ${
+              searching
+                ? "h-[100px] aspect-[5/2]"
+                : "min-h-[200px] aspect-[2/3]"
+            }`,
         className,
       )}
     >
@@ -86,28 +87,32 @@ export const Card: FC<CardProps> = ({
       </motion.div>
 
       <div
-        className={`flex flex-col w-full gap-1 sm:gap-2 ${searching ? "px-2" : "px-2 sm:px-4"
-          }`}
+        className={`flex flex-col w-full gap-1 sm:gap-2 ${
+          searching ? "px-2" : "px-2 sm:px-4"
+        }`}
       >
         <div className={`max-w-full ${searching ? "px-0" : "px-4"}`}>
           <div ref={songNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
               text={songName}
-              className={`text-primary ${searching ? "text-base" : "text-lg sm:text-xl"
-                } leading-tight`}
+              className={`text-primary ${
+                searching ? "text-base" : "text-lg sm:text-xl"
+              } leading-tight`}
             />
           </div>
           <div ref={artistNameRef} className="max-w-full overflow-hidden">
             <ScrollingText
               text={artists}
-              className={`text-secondary ${searching ? "text-sm" : "text-sm sm:text-lg"
-                } font-light leading-tight`}
+              className={`text-secondary ${
+                searching ? "text-sm" : "text-sm sm:text-lg"
+              } font-light leading-tight`}
             />
           </div>
         </div>
         <div
-          className={`w-full grid grid-rows-1 ${searching ? "grid-cols-[3fr_1fr]" : "grid-cols-[2fr_4fr_1fr_1fr]"
-            } items-center justify-between gap-2 text-tertiary text-xs`}
+          className={`w-full grid grid-rows-1 ${
+            searching ? "grid-cols-[3fr_1fr]" : "grid-cols-[2fr_4fr_1fr_1fr]"
+          } items-center justify-between gap-2 text-tertiary text-xs`}
         >
           {!searching && <p className="text-end">{msToTime(progress.time)}</p>}
           <Progress value={progress.percentage} />

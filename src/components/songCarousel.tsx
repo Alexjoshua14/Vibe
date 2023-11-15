@@ -17,8 +17,7 @@ import CarouselIndicator from "./carouselIndicator"
 
 interface SongCarouselProps {
   header?: string
-  songs:
-  {
+  songs: {
     name: string
     artists: string
     id: string
@@ -51,9 +50,7 @@ const SongCarousel: FC<SongCarouselProps> = ({
       }
 
       // scroll carousel track to selected song
-      const songCard = document.querySelector(
-        `[id="${songs[index].id}"]`,
-      )
+      const songCard = document.querySelector(`[id="${songs[index].id}"]`)
       if (songCard) {
         songCard.scrollIntoView({
           behavior: "smooth",

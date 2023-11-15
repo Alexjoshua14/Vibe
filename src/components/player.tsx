@@ -16,9 +16,9 @@ import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
 import { Progress } from "./ui/progress"
 import ScrollingText from "./scrollingText"
 
-interface playerProps { }
+interface playerProps {}
 
-const Player: FC<playerProps> = ({ }) => {
+const Player: FC<playerProps> = ({}) => {
   const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
   const status = useSelector((state: Context) => state.status)
   const path = usePathname()
@@ -36,8 +36,9 @@ const Player: FC<playerProps> = ({ }) => {
 
   return (
     <div
-      className={`h-16 w-[270px] fixed top-4 right-4 ${currentlyPlaying?.song ? "flex" : "hidden"
-        }`}
+      className={`h-16 w-[270px] fixed top-4 right-4 ${
+        currentlyPlaying?.song ? "flex" : "hidden"
+      }`}
     >
       <motion.div
         className="absolute left-0 top-0 w-16 h-16 glassmorphism-3 rounded-s overflow-hidden"

@@ -120,7 +120,7 @@ export async function addSongToSuggested(song: SpotifyItem) {
     where: {
       uri: song.uri,
     },
-    update: {}, 
+    update: {},
     create: {
       duration_ms: song.duration_ms,
       explicit: song.explicit,
@@ -137,7 +137,7 @@ export async function addSongToSuggested(song: SpotifyItem) {
       artists: {
         connect: artists.map((artist) => ({ id: artist.id })),
       },
-    }
+    },
   })
 
   console.log("Song was created: ", songDB)

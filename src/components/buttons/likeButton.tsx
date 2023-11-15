@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import { FC, MutableRefObject, useCallback, useState } from 'react'
-import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io'
-import { AnimatePresence, motion } from 'framer-motion'
+import { FC, MutableRefObject, useCallback, useState } from "react"
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io"
+import { AnimatePresence, motion } from "framer-motion"
 
 import { likeSong, unlikeSong } from "@/utilities/spotifyAPI"
 
 interface LikeButtonProps {
-  songId: string,
+  songId: string
   songName: string
 }
 

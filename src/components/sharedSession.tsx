@@ -1,9 +1,6 @@
 "use client"
 
-import {
-  FC,
-  Suspense,
-} from "react"
+import { FC, Suspense } from "react"
 import { useSelector } from "react-redux"
 
 import { useSessionManagement } from "@/app/hooks/useSessionManagement"
@@ -16,42 +13,35 @@ import { CallbackButton } from "./buttons"
 import CurrentlyPlaying from "./currentlyPlaying"
 import SongCarousel from "./songCarousel"
 
-interface sharedSessionProps { }
+interface sharedSessionProps {}
 
-const SharedSession: FC<sharedSessionProps> = ({ }) => {
+const SharedSession: FC<sharedSessionProps> = ({}) => {
   const status = useSelector((state: Context) => state.status)
 
   const { handleLeaveQueueSession } = useSessionManagement()
 
-  if (status === 'IDLE') {
-    console.warn("User should not be able to access this page without being in a session.")
-    return (
-      <Bug />
+  if (status === "IDLE") {
+    console.warn(
+      "User should not be able to access this page without being in a session.",
     )
+    return <Bug />
   }
 
   return (
     <div className="w-full h-full flex flex-col gap-4 items-center justify-center">
       <div className="h-14 w-full flex flex-row gap-4 items-center px-4">
         <CallbackButton
-          text={status === 'HOST' ? `End Session` : `Leave Session`}
+          text={status === "HOST" ? `End Session` : `Leave Session`}
           callback={handleLeaveQueueSession}
           className="bg-red-800 glassmorphism !bg-opacity-75 hover:!bg-opacity-90 transition-colors"
         />
       </div>
-      {
-        status === "HOST" ? (
-          <HostSession />
-        ) : (
-          <MemberSession />
-        )
-      }
+      {status === "HOST" ? <HostSession /> : <MemberSession />}
     </div>
   )
 }
 
 const HostSession = () => {
-
   const { suggested, queued, handleApprove, handleReject } = useSuggested()
 
   return (

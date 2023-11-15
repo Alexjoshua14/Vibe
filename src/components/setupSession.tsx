@@ -2,20 +2,24 @@ import { FC, useEffect, useState } from "react"
 import { CurrentlyPlaying, Session, User } from "@prisma/client"
 
 import { useSessionManagement } from "@/app/hooks/useSessionManagement"
-import { AvailableSession, getAvailableSessions } from "@/lib/queue-session/sessionSetup"
+import {
+  AvailableSession,
+  getAvailableSessions,
+} from "@/lib/queue-session/sessionSetup"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { JoinSession } from "./buttons"
 import { CreateSession, DestroySession, TEMPORARYGRAB } from "./sessionButtons"
 
-export interface setupSessionProps {
+export interface setupSessionProps {}
 
-}
-
-const SetupSession: FC<setupSessionProps> = ({ }) => {
+const SetupSession: FC<setupSessionProps> = ({}) => {
   const { handleJoinSession } = useSessionManagement()
-  const [availableSessions, setAvailableSessions] = useState<AvailableSession[]>([])
-  const [loadingAvailableSessions, setLoadingAvailableSessions] = useState<boolean>(true)
+  const [availableSessions, setAvailableSessions] = useState<
+    AvailableSession[]
+  >([])
+  const [loadingAvailableSessions, setLoadingAvailableSessions] =
+    useState<boolean>(true)
 
   useEffect(() => {
     const fetchAvailableSessions = async () => {
