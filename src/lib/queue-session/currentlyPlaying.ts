@@ -51,7 +51,7 @@ export async function getCurrentlyPlaying_Host() {
   }
 
   // Return payload with currently playing ready for clientside to dispatch
-  return payload
+  return {payload, imageURL: currentlyPlayingDB.song?.album?.images[0].url ?? ""}
   } catch (err) {
     console.error(err)
   }
@@ -77,6 +77,16 @@ export async function getCurrentlyPlaying_Member(cpId: string | undefined) {
         song: {
           include: {
             artists: true,
+            album: {
+              select: {
+                name: true,
+                images: {
+                  select: {
+                    url: true, 
+                  }
+                }
+              }
+            },
           },
         },
         queue: true,
@@ -88,7 +98,15 @@ export async function getCurrentlyPlaying_Member(cpId: string | undefined) {
     if (cp === null)
       throw new Error("No currently playing found")
 
-    return cp
+    const payload = 
+      {
+        ...cp,
+        timestamp: cp.timestamp.toISOString(),
+        updatedAt: cp.updatedAt.toISOString(),
+      }
+
+    return {payload, imageURL: cp.song?.album?.images[0].url ?? ""}
+    
   } catch (err) {
     console.error(err)
   }

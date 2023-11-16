@@ -48,21 +48,27 @@ export const useCurrentlyPlaying = () => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      console.log("Running Fetch Data")
       if (status === 'IDLE' || status === 'LOADING')
         return
      
+      // Ensure Members have a currently playing id, if not then reconnect them
       if (status === 'MEMBER' && currentlyPlaying?.id === undefined || currentlyPlaying?.id === null) {
         console.warn("Currently playing id is undefined or null, reconnecting..")
         dispatch(setStatus('LOADING'))
         return
       }
         
-      let payload = status === 'HOST' ? await getCurrentlyPlaying_Host() : await getCurrentlyPlaying_Member(currentlyPlaying.id)
-
-      console.log("Payload: ", JSON.stringify(payload))
-
-      dispatch(setCurrentlyPlaying(payload))
+      // Perform data fetching,
+      // if HOST then fetch from Spotify and update database
+      // if MEMBER then just fetch from database
+      let data = status === 'HOST' ? await getCurrentlyPlaying_Host() : await getCurrentlyPlaying_Member(currentlyPlaying.id)
+      if (data === null) {
+        dispatch(setCurrentlyPlaying(null))
+        setImage("")
+        return
+      }
+      dispatch(setCurrentlyPlaying(data.payload))
+      setImage(data.imageURL)
     }
 
     if (DataIntervalId.current != null) {
@@ -73,7 +79,7 @@ export const useCurrentlyPlaying = () => {
     if (status === "HOST" || status === "MEMBER") {
       fetchData()
       // Fetch currently playing song every 10 seconds
-      DataIntervalId.current = setInterval(fetchData, 30000)
+      DataIntervalId.current = setInterval(fetchData, 10000)
     }
 
     return () => {
@@ -94,7 +100,7 @@ export const useCurrentlyPlaying = () => {
    */
   useEffect(() => {
     const updateProgress = () => {
-      if (currentlyPlaying && song_completed == false) {
+      if (currentlyPlaying) {
         let progress_ms =
           currentlyPlaying.progress_ms +
           (currentlyPlaying.updatedAt !== undefined
@@ -105,7 +111,6 @@ export const useCurrentlyPlaying = () => {
           progress_ms > currentlyPlaying.song.duration_ms
         ) {
           progress_ms = currentlyPlaying.song.duration_ms
-          setSongCompleted(true)
         }
         const progressPercentage = currentlyPlaying.song
           ? progressToPercentage(progress_ms, currentlyPlaying.song.duration_ms)
@@ -124,20 +129,6 @@ export const useCurrentlyPlaying = () => {
       }
     }
   }, [currentlyPlaying, song_completed, status])
-
-  useEffect(() => {
-    const fetchNewImage = async () => {
-      let url = currentlyPlaying?.song?.albumId
-        ? await getSongImage(currentlyPlaying.song.albumId).then((img) =>
-            img ? img.url : "",
-          )
-        : ""
-
-      setImage(url)
-    }
-
-    if (status !== "IDLE") fetchNewImage()
-  }, [currentlyPlaying?.song?.albumId, status])
 
   useEffect(() => {
     if (currentlyPlaying && progress && imageURL) {

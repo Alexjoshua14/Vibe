@@ -293,6 +293,16 @@ const disconectSongFromCurrentlyPlaying = async (userId: string, includeQueue?: 
       song: {
           include: {
             artists: true,
+            album: {
+              select: {
+                name: true,
+                images: {
+                  select: {
+                    url: true, 
+                  }
+                }
+              }
+            },
           },
         },
         queue: includeQueue,
@@ -320,6 +330,8 @@ export const spotifyCurrentlyPlayingToDatabase =
     includeMembers?: boolean,
   ) => {
 
+  // If song is null or undefined, disconnect song from currently playing
+  // Else, connect or create song
   let currentlyPlayingDB = (currentlyPlaying.item === null || currentlyPlaying.item === undefined) ?
     await disconectSongFromCurrentlyPlaying(userId, includeQueue, includeSuggested, includeMembers) :
     await prisma.currentlyPlaying.update({
@@ -379,6 +391,16 @@ export const spotifyCurrentlyPlayingToDatabase =
         song: {
             include: {
               artists: true,
+              album: {
+              select: {
+                name: true,
+                images: {
+                  select: {
+                    url: true, 
+                  }
+                }
+              }
+            },
             },
           },
           queue: includeQueue,
