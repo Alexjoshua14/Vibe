@@ -55,7 +55,10 @@ export async function refreshAccessToken(token: JWT) {
  * @param userId User's id
  * @param session Session object from Auth.js Session callback
  */
-export async function refreshDatabaseAccessToken(userId: string, session: Session) {
+export async function refreshDatabaseAccessToken(
+  userId: string,
+  session: Session,
+) {
   // Grab user's spotify account information from database
   try {
     const spotify = await prisma.account.findFirst({

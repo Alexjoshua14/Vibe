@@ -46,8 +46,8 @@ export default function Profile() {
           {status === "authenticated"
             ? `Signed in as ${user.name}`
             : status === "loading"
-            ? `Loading...`
-            : `Not signed in..`}
+              ? `Loading...`
+              : `Not signed in..`}
         </span>
       </div>
       <div className="flex w-full h-full justify-center items-center border-2 border-teal-500 rounded-lg">

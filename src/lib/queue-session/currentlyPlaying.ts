@@ -1,4 +1,4 @@
-'use server'
+"use server"
 
 import { getServerSession } from "next-auth"
 
@@ -12,44 +12,53 @@ import { CurrentlyPlaying } from "../validators/spotify"
 
 export async function getCurrentlyPlaying_Host() {
   try {
-  // Get user information
-  const session = await getServerSession(authOptions)
-  if (!session?.accessToken) {
-    throw new Error("No user access token found")
-  }
+    // Get user information
+    const session = await getServerSession(authOptions)
+    if (!session?.accessToken) {
+      throw new Error("No user access token found")
+    }
 
-  // Get currently playing from Spotify
-  const currentlyPlayingSpotify = await getCurrentlyPlaying(session.accessToken)
+    // Get currently playing from Spotify
+    const currentlyPlayingSpotify = await getCurrentlyPlaying(
+      session.accessToken,
+    )
 
-  if (currentlyPlayingSpotify === null) {
-    throw new Error("No currently playing found")
-  }
+    if (currentlyPlayingSpotify === null) {
+      throw new Error("No currently playing found")
+    }
 
-  // Parse currentlyPlaying to SpotifyItem ready to be stored in database
-  const currentlyPlaying = mapToCurrentlyPlaying(currentlyPlayingSpotify)
+    // Parse currentlyPlaying to SpotifyItem ready to be stored in database
+    const currentlyPlaying = mapToCurrentlyPlaying(currentlyPlayingSpotify)
 
+    // Update database with currently playing from Spotify
+    let currentlyPlayingDB = await spotifyCurrentlyPlayingToDatabase(
+      session.user.id,
+      currentlyPlaying,
+      true,
+      true,
+      true,
+    )
 
-  // Update database with currently playing from Spotify
-  let currentlyPlayingDB = await spotifyCurrentlyPlayingToDatabase(session.user.id, currentlyPlaying, true, true, true)
+    // Get payload ready for dispatch
+    const payload = {
+      ...currentlyPlayingDB,
+      timestamp: currentlyPlayingDB.timestamp.toISOString(),
+      updatedAt: currentlyPlayingDB.updatedAt.toISOString(),
+      queue: {
+        ...currentlyPlayingDB.queue,
+        updatedAt: currentlyPlayingDB.queue.updatedAt.toISOString(),
+      },
+      suggested: {
+        ...currentlyPlayingDB?.suggested,
+        updatedAt: currentlyPlayingDB?.suggested.updatedAt.toISOString(),
+      },
+    }
 
-  // Get payload ready for dispatch
-  const payload = 
-  {
-    ...currentlyPlayingDB,
-    timestamp: currentlyPlayingDB.timestamp.toISOString(),
-    updatedAt: currentlyPlayingDB.updatedAt.toISOString(),
-    queue: {
-      ...currentlyPlayingDB.queue,
-      updatedAt: currentlyPlayingDB.queue.updatedAt.toISOString(),
-    },
-    suggested: {
-      ...currentlyPlayingDB?.suggested,
-      updatedAt: currentlyPlayingDB?.suggested.updatedAt.toISOString(),
-    },
-  }
-
-  // Return payload with currently playing ready for clientside to dispatch
-  return {payload, imageURL: currentlyPlayingDB.song?.album?.images[0].url ?? ""}
+    // Return payload with currently playing ready for clientside to dispatch
+    return {
+      payload,
+      imageURL: currentlyPlayingDB.song?.album?.images[0].url ?? "",
+    }
   } catch (err) {
     console.error(err)
   }
@@ -57,8 +66,7 @@ export async function getCurrentlyPlaying_Host() {
 }
 
 export async function getCurrentlyPlaying_Member(cpId: string | undefined) {
-  if (cpId === undefined) 
-    return null
+  if (cpId === undefined) return null
 
   try {
     const session = await getServerSession(authOptions)
@@ -80,10 +88,10 @@ export async function getCurrentlyPlaying_Member(cpId: string | undefined) {
                 name: true,
                 images: {
                   select: {
-                    url: true, 
-                  }
-                }
-              }
+                    url: true,
+                  },
+                },
+              },
             },
           },
         },
@@ -93,18 +101,15 @@ export async function getCurrentlyPlaying_Member(cpId: string | undefined) {
       },
     })
 
-    if (cp === null)
-      throw new Error("No currently playing found")
+    if (cp === null) throw new Error("No currently playing found")
 
-    const payload = 
-      {
-        ...cp,
-        timestamp: cp.timestamp.toISOString(),
-        updatedAt: cp.updatedAt.toISOString(),
-      }
+    const payload = {
+      ...cp,
+      timestamp: cp.timestamp.toISOString(),
+      updatedAt: cp.updatedAt.toISOString(),
+    }
 
-    return {payload, imageURL: cp.song?.album?.images[0].url ?? ""}
-    
+    return { payload, imageURL: cp.song?.album?.images[0].url ?? "" }
   } catch (err) {
     console.error(err)
   }

@@ -1,15 +1,15 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { Account,NextAuthOptions } from "next-auth";
-import { Adapter } from "next-auth/adapters";
-import { JWT } from "next-auth/jwt";
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { Account, NextAuthOptions } from "next-auth"
+import { Adapter } from "next-auth/adapters"
+import { JWT } from "next-auth/jwt"
 import SpotifyProvider from "next-auth/providers/spotify"
 
-import { spotifyScope } from "@/constants/spotify";
-import prisma from "@/lib/prisma";
+import { spotifyScope } from "@/constants/spotify"
+import prisma from "@/lib/prisma"
 
-import { tokenExpired } from "../helper";
+import { tokenExpired } from "../helper"
 
-import { refreshAccessToken, refreshDatabaseAccessToken } from "./refreshTokens";
+import { refreshAccessToken, refreshDatabaseAccessToken } from "./refreshTokens"
 /**
  * NextAuthOptions
  *

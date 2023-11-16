@@ -26,7 +26,6 @@ const LikeButton: FC<LikeButtonProps> = ({ songId, songName }) => {
 
   return (
     <div className="relative w-8 max-w-full min-h-[30px] h-full">
-
       <AnimatePresence>
         {liked ? (
           <motion.button
@@ -60,7 +59,6 @@ const LikeButton: FC<LikeButtonProps> = ({ songId, songName }) => {
           </motion.button>
         )}
       </AnimatePresence>
-
     </div>
   )
 }

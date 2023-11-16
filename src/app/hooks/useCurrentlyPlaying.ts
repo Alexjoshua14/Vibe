@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import { getCurrentlyPlaying_Host, getCurrentlyPlaying_Member } from "@/lib/queue-session/currentlyPlaying"
+import {
+  getCurrentlyPlaying_Host,
+  getCurrentlyPlaying_Member,
+} from "@/lib/queue-session/currentlyPlaying"
 import { Context } from "@/lib/validators/context"
 import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
 import { setStatus } from "@/redux/reducers/status"
@@ -34,20 +37,27 @@ export const useCurrentlyPlaying = () => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      if (status === 'IDLE' || status === 'LOADING')
-        return
-     
+      if (status === "IDLE" || status === "LOADING") return
+
       // Ensure Members have a currently playing id, if not then reconnect them
-      if (status === 'MEMBER' && currentlyPlaying?.id === undefined || currentlyPlaying?.id === null) {
-        console.warn("Currently playing id is undefined or null, reconnecting..")
-        dispatch(setStatus('LOADING'))
+      if (
+        (status === "MEMBER" && currentlyPlaying?.id === undefined) ||
+        currentlyPlaying?.id === null
+      ) {
+        console.warn(
+          "Currently playing id is undefined or null, reconnecting..",
+        )
+        dispatch(setStatus("LOADING"))
         return
       }
-        
+
       // Perform data fetching,
       // if HOST then fetch from Spotify and update database
       // if MEMBER then just fetch from database
-      let data = status === 'HOST' ? await getCurrentlyPlaying_Host() : await getCurrentlyPlaying_Member(currentlyPlaying.id)
+      let data =
+        status === "HOST"
+          ? await getCurrentlyPlaying_Host()
+          : await getCurrentlyPlaying_Member(currentlyPlaying.id)
       if (data === null) {
         dispatch(setCurrentlyPlaying(null))
         setImage("")
