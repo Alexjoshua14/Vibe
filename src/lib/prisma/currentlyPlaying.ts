@@ -278,3 +278,114 @@ export async function reconnect() {
 
   return { cpID: userDB?.currentlyPlayingId, prevStatus }
 }
+
+const disconectSongFromCurrentlyPlaying = async (userId: string, includeQueue?: boolean, includeSuggested?: boolean, includeMembers?: boolean) => {
+  return await prisma.currentlyPlaying.update({
+    where: {
+      userId: userId,
+    },
+    data: {
+      song: {
+        disconnect: true,
+      }
+    },
+    include: {
+      song: {
+          include: {
+            artists: true,
+          },
+        },
+        queue: includeQueue,
+        suggested: includeSuggested,
+        members: includeMembers,
+    }
+  })
+}
+
+  
+
+/**
+ * Takes a CurrentlyPlaying object and uses it to update the database
+ * 
+ * @param userId 
+ * @param currentlyPlaying 
+ * @returns Updated currentlyPlaying from database
+ */
+export const spotifyCurrentlyPlayingToDatabase = 
+  async (
+    userId: string, 
+    currentlyPlaying: CurrentlyPlaying,
+    includeQueue?: boolean,
+    includeSuggested?: boolean,
+    includeMembers?: boolean,
+  ) => {
+
+  let currentlyPlayingDB = (currentlyPlaying.item === null || currentlyPlaying.item === undefined) ?
+    await disconectSongFromCurrentlyPlaying(userId, includeQueue, includeSuggested, includeMembers) :
+    await prisma.currentlyPlaying.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        progress_ms: currentlyPlaying.progress_ms,
+        song: {
+          connectOrCreate: {
+            where: {
+              uri: currentlyPlaying.item.uri,
+            },
+            create: {
+              uri: currentlyPlaying.item.uri,
+              name: currentlyPlaying.item.name,
+              duration_ms: currentlyPlaying.item.duration_ms,
+              href: currentlyPlaying.item.href,
+              explicit: currentlyPlaying.item.explicit,
+              popularity: currentlyPlaying.item.popularity,
+              type: currentlyPlaying.item.type,
+              album: {
+                connectOrCreate: {
+                  where: {
+                    uri: currentlyPlaying.item.album.uri,
+                  },
+                  create: {
+                    uri: currentlyPlaying.item.album.uri,
+                    name: currentlyPlaying.item.album.name,
+                    href: currentlyPlaying.item.album.href,
+                    images: {
+                      create: currentlyPlaying.item.album.images,
+                    }
+                  }
+                }
+              },
+              artists: {
+                connectOrCreate: currentlyPlaying.item.artists.map((artist) => {
+                  return {
+                    where: {
+                      uri: artist.uri,
+                    },
+                    create: {
+                      uri: artist.uri,
+                      name: artist.name,
+                      href: artist.href,
+                    }
+                  }
+                })
+              }
+            
+            }
+          }
+        }
+      },
+      include: {
+        song: {
+            include: {
+              artists: true,
+            },
+          },
+          queue: includeQueue,
+          suggested: includeSuggested,
+          members: includeMembers,
+      }
+    })
+
+  return currentlyPlayingDB
+}

@@ -13,6 +13,7 @@ import {
   updateCurrentlyPlayingDB,
 } from "@/lib/prisma/currentlyPlaying"
 import { getSongImage } from "@/lib/prisma/song"
+import { getCurrentlyPlaying_Host, getCurrentlyPlaying_Member } from "@/lib/queue-session/currentlyPlaying"
 import { Context } from "@/lib/validators/context"
 import { CurrentlyPlaying } from "@/lib/validators/spotify"
 import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
@@ -48,54 +49,20 @@ export const useCurrentlyPlaying = () => {
   useEffect(() => {
     const fetchData = async () => {
       console.log("Running Fetch Data")
-      let dbcp =
-        status === "HOST"
-          ? await getCurrentlyPlayingDB(true, true, true)
-          : status === "MEMBER"
-          ? await getCurrentlyPlayingDBMember(
-              currentlyPlaying?.id,
-              true,
-              true,
-              true,
-            )
-          : null
-
-      if (dbcp == null) {
-        console.log(
-          "Database doesn't seem to have a currently playing object..",
-        )
+      if (status === 'IDLE' || status === 'LOADING')
+        return
+     
+      if (status === 'MEMBER' && currentlyPlaying?.id === undefined || currentlyPlaying?.id === null) {
+        console.warn("Currently playing id is undefined or null, reconnecting..")
+        dispatch(setStatus('LOADING'))
         return
       }
+        
+      let payload = status === 'HOST' ? await getCurrentlyPlaying_Host() : await getCurrentlyPlaying_Member(currentlyPlaying.id)
 
-      let cp: CurrentlyPlaying | null = null
-      let payload = null
-
-      if (status === "HOST") cp = await getClientCurrentlyPlaying()
-
-      if (cp) {
-        dbcp = await updateCurrentlyPlayingDB(cp, true, true, true)
-      } else if (!dbcp) {
-        console.log("No song playing")
-      }
-
-      if (dbcp) {
-        payload = {
-          ...dbcp,
-          timestamp: dbcp.timestamp.toISOString(),
-          updatedAt: dbcp.updatedAt.toISOString(),
-          queue: {
-            ...dbcp.queue,
-            updatedAt: dbcp.queue.updatedAt.toISOString(),
-          },
-          suggested: {
-            ...dbcp?.suggested,
-            updatedAt: dbcp?.suggested.updatedAt.toISOString(),
-          },
-        }
-      }
+      console.log("Payload: ", JSON.stringify(payload))
 
       dispatch(setCurrentlyPlaying(payload))
-      // setSongCompleted(false)
     }
 
     if (DataIntervalId.current != null) {
@@ -106,7 +73,7 @@ export const useCurrentlyPlaying = () => {
     if (status === "HOST" || status === "MEMBER") {
       fetchData()
       // Fetch currently playing song every 10 seconds
-      DataIntervalId.current = setInterval(fetchData, 10000)
+      DataIntervalId.current = setInterval(fetchData, 30000)
     }
 
     return () => {
