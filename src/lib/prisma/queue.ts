@@ -3,7 +3,7 @@
 import { Album, Artist, Image, Queue, Song } from "@prisma/client"
 import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/utilities/OAuth/authOptions"
 
 import prisma from "../prisma"
 
