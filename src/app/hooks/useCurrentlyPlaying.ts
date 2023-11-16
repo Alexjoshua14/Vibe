@@ -1,25 +1,11 @@
-import React, { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  Artist,
-  CurrentlyPlaying as DBCurrentlyPlaying,
-  Song,
-} from "@prisma/client"
 
-import {
-  getCurrentlyPlayingDB,
-  getCurrentlyPlayingDBMember,
-  reconnect,
-  updateCurrentlyPlayingDB,
-} from "@/lib/prisma/currentlyPlaying"
-import { getSongImage } from "@/lib/prisma/song"
 import { getCurrentlyPlaying_Host, getCurrentlyPlaying_Member } from "@/lib/queue-session/currentlyPlaying"
 import { Context } from "@/lib/validators/context"
-import { CurrentlyPlaying } from "@/lib/validators/spotify"
 import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
 import { setStatus } from "@/redux/reducers/status"
 import { progressToPercentage } from "@/utilities/helper"
-import { getClientCurrentlyPlaying } from "@/utilities/spotifyAPI"
 
 export const useCurrentlyPlaying = () => {
   // const [currentlyPlaying, setCurrentlyPlaying] = useState<Awaited<ReturnType<typeof getCurrentlyPlayingDB>> | null | undefined>(undefined)

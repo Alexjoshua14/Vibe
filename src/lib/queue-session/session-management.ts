@@ -2,7 +2,7 @@
 
 import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/utilities/OAuth/authOptions"
 
 import prisma from "../prisma"
 import { addSongToSuggested } from "../prisma/suggested"

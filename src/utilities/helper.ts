@@ -1,6 +1,5 @@
 import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import {
   CurrentlyPlaying,
   CurrentlyPlayingResponse,
@@ -10,6 +9,7 @@ import {
   SpotifyItemSchema,
   SpotifyItemWrapper,
 } from "@/lib/validators/spotify"
+import { authOptions } from "@/utilities/OAuth/authOptions"
 
 /**
  * Extract SpotifyItems from json response

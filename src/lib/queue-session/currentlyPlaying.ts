@@ -2,15 +2,13 @@
 
 import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { mapToCurrentlyPlaying } from "@/utilities/helper"
+import { authOptions } from "@/utilities/OAuth/authOptions"
 import { getCurrentlyPlaying } from "@/utilities/spotifyAPI"
 
 import prisma from "../prisma"
 import { spotifyCurrentlyPlayingToDatabase } from "../prisma/currentlyPlaying"
 import { CurrentlyPlaying } from "../validators/spotify"
-
-
 
 export async function getCurrentlyPlaying_Host() {
   try {

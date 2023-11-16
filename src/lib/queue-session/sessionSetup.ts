@@ -2,8 +2,8 @@
 
 import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import prisma from "@/lib/prisma"
+import { authOptions } from "@/utilities/OAuth/authOptions"
 
 export interface AvailableSession {
   id: string

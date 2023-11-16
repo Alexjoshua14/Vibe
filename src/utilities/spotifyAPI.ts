@@ -2,7 +2,6 @@
 
 import { getServerSession } from "next-auth/next"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import {
   addToQueueURL,
   currentlyPlayingURL,
@@ -27,6 +26,7 @@ import {
   mapToCurrentlyPlaying,
   mapToSongs,
 } from "@/utilities/helper"
+import { authOptions } from "@/utilities/OAuth/authOptions"
 
 /**
  * Get the user's top tracks
