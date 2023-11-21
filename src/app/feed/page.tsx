@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation"
+
 import SongCard from "@/components/cards/songCard"
 import { Post } from "@/components/songCard"
 import { postSampleData } from "@/data/songs"
@@ -8,6 +10,8 @@ import { postSampleData } from "@/data/songs"
  *
  */
 export default function Feed() {
+  if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test")
+    redirect("/")
   // Get Posts from Supabase using Prisma
 
   return (
