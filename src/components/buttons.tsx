@@ -2,7 +2,7 @@
 
 import { FC, HTMLAttributes } from "react"
 import { useDispatch } from "react-redux"
-import Link from "next/link"
+import Link, { LinkProps } from "next/link"
 import { signIn, signOut } from "next-auth/react"
 
 import { useSessionManagement } from "@/app/hooks/useSessionManagement"
@@ -19,49 +19,52 @@ export const LoginButton = () => {
   return <button onClick={() => signIn()}>Sign In</button>
 }
 
-export const LogoutButton = () => {
-  return <button onClick={() => signOut()}>Sign Out</button>
+export const LogoutButton: FC<Partial<HTMLAttributes<HTMLButtonElement>>> = ({ ...props }) => {
+  return <button onClick={() => signOut()} {...props}>Sign Out</button>
 }
 
 /**
  * Next.js page navigation buttons
  *
  */
-export const HomeButton = () => {
-  return <Link href="/">Home</Link>
+export const HomeButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
+  return <Link href="/" {...props}>Home</Link>
 }
 
-export const FeedButton = () => {
-  return <Link href="/feed">Feed</Link>
+export const FeedButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
+  return <Link href="/feed" {...props}>Feed</Link>
 }
 
-export const PlayerButton = () => {
-  return <Link href="/player">Player</Link>
+export const PlayerButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
+  return <Link href="/player" {...props}>Player</Link>
 }
 
-export const ProfileButton = () => {
-  return <Link href="/profile">Profile</Link>
+export const ProfileButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
+  return <Link href="/profile" {...props}>Profile</Link>
 }
 
-export const EndSession = () => {
+export const EndSession: FC<Partial<HTMLAttributes<HTMLButtonElement>>> = ({ ...props }) => {
   return (
     <button
       onClick={() => destroySession}
       className="bg-red-950 text-stone-50 px-4 py-2 rounded glassmorphism-2-interactive"
+      {...props}
     >
       End Session ⚠️
     </button>
   )
 }
 
-export const CallbackButton = ({
+interface CallbackButtonProps extends Partial<HTMLAttributes<HTMLButtonElement>> {
+  callback: () => void
+  text: string
+}
+
+export const CallbackButton: FC<CallbackButtonProps> = ({
   callback,
   text,
   className,
-}: {
-  callback: () => void
-  text: string
-  className?: string
+  ...props
 }) => {
   return (
     <button
@@ -70,13 +73,14 @@ export const CallbackButton = ({
         className,
       )}
       onClick={() => callback()}
+      {...props}
     >
       {text}
     </button>
   )
 }
 
-interface JoinSessionProps extends HTMLAttributes<HTMLButtonElement> {
+interface JoinSessionProps extends Partial<HTMLAttributes<HTMLButtonElement>> {
   sessionId: string
   text: string
   handleJoinSession: (sessionId: string) => void
@@ -87,6 +91,7 @@ export const JoinSessionButton: FC<JoinSessionProps> = ({
   text,
   handleJoinSession,
   className,
+  ...props
 }) => {
   return (
     <button
@@ -95,6 +100,7 @@ export const JoinSessionButton: FC<JoinSessionProps> = ({
         "glassmorphism-2-interactive px-4 py-2 rounded !bg-tertiary",
         className,
       )}
+      {...props}
     >
       {text}
     </button>
