@@ -58,7 +58,7 @@ export const useCurrentlyPlaying = () => {
         status === "HOST"
           ? await getCurrentlyPlaying_Host()
           : await getCurrentlyPlaying_Member(currentlyPlaying.id)
-      
+
       dispatch(setCurrentlyPlaying(data?.payload ?? null))
       setImage(data?.imageURL ?? "")
     }
@@ -94,7 +94,7 @@ export const useCurrentlyPlaying = () => {
     const updateProgress = () => {
       // Ensure a song is actually playing based on currentlyPlaying object status
       if (currentlyPlaying) {
-        // Set progress_ms to the current progress 
+        // Set progress_ms to the current progress
         // with the time since the last update factored in
         let progress_ms =
           currentlyPlaying.progress_ms +

@@ -79,7 +79,7 @@ export const useSuggested = () => {
           title: "Added to queue",
           description: `${name} has been added to the queue`,
         })
-      } catch (error) { }
+      } catch (error) {}
     },
     [toast, suggested, setQueue],
   )

@@ -1,17 +1,18 @@
-'use client'
+"use client"
 
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from "react"
 
-import { useSessionManagement } from '@/app/hooks/useSessionManagement'
-import { AvailableSession, getAvailableSessions } from '@/lib/queue-session/sessionSetup'
+import { useSessionManagement } from "@/app/hooks/useSessionManagement"
+import {
+  AvailableSession,
+  getAvailableSessions,
+} from "@/lib/queue-session/sessionSetup"
 
-import { JoinSessionButton } from '../buttons'
+import { JoinSessionButton } from "../buttons"
 
-interface JoinSessionProps {
+interface JoinSessionProps {}
 
-}
-
-const JoinSession: FC<JoinSessionProps> = ({ }) => {
+const JoinSession: FC<JoinSessionProps> = ({}) => {
   const { handleJoinSession } = useSessionManagement()
   const [availableSessions, setAvailableSessions] = useState<
     AvailableSession[]
