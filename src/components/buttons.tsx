@@ -82,7 +82,7 @@ interface JoinSessionProps extends HTMLAttributes<HTMLButtonElement> {
   handleJoinSession: (sessionId: string) => void
 }
 
-export const JoinSession: FC<JoinSessionProps> = ({
+export const JoinSessionButton: FC<JoinSessionProps> = ({
   sessionId,
   text,
   handleJoinSession,
