@@ -36,7 +36,7 @@ export const FeedButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement
 }
 
 export const PlayerButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
-  return <Link href="/player" {...props}>Player</Link>
+  return <Link href="/player" className={props.className} {...props}>Player</Link>
 }
 
 export const ProfileButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
