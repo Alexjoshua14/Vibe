@@ -15,8 +15,8 @@ import { setStatus } from "@/redux/reducers/status"
  * NextAuth authentication buttons
  *
  */
-export const LoginButton = () => {
-  return <button onClick={() => signIn()}>Sign In</button>
+export const LoginButton: FC<Partial<HTMLAttributes<HTMLButtonElement>>> = ({ ...props }) => {
+  return <button onClick={() => signIn()} {...props}>Sign In</button>
 }
 
 export const LogoutButton: FC<Partial<HTMLAttributes<HTMLButtonElement>>> = ({ ...props }) => {
@@ -36,7 +36,7 @@ export const FeedButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement
 }
 
 export const PlayerButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
-  return <Link href="/player" {...props}>Player</Link>
+  return <Link href="/player" className={props.className} {...props}>Player</Link>
 }
 
 export const ProfileButton: FC<Partial<LinkProps & HTMLAttributes<HTMLAnchorElement>>> = ({ href, ...props }) => {
