@@ -51,27 +51,27 @@
 }
 
 .glassmorphism-primary {
-  @apply glassmorphism-base bg-opacity-20;
-}
-
-.glassmorphism-primary-interactive {
-  @apply glassmorphism-primary hover:bg-opacity-30;
-}
-
-.glassmorphism-secondary {
   @apply glassmorphism-base bg-opacity-30;
 }
 
-.glassmorphism-secondary-interactive {
-  @apply glassmorphism-secondary hover:bg-opacity-40;
+.glassmorphism-primary-interactive {
+  @apply glassmorphism-primary hover:bg-opacity-20;
 }
 
-.glassmorphism-tertiary {
+.glassmorphism-secondary {
   @apply glassmorphism-base bg-opacity-40;
 }
 
+.glassmorphism-secondary-interactive {
+  @apply glassmorphism-secondary hover:bg-opacity-50;
+}
+
+.glassmorphism-tertiary {
+  @apply glassmorphism-base bg-opacity-70;
+}
+
 .glassmorphism-tertiary-interactive {
-  @apply glassmorphism-tertiary hover:bg-opacity-50;
+  @apply glassmorphism-tertiary hover:bg-opacity-80;
 }
 
 .glassmorphism {
