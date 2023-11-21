@@ -161,12 +161,13 @@ export async function addSongToSuggested(song: SpotifyItem) {
 
 export async function acceptSuggestedSong(songId: string) {
   // Add to actual spotify queue
-  const user = await getServerSession(authOptions)
-  if (!user?.accessToken) throw new Error("No access token found")
+  const session = await getServerSession(authOptions)
+  if (!session?.accessToken) throw new Error("No access token found")
 
+  // Get queue and suggested ids
   const ids = await prisma.user.findFirst({
     where: {
-      id: user?.user?.id,
+      id: session?.user?.id,
     },
     select: {
       queueId: true,
@@ -188,7 +189,7 @@ export async function acceptSuggestedSong(songId: string) {
 
   if (uri === null) throw new Error("No song uri found")
 
-  const res = await addToQueue(user?.accessToken, uri)
+  const res = await addToQueue(session?.accessToken, uri)
 
   if (res === false) throw new Error("Song was not successfully added to queue")
 

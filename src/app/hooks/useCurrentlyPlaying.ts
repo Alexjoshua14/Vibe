@@ -58,13 +58,9 @@ export const useCurrentlyPlaying = () => {
         status === "HOST"
           ? await getCurrentlyPlaying_Host()
           : await getCurrentlyPlaying_Member(currentlyPlaying.id)
-      if (data === null) {
-        dispatch(setCurrentlyPlaying(null))
-        setImage("")
-        return
-      }
-      dispatch(setCurrentlyPlaying(data.payload))
-      setImage(data.imageURL)
+
+      dispatch(setCurrentlyPlaying(data?.payload ?? null))
+      setImage(data?.imageURL ?? "")
     }
 
     if (DataIntervalId.current != null) {
@@ -96,18 +92,26 @@ export const useCurrentlyPlaying = () => {
    */
   useEffect(() => {
     const updateProgress = () => {
+      // Ensure a song is actually playing based on currentlyPlaying object status
       if (currentlyPlaying) {
+        // Set progress_ms to the current progress
+        // with the time since the last update factored in
         let progress_ms =
           currentlyPlaying.progress_ms +
           (currentlyPlaying.updatedAt !== undefined
             ? Date.now() - new Date(currentlyPlaying.updatedAt).getTime()
             : 0)
+
+        // Ensure the progress_ms is not greater than the song duration
         if (
           currentlyPlaying.song &&
           progress_ms > currentlyPlaying.song.duration_ms
         ) {
           progress_ms = currentlyPlaying.song.duration_ms
         }
+
+        // Compute the percentage of the song that has been played
+        // defaulting to 0 in any erroneous cases
         const progressPercentage = currentlyPlaying.song
           ? progressToPercentage(progress_ms, currentlyPlaying.song.duration_ms)
           : 0
@@ -115,7 +119,7 @@ export const useCurrentlyPlaying = () => {
       }
     }
 
-    if (status !== "IDLE" && !song_completed)
+    if ((status === "HOST" || status === "MEMBER") && !song_completed)
       ProgressIntervalId.current = setInterval(updateProgress, 1000)
 
     return () => {
@@ -126,6 +130,7 @@ export const useCurrentlyPlaying = () => {
     }
   }, [currentlyPlaying, song_completed, status])
 
+  // Set loading to true if any of the required data is missing
   useEffect(() => {
     if (currentlyPlaying && progress && imageURL) {
       setLoading(false)

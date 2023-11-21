@@ -64,15 +64,15 @@ export const useSuggested = () => {
         acceptSuggestedSong(id) ?? { queue: null, suggested: null }
 
         // Optimistic update
-        const updatedQueue = [
-          ...queued,
-          suggested.find((song) => song.id === id)!,
-        ]
-        const updatedSuggested = suggested.filter((song) => song.id !== id)
-        setQueue(updatedQueue)
-        setSuggested(updatedSuggested)
-        // setQueue((prev) => [...prev, suggested.find((song) => song.id === id)!])
-        // setSuggested((prev) => prev.filter((song) => song.id !== id))
+        // const updatedQueue = [
+        //   ...queued,
+        //   suggested.find((song) => song.id === id)!,
+        // ]
+        // const updatedSuggested = suggested.filter((song) => song.id !== id)
+        // setQueue(updatedQueue)
+        // setSuggested(updatedSuggested)
+        setQueue((prev) => [...prev, suggested.find((song) => song.id === id)!])
+        setSuggested((prev) => prev.filter((song) => song.id !== id))
 
         console.log("APPROVED: " + id)
         toast({
@@ -81,7 +81,7 @@ export const useSuggested = () => {
         })
       } catch (error) {}
     },
-    [toast, suggested, queued, setQueue],
+    [toast, suggested, setQueue],
   )
 
   const handleReject = useCallback(

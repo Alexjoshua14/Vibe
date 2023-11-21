@@ -2,6 +2,7 @@ import React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
+import { Background } from "@/components/background"
 import Providers from "@/components/Providers"
 import { Toaster } from "@/components/ui/toaster"
 
@@ -28,8 +29,9 @@ export default function RootLayout({
     <html lang="en" className="overscroll-none">
       <Providers>
         <body
-          className={`inter.className z-10 bg-gradient-to-t from-bg-tertiary to-bg-primary text-primary`}
+          className={`inter.className z-10 bg-gradient-to-t from-teal-950 to-teal-700 text-primary subpixel-antialiased`}
         >
+          <Background />
           <div className={`flex flex-col min-h-screen p-2 z-20`}>
             <div className="flex-1 flex pb-[5rem]">{children}</div>
             <Toaster />

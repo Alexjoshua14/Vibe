@@ -7,20 +7,15 @@ import { FeedButton, PlayerButton, ProfileButton } from "./buttons"
 
 export const BottomNav = () => {
   return (
-    <Grid
-      container
-      spacing={2}
-      className="fixed bottom-0 left-0 right-0 flex center h-14 sm:h-20 p-1 sm:p-4 text-center bg-zinc-800 glassmorphism glassmorphism-2"
-    >
-      <Grid xs={4}>
-        <FeedButton />
-      </Grid>
-      <Grid xs={4}>
-        <PlayerButton />
-      </Grid>
-      <Grid xs={4}>
-        <ProfileButton />
-      </Grid>
-    </Grid>
+    <nav className="fixed bottom-5 left-1/2 -translate-x-1/2 h-14 sm:h-20 p-1 sm:p-4 text-center bg-secondary glassmorphism-tertiary rounded">
+      <ul className="w-full h-full flex gap-2 items-center justify-around">
+        <li>
+          <PlayerButton className="glassmorphism-tertiary-interactive px-6 py-3 rounded hover:scale-105 subpixel-antialiased transiton-all" />
+        </li>
+        <li>
+          <ProfileButton className="glassmorphism-tertiary-interactive px-6 py-3 rounded hover:scale-105 transiton-all subpixel-antialiased" />
+        </li>
+      </ul>
+    </nav>
   )
 }

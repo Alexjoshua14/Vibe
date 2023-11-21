@@ -7,30 +7,13 @@ import {
   getAvailableSessions,
 } from "@/lib/queue-session/sessionSetup"
 
+import CreateSessionForm from "./sessionSetup/createSessionForm"
+import JoinSession from "./sessionSetup/joinSession"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
-import { JoinSession } from "./buttons"
-import { CreateSession, DestroySession, TEMPORARYGRAB } from "./sessionButtons"
 
 export interface setupSessionProps {}
 
 const SetupSession: FC<setupSessionProps> = ({}) => {
-  const { handleJoinSession } = useSessionManagement()
-  const [availableSessions, setAvailableSessions] = useState<
-    AvailableSession[]
-  >([])
-  const [loadingAvailableSessions, setLoadingAvailableSessions] =
-    useState<boolean>(true)
-
-  useEffect(() => {
-    const fetchAvailableSessions = async () => {
-      const availableSessions = await getAvailableSessions()
-      setAvailableSessions(availableSessions)
-      setLoadingAvailableSessions(false)
-    }
-
-    fetchAvailableSessions()
-  })
-
   return (
     <Tabs defaultValue="join" className="flex flex-col items-center">
       <TabsList>
@@ -38,27 +21,12 @@ const SetupSession: FC<setupSessionProps> = ({}) => {
         <TabsTrigger value="join">Join Session</TabsTrigger>
       </TabsList>
       <TabsContent value="create">
-        <div className="h-[300px] w-[400px] flex flex-col items-center justify-center gap-4">
-          <DestroySession />
-          <CreateSession />
-          <TEMPORARYGRAB />
+        <div className=" flex flex-col items-center justify-center gap-4">
+          <CreateSessionForm />
         </div>
       </TabsContent>
       <TabsContent value="join">
-        <div className="h-[300px] w-[400px] flex flex-col items-center justify-center gap-4">
-          {availableSessions.length > 0 ? (
-            availableSessions.map((session) => (
-              <JoinSession
-                key={session.id}
-                sessionId={session.id}
-                handleJoinSession={handleJoinSession}
-                text={`Join ${session.hostName}'s session!`}
-              />
-            ))
-          ) : (
-            <p>No sessions available at the moment..</p>
-          )}
-        </div>
+        <JoinSession />
       </TabsContent>
     </Tabs>
   )
