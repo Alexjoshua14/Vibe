@@ -12,6 +12,9 @@ export default async function Home() {
   if (!session) {
     console.log("No session found.")
     redirect("/api/auth/signin?callbackUrl=/")
+  } else {
+    if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test")
+      redirect("/player")
   }
 
   return (
