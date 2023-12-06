@@ -4,6 +4,13 @@ import { getServerSession } from "next-auth"
 import { LoginButton, LogoutButton } from '@/components/buttons'
 import { authOptions } from "@/utilities/OAuth/authOptions"
 
+/**
+* Things to do for profile page
+* - Add section for profile control buttons such as sign out, settings, etc
+* - Add section for list of recently played/listened to songs
+* - Add top area of general user information such as their profile image, name, etc
+*
+*/
 
 /**
  * Profile page, where user can change their settings
