@@ -5,11 +5,15 @@ import { getServerSession } from "next-auth"
 import prisma from "@/lib/prisma"
 import { authOptions } from "@/utilities/OAuth/authOptions"
 
+/* TODO: Pull this interface out into a proper location */
 export interface AvailableSession {
   id: string
   hostName: string
 }
 
+/* TODO: Augment this function to allow for selecting from a set of predefined filters such as sessions from friends of user
+ * or publicly listed sessions
+ */
 export async function getAvailableSessions() {
   const user = await getServerSession(authOptions)
   if (!user) {
