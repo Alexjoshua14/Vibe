@@ -4,6 +4,10 @@ import { getUserQueued } from "@/lib/prisma/queue"
 
 import "client-only"
 
+/**
+ * useQueue hook for fetching songs in database queue
+ * Polls data every 10 seconds
+ */
 export const useQueue = () => {
   const [queued, setQueue] = useState<
     {
