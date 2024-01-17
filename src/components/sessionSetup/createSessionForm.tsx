@@ -20,16 +20,16 @@ import {
 } from "../ui/form"
 import { Input } from "../ui/input"
 import { Switch } from "../ui/switch"
-import { toast, useToast } from "../ui/use-toast"
+import { useToast } from "../ui/use-toast"
 
-interface CreateSessionFormProps {}
+interface CreateSessionFormProps { }
 
 const formSchema = z.object({
   sessionName: z.string().min(1).max(50),
   public: z.boolean(),
 })
 
-const CreateSessionForm: FC<CreateSessionFormProps> = ({}) => {
+const CreateSessionForm: FC<CreateSessionFormProps> = ({ }) => {
   const dispatch = useDispatch()
   const { toast } = useToast()
 

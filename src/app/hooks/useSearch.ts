@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux"
 
 import { SpotifyItem } from "@/lib/validators/spotify"
 import { setSearching } from "@/redux/reducers/search"
-import { sampleSearchResults } from "@/testData/searchData"
 import { searchSpotify } from "@/utilities/spotifyAPI"
 
 import "client-only"

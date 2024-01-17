@@ -1,10 +1,7 @@
-import { FC, Suspense } from "react"
-import { User } from "@prisma/client"
+import { Suspense } from "react"
 
 import CurrentlyPlaying from "@/components/currentlyPlaying"
 import Search from "@/components/search/search"
-import { getUser } from "@/lib/prisma/user"
-import { getQueueSession } from "@/lib/queue-session/session-management"
 
 interface pageProps {
   params: {

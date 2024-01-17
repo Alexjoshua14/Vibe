@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-import Grid from "@mui/material/Unstable_Grid2"
 
 import { PlayerButton, ProfileButton } from "./buttons/NavigationButtons"
 

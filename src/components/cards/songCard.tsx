@@ -1,7 +1,5 @@
 import { FC, HTMLAttributes } from "react"
-import { IconType } from "react-icons"
 import { IoMdCheckmark, IoMdClose } from "react-icons/io"
-import Image from "next/image"
 
 import { cn } from "@/lib/utils"
 

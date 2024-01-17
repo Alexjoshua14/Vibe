@@ -1,19 +1,12 @@
-import { FC, useEffect, useState } from "react"
-import { CurrentlyPlaying, Session, User } from "@prisma/client"
-
-import { useSessionManagement } from "@/app/hooks/useSessionManagement"
-import {
-  AvailableSession,
-  getAvailableSessions,
-} from "@/lib/queue-session/sessionSetup"
+import { FC } from "react"
 
 import CreateSessionForm from "./sessionSetup/createSessionForm"
 import JoinSession from "./sessionSetup/joinSession"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 
-export interface setupSessionProps {}
+export interface setupSessionProps { }
 
-const SetupSession: FC<setupSessionProps> = ({}) => {
+const SetupSession: FC<setupSessionProps> = ({ }) => {
   return (
     <Tabs defaultValue="join" className="flex flex-col items-center">
       <TabsList>

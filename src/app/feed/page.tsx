@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 
 import SongCard from "@/components/cards/songCard"
-import { Post } from "@/components/songCard"
 import { postSampleData } from "@/data/songs"
 
 /**
