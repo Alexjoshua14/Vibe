@@ -7,15 +7,15 @@ import { useSessionManagement } from "@/app/hooks/useSessionManagement"
 import { useSuggested } from "@/app/hooks/useSuggested"
 import { Context } from "@/lib/validators/context"
 
+import { CallbackButton } from "./buttons/CallbackButton"
 import Bug from "./error/bug"
 import Search from "./search/search"
-import { CallbackButton } from "./buttons"
 import CurrentlyPlaying from "./currentlyPlaying"
 import SongCarousel from "./songCarousel"
 
-interface sharedSessionProps {}
+interface sharedSessionProps { }
 
-const SharedSession: FC<sharedSessionProps> = ({}) => {
+const SharedSession: FC<sharedSessionProps> = ({ }) => {
   const status = useSelector((state: Context) => state.status)
 
   const { handleLeaveQueueSession } = useSessionManagement()

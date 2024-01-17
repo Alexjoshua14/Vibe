@@ -1,23 +1,22 @@
-"use client"
+'use client'
 
-import { FC } from "react"
+import { FC, HTMLAttributes } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/router"
 
-import {
-  createSession,
-  destroySession,
-} from "@/lib/queue-session/session-management"
+import { useToast } from "@/components/ui/use-toast"
+import { createSession, destroySession } from "@/lib/queue-session/session-management"
+import { cn } from "@/lib/utils"
 import { Context } from "@/lib/validators/context"
 import { setCurrentlyPlaying } from "@/redux/reducers/currentlyPlaying"
 import { setStatus } from "@/redux/reducers/status"
 
-import { useToast } from "./ui/use-toast"
-import { CallbackButton } from "./buttons"
+import { CallbackButton } from "./CallbackButton"
 
-interface createSessionProps {}
 
-export const CreateSession: FC<createSessionProps> = ({}) => {
+interface createSessionProps { }
+
+export const CreateSession: FC<createSessionProps> = ({ }) => {
   const { toast } = useToast()
   const dispatch = useDispatch()
   const router = useRouter()
@@ -46,9 +45,9 @@ export const CreateSession: FC<createSessionProps> = ({}) => {
   )
 }
 
-interface destroySessionProps {}
+interface destroySessionProps { }
 
-export const DestroySession: FC<destroySessionProps> = ({}) => {
+export const DestroySession: FC<destroySessionProps> = ({ }) => {
   const dispatch = useDispatch()
   const { toast } = useToast()
 
@@ -78,7 +77,7 @@ export const DestroySession: FC<destroySessionProps> = ({}) => {
   )
 }
 
-export const TEMPORARYGRAB: FC = ({}) => {
+export const TEMPORARYGRAB: FC = ({ }) => {
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -106,4 +105,44 @@ export const LeaveSession = () => {
   }
 
   return <CallbackButton callback={() => handleLeave()} text="Leave Session" />
+}
+
+
+export const EndSession: FC<Partial<HTMLAttributes<HTMLButtonElement>>> = ({ ...props }) => {
+  return (
+    <button
+      onClick={() => destroySession}
+      className="bg-red-950 text-stone-50 px-4 py-2 rounded glassmorphism-2-interactive"
+      {...props}
+    >
+      End Session ⚠️
+    </button>
+  )
+}
+
+interface JoinSessionProps extends Partial<HTMLAttributes<HTMLButtonElement>> {
+  sessionId: string
+  text: string
+  handleJoinSession: (sessionId: string) => void
+}
+
+export const JoinSessionButton: FC<JoinSessionProps> = ({
+  sessionId,
+  text,
+  handleJoinSession,
+  className,
+  ...props
+}) => {
+  return (
+    <button
+      onClick={() => handleJoinSession(sessionId)}
+      className={cn(
+        "glassmorphism-2-interactive px-4 py-2 rounded !bg-tertiary",
+        className,
+      )}
+      {...props}
+    >
+      {text}
+    </button>
+  )
 }

@@ -1,7 +1,7 @@
 import React from "react"
 import { getServerSession } from "next-auth"
 
-import { LoginButton, LogoutButton } from '@/components/buttons'
+import { LoginButton, LogoutButton } from '@/components/buttons/AuthButtons'
 import { authOptions } from "@/utilities/OAuth/authOptions"
 
 

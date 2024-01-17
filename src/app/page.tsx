@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth/next"
 
-import { LoginButton, LogoutButton } from "@/components/buttons"
+import { LoginButton, LogoutButton } from "@/components/buttons/AuthButtons"
 import { SongCard } from "@/components/songCard"
 import { songs } from "@/data/songs"
 import { authOptions } from "@/utilities/OAuth/authOptions"
