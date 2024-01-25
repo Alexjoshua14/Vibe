@@ -67,7 +67,7 @@
     "@testing-library/cypress": "^10.0.1",
     "@testing-library/react": "^14.0.0",
     "bun-types": "^1.0.6",
-    "cypress": "^13.3.1",
+    "cypress": "^13.6.3",
     "cypress-social-logins": "^1.14.1",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
