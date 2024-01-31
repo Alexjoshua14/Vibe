@@ -4,7 +4,9 @@
   "private": true,
   "license": "BSD-4-Clause",
   "scripts": {
-    "dev": "next dev",
+    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app src/api/index run -p 5328",
+    "next-dev": "next dev",
+    "dev": "concurrently \"bun run next-dev\" \"bun run flask-dev\"",
     "build": "next build",
     "postinstall": "prisma generate",
     "start": "next start",
@@ -43,6 +45,7 @@
     "class-variance-authority": "^0.7.0",
     "client-only": "^0.0.1",
     "clsx": "^2.0.0",
+    "concurrently": "^8.2.2",
     "eslint": "8.44.0",
     "eslint-config-next": "latest",
     "framer-motion": "^10.12.18",
