@@ -1,35 +1,39 @@
 from src.api.ranking.ranking3 import Rankings, testing
 from flask import Flask, request, jsonify
+import logging
 app = Flask(__name__)
+
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/api/hello")
 def hello_world():
+    app.logger.debug("Testing debug logger right this very second")
     return testing()
   
 @app.route("/api/sample", methods=["POST"])
 def sample():
-  print("Request received...")
+  app.logger.debug("Request received...")
   try:
-    print("Request received and parsing JSON data...")
+    app.logger.debug("Request received and parsing JSON data...")
     json_data = request.get_json()
     
-    print("JSON data: " + json_data)
+    app.logger.debug(json_data)
     
     if not json_data:
       return jsonify({"error": "No JSON data provided"}), 400
     
     return jsonify(json_data)
   except Exception as e:
-    print("Exception: " + str(e))
-    return jsonify({"error": "An error occurred"}), 500
+    app.logger.debug("Exception: " + str(e))
+    return jsonify({"error": "An error occurred.."}), 500
   
 @app.route("/api/ranking", methods=["POST"])
 def compute_ranking():
   try:
-    print("Request received and parsing JSON data...")
+    app.logger.debug("Request received and parsing JSON data...")
     json_data = request.get_json()
     
-    print("JSON data: " + json_data)
+    app.logger.debug(json_data)
     
     if not json_data:
       return jsonify({"error": "No JSON data provided"}), 400
@@ -47,7 +51,7 @@ def compute_ranking():
     rankings = Rankings(limit)
   
   except Exception as e:
-    print("Exception: " + str(e))
+    app.logger.debug("Exception: " + str(e))
     return jsonify({"error": "An error occurred"}), 500
     
     
