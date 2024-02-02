@@ -2,7 +2,7 @@ from src.api.ranking.ranking3 import Rankings, testing
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 
-@app.route("/api/python")
+@app.route("/api/hello")
 def hello_world():
     return testing()
   
