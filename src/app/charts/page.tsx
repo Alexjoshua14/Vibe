@@ -1,20 +1,6 @@
 
 import { computeGroupTopTracks, decodeURI } from "@/lib/topCharts/topTracks"
 
-import { sampleData } from "./sampleData"
-
-const getRankings = async (data: any) => {
-  const res = await fetch('http://localhost:3000/api/flask/ranking', {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-
-  return res.json()
-}
-
 const Track = (name: string, score: number) => {
   return (
     <div className="flex items-center justify-between gap-8">
