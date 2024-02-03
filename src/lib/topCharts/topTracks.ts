@@ -1,5 +1,9 @@
 import { uri_table, userData } from "./sampleData"
 
+const baseURL = 
+  process.env.NODE_ENV === 
+  'development' ? 'http://localhost:3000/'
+    : 'https://vibe-zeta.vercel.app/'
 
 // Fetch the top tracks for the current user
 const fetchTopTracks = async () => {
@@ -35,8 +39,7 @@ export const computeGroupTopTracks = async () => {
       items: groupData
     }
 
-
-  const res = await fetch('http://localhost:3000/api/flask/ranking', {
+  const res = await fetch(`${baseURL}api/flask/ranking`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
