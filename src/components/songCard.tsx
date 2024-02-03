@@ -9,7 +9,7 @@ import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
 import LinearProgress from "@mui/material/LinearProgress"
 import Typography from "@mui/material/Typography"
-import { Album, Song } from "@prisma/client"
+import { Song } from "@prisma/client"
 import Image from "next/image"
 
 import { cn } from "@/lib/utils"
@@ -43,11 +43,9 @@ const SongInformation = ({
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${
-        variant === "main" && "items-center sm:items-start"
-      } ${variant != "modal" && "items-start"} ${
-        variant == "modal" && "items-center"
-      }`}
+      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
+        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
+        }`}
     >
       <div
         className={`
@@ -160,11 +158,9 @@ const SongInformation2 = ({
 
   return (
     <div
-      className={`flex flex-col w-full justify-between ${
-        variant === "main" && "items-center sm:items-start"
-      } ${variant != "modal" && "items-start"} ${
-        variant == "modal" && "items-center"
-      }`}
+      className={`flex flex-col w-full justify-between ${variant === "main" && "items-center sm:items-start"
+        } ${variant != "modal" && "items-start"} ${variant == "modal" && "items-center"
+        }`}
     >
       <div
         ref={titleRef}

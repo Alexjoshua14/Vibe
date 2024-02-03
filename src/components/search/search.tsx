@@ -7,15 +7,14 @@ import { motion } from "framer-motion"
 
 import { useSearch } from "@/app/hooks/useSearch"
 import { addSongToSuggested } from "@/lib/prisma/suggested"
-import { addSongToQueue } from "@/lib/queue-session/session-management"
 import { SpotifyItem } from "@/lib/validators/spotify"
-import { addToQueueClient } from "@/utilities/spotifyAPI"
 
 import { AddToQueueModal, SearchResult } from "../songCard"
 
 import { SearchField } from "./searchField"
 
-interface searchProps {}
+interface searchProps { }
+
 
 /**
  * TODO - clean up ui presentation

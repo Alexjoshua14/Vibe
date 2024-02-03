@@ -1,0 +1,14 @@
+.bg {
+  --tw-bg-opacity: 1;
+  --bg-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  --bg-secondary: #f0f1f7;
+  background-color: var(--bg-color);
+}
+
+.gradient {
+  background: radial-gradient(#cdc3d5 0%, transparent 80%, transparent 100%);
+}
+
+.gradient2 {
+  background: radial-gradient(#c3d5d4 0%, transparent 80%, transparent 100%);
+}

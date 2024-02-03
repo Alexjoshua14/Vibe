@@ -1,21 +1,16 @@
 "use client"
 
-import { FC, useRef } from "react"
-import { HiOutlineDotsVertical } from "react-icons/hi"
+import { FC } from "react"
 import { useSelector } from "react-redux"
-import Image from "next/image"
 
 import { useCurrentlyPlaying } from "@/app/hooks/useCurrentlyPlaying"
-import { Progress } from "@/components/ui/progress"
 import { Context } from "@/lib/validators/context"
-import { msToTime } from "@/utilities/helper"
 
 import { Card, SkeletonCard } from "./cards/currentlyPlayingCard"
-import ScrollingText from "./scrollingText"
 
-interface currentlyPlayingProps {}
+interface currentlyPlayingProps { }
 
-const CurrentlyPlaying: FC<currentlyPlayingProps> = ({}) => {
+const CurrentlyPlaying: FC<currentlyPlayingProps> = ({ }) => {
   const status = useSelector((state: Context) => state.status)
 
   const { currentlyPlaying, progress, imageURL, loading } =

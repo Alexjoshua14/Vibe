@@ -8,11 +8,11 @@ import {
   getAvailableSessions,
 } from "@/lib/queue-session/sessionSetup"
 
-import { JoinSessionButton } from "../buttons"
+import { JoinSessionButton } from "../buttons/SessionButtons"
 
-interface JoinSessionProps {}
+interface JoinSessionProps { }
 
-const JoinSession: FC<JoinSessionProps> = ({}) => {
+const JoinSession: FC<JoinSessionProps> = ({ }) => {
   const { handleJoinSession } = useSessionManagement()
   const [availableSessions, setAvailableSessions] = useState<
     AvailableSession[]

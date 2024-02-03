@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, MutableRefObject, useCallback, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io"
 import { AnimatePresence, motion } from "framer-motion"
 

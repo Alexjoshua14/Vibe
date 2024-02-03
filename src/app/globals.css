@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.gradient-01 {
+/* .gradient-01 {
   position: absolute;
   width: 300px;
   height: 500px;
@@ -33,7 +33,7 @@
   background: slateblue;
   transform: rotate(44deg);
   filter: blur(200px);
-}
+} */
 
 @layer components {
   .no-scrollbar::-webkit-scrollbar {

@@ -1,9 +1,8 @@
 "use client"
 
 import React from "react"
-import Grid from "@mui/material/Unstable_Grid2"
 
-import { FeedButton, PlayerButton, ProfileButton } from "./buttons"
+import { PlayerButton, ProfileButton } from "./buttons/NavigationButtons"
 
 export const BottomNav = () => {
   return (

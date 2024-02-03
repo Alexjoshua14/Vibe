@@ -2,15 +2,10 @@
 
 import {
   FC,
-  MutableRefObject,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
-  useState,
 } from "react"
-
-import { postSampleData } from "@/data/songs"
 
 import SongCard from "./cards/songCard"
 import CarouselIndicator from "./carouselIndicator"
