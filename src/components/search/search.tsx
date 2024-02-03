@@ -15,7 +15,12 @@ import { SearchField } from "./searchField"
 
 interface searchProps { }
 
-const Search: FC<searchProps> = ({ }) => {
+
+/**
+ * TODO - clean up ui presentation
+ *
+ */
+const Search: FC<searchProps> = ({}) => {
   /* Search Spotify for Tracks */
   const {
     searchResults,
