@@ -1,6 +1,6 @@
 "use client"
 
-import { FC } from "react"
+import { FC, Suspense, useMemo } from "react"
 import { HiOutlineDotsVertical } from "react-icons/hi"
 import { useSelector } from "react-redux"
 import { motion } from "framer-motion"
@@ -18,8 +18,6 @@ interface playerProps { }
 
 const Player: FC<playerProps> = ({ }) => {
   const { currentlyPlaying, progress, imageURL } = useCurrentlyPlaying()
-  const status = useSelector((state: Context) => state.status)
-  const path = usePathname()
 
   useSessionManagement()
 
@@ -124,5 +122,11 @@ const Player: FC<playerProps> = ({ }) => {
 export default function PlayerWrapper({ ...props }) {
   const path = usePathname()
 
-  if (!path.startsWith("/player")) return <Player />
+  if (!path.startsWith("/player")) return (
+    <Suspense fallback={<div>Loading..</div>}>
+      <Player />
+    </Suspense>
+  )
+
+  return null
 }

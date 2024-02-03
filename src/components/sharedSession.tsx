@@ -29,14 +29,16 @@ const SharedSession: FC<sharedSessionProps> = ({ }) => {
 
   return (
     <div className="w-full h-full flex flex-col gap-4 items-center justify-center">
-      <div className="h-14 w-full flex flex-row gap-4 items-center px-4">
-        <CallbackButton
-          text={status === "HOST" ? `End Session` : `Leave Session`}
-          callback={handleLeaveQueueSession}
-          className="bg-red-800 glassmorphism !bg-opacity-75 hover:!bg-opacity-90 transition-colors"
-        />
-      </div>
-      {status === "HOST" ? <HostSession /> : <MemberSession />}
+      <Suspense fallback={<div className="text-3xl text-black">Loading...</div>}>
+        <div className="h-14 w-full flex flex-row gap-4 items-center px-4">
+          <CallbackButton
+            text={status === "HOST" ? `End Session` : `Leave Session`}
+            callback={handleLeaveQueueSession}
+            className="bg-red-800 glassmorphism !bg-opacity-75 hover:!bg-opacity-90 transition-colors"
+          />
+        </div>
+        {status === "HOST" ? <HostSession /> : <MemberSession />}
+      </Suspense>
     </div>
   )
 }

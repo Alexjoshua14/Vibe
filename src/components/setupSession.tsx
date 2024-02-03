@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, Suspense } from "react"
 
 import CreateSessionForm from "./sessionSetup/createSessionForm"
 import JoinSession from "./sessionSetup/joinSession"
@@ -19,7 +19,9 @@ const SetupSession: FC<setupSessionProps> = ({ }) => {
         </div>
       </TabsContent>
       <TabsContent value="join">
-        <JoinSession />
+        <Suspense fallback={<div>Loading...</div>}>
+          <JoinSession />
+        </Suspense>
       </TabsContent>
     </Tabs>
   )
