@@ -1,4 +1,4 @@
-from src.api.ranking.ranking3 import Rankings, testing
+from src.api.ranking.ranking3 import Rankings, testing, calculate_rankings
 from flask import Flask, request, jsonify
 import logging
 app = Flask(__name__)
@@ -48,7 +48,8 @@ def compute_ranking():
     if not items:
       return jsonify({"error": "No items provided"}), 400
     
-    rankings = Rankings(limit)
+    return calculate_rankings(json_data)
+
   
   except Exception as e:
     app.logger.debug("Exception: " + str(e))
