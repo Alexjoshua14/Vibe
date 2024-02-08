@@ -1,19 +1,33 @@
 import { uri_table, userData } from "./sampleData"
 
+// url for backend API
 const baseURL = 
   process.env.NODE_ENV === 
   'development' ? 'http://localhost:3000/'
     : 'https://vibe-zeta.vercel.app/'
 
 // Fetch the top tracks for the current user
+// Slightly external to func but this should likely be called
+// on a periodic basis once initiated (accepted by user)
+// i.e., ensure db has user's most current top tracks each 24hr or (24 * 7) hours
+//        or even each time user opens app (I think this is what apps like tinder does)
 const fetchTopTracks = async () => {
+  // 1) Grab user id / required info from current session
+
+  // 2) Call spotify API endpoint for desired data
+  // desired data: top tracks, likely max of 10-20 items
+
+  // 3) Parse response and return some predetermined structure
+
   return "TODO"
 }
 
 
 // Grab the top track data for each user in a given group
 const getGroupTopTrackData = async () => {
-  // TODO
+  // Fetch top tracks info for each member in the specified group
+  // grabbing their top track info from the db where it should be
+  // Aggregate the data, making it ready for computations
 
   return userData
 }
@@ -39,6 +53,7 @@ export const computeGroupTopTracks = async () => {
       items: groupData
     }
 
+    // Hand data off to backend for analysis
   const res = await fetch(`${baseURL}api/flask/ranking`, {
     method: 'POST',
     headers: {
@@ -50,6 +65,8 @@ export const computeGroupTopTracks = async () => {
   return res.json()
 }
 
+// TODO: Connect this to spotify API endpoint and possibly
+// throw in some cacheing mechanism 
 export const decodeURI = (uri: string) => {
   return uri_table.get(uri) ?? "Unkown"
 }
