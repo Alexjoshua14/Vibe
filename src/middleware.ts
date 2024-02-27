@@ -19,7 +19,7 @@ export async function middleware(req: NextRequest) {
 
   const ip = req.ip ?? "127.0.0.1"
   const env = process.env.NODE_ENV
-  if (env === "test" || env === "development") return NextResponse.next()
+  // if (env === "test" || env === "development") return NextResponse.next()
 
   try {
     // rate limit based on ip address
