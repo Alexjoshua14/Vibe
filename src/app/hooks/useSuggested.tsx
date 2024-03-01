@@ -26,7 +26,10 @@ export const useSuggested = () => {
   const { queued, setQueue } = useQueue()
 
   useEffect(() => {
-    if (suggestedTimerId.current) clearInterval(suggestedTimerId.current)
+    if (suggestedTimerId.current) {
+      clearInterval(suggestedTimerId.current)
+      suggestedTimerId.current = null
+    }
 
     const getSuggested = async () => {
       console.log("Getting suggested")
@@ -46,13 +49,16 @@ export const useSuggested = () => {
 
     getSuggested()
 
+    console.log("Setting timer for suggested")
     suggestedTimerId.current = setInterval(() => {
-      console.log("Setting timer for suggested")
       getSuggested()
     }, 10000)
 
     return () => {
-      if (suggestedTimerId.current) clearInterval(suggestedTimerId.current)
+      if (suggestedTimerId.current) {
+        clearInterval(suggestedTimerId.current)
+        suggestedTimerId.current = null
+      }
     }
   }, [])
 
@@ -79,7 +85,7 @@ export const useSuggested = () => {
           title: "Added to queue",
           description: `${name} has been added to the queue`,
         })
-      } catch (error) {}
+      } catch (error) { }
     },
     [toast, suggested, setQueue],
   )
