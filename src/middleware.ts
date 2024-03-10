@@ -1,6 +1,9 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextFetchEvent, NextMiddleware, NextRequest, NextResponse } from "next/server"
 
 import { rateLimiter } from "@/lib/rate-limiting/rate-limiter"
+
+import { stackMiddlewares } from "./middlewares/stackMiddlewares"
+import { MiddlewareFactory } from "./middlewares/types"
 
 export { default } from "next-auth/middleware"
 
@@ -15,7 +18,7 @@ export const config = {
  * Rate limiting Spotify API calls
  */
 export async function middleware(req: NextRequest) {
-  console.log("Middleware: " + req.url)
+  logRequest(req)
 
   const ip = req.ip ?? "127.0.0.1"
   const env = process.env.NODE_ENV
@@ -38,3 +41,39 @@ export async function middleware(req: NextRequest) {
     )
   }
 }
+
+// export function chain(functions: MiddlewareFactory[], index = 0): NextMiddleware {
+//   const current = functions[index]
+
+//   if (current) {
+//     const next = chain(functions, index + 1)
+//     return current(next)
+//   }
+//   return () => NextResponse.next()
+// }
+
+const logRequest = (req: NextRequest) => {
+  try {
+  console.log("Request: " + req.url)
+  console.log("Method: " + req.method)
+  
+  } catch (err) {
+    console.log("Middleware request logging failed: " + err)
+  }
+  
+  NextResponse.next()
+}
+
+
+// const withLogging: MiddlewareFactory = (next) => {
+//   return async (request: NextRequest, _next: NextFetchEvent) => {
+//     console.log("Request: " + request.url)
+//     console.log("Method: " + request.method)
+
+//     return next(request, _next)
+//   }
+// }
+
+// export async function middleware(req: NextRequest) {
+//   chain([withLogging])
+// }
